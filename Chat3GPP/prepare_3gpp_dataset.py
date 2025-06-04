@@ -1,82 +1,117 @@
 import os
-import shutil
-from ftplib import FTP
-from zipfile import ZipFile
-from datetime import datetime
-import pytz
-from download_3gpp import download_3gpp
-from docx import Document
-
-# Import the delete_sections function from remove_content.py
+import argparse
+import zipfile
+import subprocess
+from tqdm import tqdm
+from download_3gpp.options import UserOptions
+from download_3gpp.download import Downloader
 from preprocess.remove_content import delete_sections
 
-# Define directories
-DOWNLOAD_DIR = 'downloads'
-EXTRACT_DIR = 'extracted_docs'
-KNOWLEDGE_BASE_DIR = 'knowledge_base'
+# Define paths
+DOWNLOAD_DIR = "downloads"
+EXTRACT_DIR = "extracted_docs"
+OUTPUT_DIR = "knowledge_base"
 
 # Create directories if they don't exist
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 os.makedirs(EXTRACT_DIR, exist_ok=True)
-os.makedirs(KNOWLEDGE_BASE_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-def get_ftp_file_time(ftp, filename):
-    """Get the modification time of a file on the FTP server."""
-    try:
-        # Use MDTM command to get the modification time
-        timestamp = ftp.sendcmd(f"MDTM {filename}")
-        # Response format: '213 YYYYMMDDHHMMSS'
-        time_str = timestamp[4:]
-        return datetime.strptime(time_str, '%Y%m%d%H%M%S').replace(tzinfo=pytz.UTC)
-    except Exception:
-        return None
-
-def needs_update(local_path, ftp, ftp_path):
-    """Check if the local file needs to be updated based on FTP timestamp."""
-    if not os.path.exists(local_path):
-        return True
-    local_mtime = datetime.fromtimestamp(os.path.getmtime(local_path), tz=pytz.UTC)
-    ftp_mtime = get_ftp_file_time(ftp, ftp_path)
-    return ftp_mtime is None or ftp_mtime > local_mtime
-
-def download_and_extract():
-    """Download the latest 3GPP documents and extract them."""
-    # Connect to the FTP server
-    ftp = FTP('ftp.3gpp.org')
-    ftp.login()  # Anonymous login
-    ftp.cwd('/Specs/latest')
-
-    # Download only updated files
-    download_3gpp.download_latest_specs(download_dir=DOWNLOAD_DIR, ftp=ftp, needs_update=needs_update)
-
-    # Extract the downloaded zip files
-    for root, _, files in os.walk(DOWNLOAD_DIR):
+def extract_zipfiles(input_dir, output_dir):
+    """Extract each .zip file preserving directory structure."""
+    zip_files = []
+    for root, _, files in os.walk(input_dir):
         for file in files:
             if file.endswith('.zip'):
-                zip_path = os.path.join(root, file)
-                with ZipFile(zip_path, 'r') as zip_ref:
-                    zip_ref.extractall(EXTRACT_DIR)
-    
-    ftp.quit()
+                zip_files.append((root, file))
 
-def preprocess_documents():
-    """Preprocess the extracted .doc files and save them to knowledge_base."""
-    for root, _, files in os.walk(EXTRACT_DIR):
+    for root, file in tqdm(zip_files, desc="Extracting", unit=" zip"):
+        zip_path = os.path.join(root, file)
+        extract_to = os.path.join(output_dir, os.path.relpath(root, input_dir))
+        os.makedirs(extract_to, exist_ok=True)
+        with zipfile.ZipFile(zip_path, "r") as zip_ref:
+            zip_ref.extractall(extract_to)
+        # print(f"Extracted {zip_path} to {extract_to}")
+    #print(f"Extracting {len(zip_files)} \".zip\" files from {input_dir} to {output_dir} completed")
+    
+
+def preprocess_files(input_dir, output_dir):
+    """Run preprocessing on each .doc/x file using remove_content.py."""
+    docx_files = []
+    for root, _, files in os.walk(input_dir):
         for file in files:
-            if file.endswith('.doc'):
-                doc_path = os.path.join(root, file)
-                output_path = os.path.join(KNOWLEDGE_BASE_DIR, file)
-                try:
-                    delete_sections(doc_path, output_path)
-                except Exception as e:
-                    print(f"Error preprocessing {file}: {e}")
+            if file.endswith('.doc') or file.endswith('.docx'):
+                docx_files.append((root, file))
+
+    for root, file in tqdm(docx_files, desc="Preprocessing", unit=" file"):
+        input_path = os.path.join(root, file)
+        
+        # Handle .doc files by converting them to .docx
+        # ===
+        if file.endswith(".doc"):
+            docx_file = file.replace(".doc", ".docx")
+            docx_path = os.path.join(root, docx_file)
+            
+            try:
+                # Use LibreOffice CLI for conversion (linux supported only)
+                subprocess.run([
+                    "libreoffice", 
+                    "--headless", 
+                    "--convert-to", "docx", 
+                    "--outdir", root,  # Keep converted file in same directory
+                    input_path
+                ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                
+                # Update input path to point to converted .docx
+                input_path = docx_path
+                file = docx_file
+            except subprocess.CalledProcessError as e:
+                print(f"Failed to convert {input_path}: {e}")
+                continue
+        # ===
+
+        output_path = os.path.join(output_dir, os.path.relpath(root, input_dir), file)
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        try:
+            delete_sections(input_path, output_path)
+            # print(f"Cleaned {input_path} -> {output_path}")
+        except Exception as e:
+            print(f"Failed to process {input_path}: {e}")
+    #print(f"Preprocessing {len(docx_files)} \".docx\" files from {input_dir} to {output_dir} completed")
 
 def main():
-    """Main function to orchestrate the download, extraction, and preprocessing."""
-    print("Starting the download and preprocessing of 3GPP documents...")
-    download_and_extract()
-    preprocess_documents()
-    print("Process completed successfully. Cleaned documents are in the 'knowledge_base' directory.")
+    # Step 1: Parse command-line arguments for user-visible options
+    parser = argparse.ArgumentParser(description="Acquire 3GPP standards packages from archive")
+    parser.add_argument("--rel", type=int, help="3GPP release number to target, default 'all'")
+    parser.add_argument("--series", type=int, help="3GPP series number to target, default 'all'")
+    parser.add_argument("--std", type=str, help="3GPP standard number to target, default 'all'")
+    args = parser.parse_args()
+
+    # Step 2: Convert parsed args into a list for UserOptions
+    cmd_args = []
+    if args.rel is not None:
+        cmd_args.extend(["--rel", str(args.rel)])
+    if args.series is not None:
+        cmd_args.extend(["--series", str(args.series)])
+    if args.std is not None:
+        cmd_args.extend(["--std", args.std])
+
+    # Step 3: Initialize UserOptions with default values and parsed args
+    user_options = UserOptions()
+    user_options.parse_arguments(cmd_args)
+    user_options.destination = DOWNLOAD_DIR
+    
+    # Step 4: Download 3GPP specs
+    downloader = Downloader(user_options)
+    downloader.get_files()
+    print(f"Completed downloading files with config: rel:{user_options.rel}, series:{user_options.series}, std:{user_options.std}")
+
+    # Step 5: Extract .zip files
+    extract_zipfiles(DOWNLOAD_DIR, EXTRACT_DIR)
+
+    # Step 6: Preprocess extracted .docx files
+    preprocess_files(EXTRACT_DIR, OUTPUT_DIR)
 
 if __name__ == "__main__":
     main()

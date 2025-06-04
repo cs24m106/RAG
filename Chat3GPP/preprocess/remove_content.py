@@ -1,5 +1,15 @@
-from docx import Document
+'''
+Description:
+    Remove "Contents" Section: Deletes the "Contents" heading and all following paragraphs until the next heading.
+    Remove "References" Section: Uses remove_content_after_heading to delete the "References" section.
+    Remove Everything After "Annex": Finds the first heading containing "Annex" and deletes it and all subsequent paragraphs.
+    Remove All Tables: Iterates through all tables and removes them from the document.
 
+Parameters:
+    document_path: Path to the input .docx file.
+    output_path: Path to save the modified document.
+'''
+from docx import Document
 
 def delete_sections(document_path, output_path):
     

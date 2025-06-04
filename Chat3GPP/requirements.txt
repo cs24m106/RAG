@@ -67,3 +67,4 @@ triton==2.2.0
 typing_extensions==4.12.2
 urllib3==2.2.3
 yarl==1.15.2
+download_3gpp==0.7.0
