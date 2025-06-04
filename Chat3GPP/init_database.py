@@ -51,15 +51,19 @@ def folder2db(kb_names, retrieval_type, es_client, index_name, embed_model):
         files2db(retrieval_type, es_client, index_name, kb_files, embed_model)
 
 
-es_client = Elasticsearch("https://localhost:9200",
-                          http_auth=("elastic", ""),
-                          verify_certs=False)
+def main():
+    es_client = Elasticsearch("https://localhost:9200",
+                            http_auth=("elastic", ""),
+                            verify_certs=False)
 
-if es_client.ping():
-    print("Successfully connected to Elasticsearch!")
-    embed_model = load_embeddings(model=EMBED_CONFIG["embed_model"], device=EMBED_CONFIG["embed_device"])
-else:
-    print("Could not connect to Elasticsearch.")
+    if es_client.ping():
+        print("Successfully connected to Elasticsearch!")
+        embed_model = load_embeddings(model=EMBED_CONFIG["embed_model"], device=EMBED_CONFIG["embed_device"])
+    else:
+        print("Could not connect to Elasticsearch.")
+        exit(1)
+    
+    folder2db(None, retrieval_type="vector", es_client=es_client, index_name="index", embed_model=embed_model)
     
 if __name__ == "__main__":
-    folder2db(None, retrieval_type="vector", es_client=es_client, index_name="index", embed_model=embed_model)
+    main()
