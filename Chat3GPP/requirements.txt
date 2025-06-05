@@ -68,3 +68,4 @@ typing_extensions==4.12.2
 urllib3==2.2.3
 yarl==1.15.2
 download_3gpp==0.7.0
+doc2docx==0.2.4
