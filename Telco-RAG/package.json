@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:api": "echo 'Launching [Server] API...' && cd .\\Telco-RAG_api && uvicorn api.deploy_api:app --reload",
+    "dev:api": "echo 'Launching [Server] API...' && cd Telco-RAG_api && uvicorn api.deploy_api:app --reload",
     "dev:client": "echo 'Launching [Client] website...' && next dev",
     "dev:api:terminal": "npm run dev:api",
     "dev": "npm-run-all -p dev:client dev:api:terminal",
