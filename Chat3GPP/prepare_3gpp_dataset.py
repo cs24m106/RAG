@@ -10,9 +10,9 @@ from preprocess.remove_content import delete_sections
 import platform
 
 # Define paths
-DOWNLOAD_DIR = "downloads"
-EXTRACT_DIR = "extracted_docs"
-OUTPUT_DIR = "knowledge_base"
+DOWNLOAD_DIR = "data/downloads"
+EXTRACT_DIR = "data/extracted_docs"
+OUTPUT_DIR = "data/knowledge_base"
 
 # Create directories if they don't exist
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)

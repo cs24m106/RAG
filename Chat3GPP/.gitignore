@@ -1,0 +1,5 @@
+# ignore downloaded data files
+/data/
+
+# ignore cache files
+**/__pycache__/
