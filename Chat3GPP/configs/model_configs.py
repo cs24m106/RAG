@@ -20,14 +20,14 @@ RERANKER_CONFIG = {
 MODEL_PATH = {
     "embed_model": {
         "bge-large-en": "",
-        "bge-m3": "",
+        "bge-m3": "BAAI/bge-m3",  # Hugging Face model name
     },
     "llm_model": {
-        "llama3-8B-instruct": "",
+        "llama3-8B-instruct": "meta-llama/Llama-3-8B-Instruct",  # Hugging Face model name
         "qwen2.5-7B-instruct": "",
         "LLama-3-8B-Tele-it": ""
     },
     "reranker_model": {
-        "bge-reranker-large": ""
+        "bge-reranker-large": "BAAI/bge-reranker-large",  # Hugging Face model name
     }
 }

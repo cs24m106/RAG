@@ -3,9 +3,11 @@ import argparse
 import zipfile
 import subprocess
 from tqdm import tqdm
+from doc2docx import convert
 from download_3gpp.options import UserOptions
 from download_3gpp.download import Downloader
 from preprocess.remove_content import delete_sections
+import platform
 
 # Define paths
 DOWNLOAD_DIR = "downloads"
@@ -48,29 +50,15 @@ def preprocess_files(input_dir, output_dir):
         
         # Handle .doc files by converting them to .docx
         # ===
-        if file.endswith(".doc"):
-            docx_file = file.replace(".doc", ".docx")
-            docx_path = os.path.join(root, docx_file)
-            
+        if file.endswith(".doc"):            
             try:
-                # Use LibreOffice CLI for conversion (linux supported only)
-                subprocess.run([
-                    "libreoffice", 
-                    "--headless", 
-                    "--convert-to", "docx", 
-                    "--outdir", root,  # Keep converted file in same directory
-                    input_path
-                ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                
-                # Update input path to point to converted .docx
-                input_path = docx_path
-                file = docx_file
+                input_path = convert_doc_to_docx(root, file)
             except subprocess.CalledProcessError as e:
                 print(f"Failed to convert {input_path}: {e}")
                 continue
         # ===
 
-        output_path = os.path.join(output_dir, os.path.relpath(root, input_dir), file)
+        output_path = os.path.join(output_dir, os.path.relpath(input_path, input_dir))
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         
         try:
@@ -78,7 +66,26 @@ def preprocess_files(input_dir, output_dir):
             # print(f"Cleaned {input_path} -> {output_path}")
         except Exception as e:
             print(f"Failed to process {input_path}: {e}")
+
+
+def convert_doc_to_docx(root, file): # convert in same directory
+    """Convert .doc file to .docx using LibreOffice or doc2docx."""
+    input_path = os.path.join(root, file)
+    output_path = os.path.join(root, file.replace(".doc", ".docx"))
+
+    if platform.system().lower() == "linux":
+        subprocess.run([
+            "libreoffice",
+            "--headless",
+            "--convert-to", "docx",
+            "--outdir", root,
+            input_path
+        ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    else:
+        # Use doc2docx's convert function for Windows or other OS
+        convert(input_path, output_path)
     #print(f"Preprocessing {len(docx_files)} \".docx\" files from {input_dir} to {output_dir} completed")
+    return output_path
 
 def main():
     # Step 1: Parse command-line arguments for user-visible options
