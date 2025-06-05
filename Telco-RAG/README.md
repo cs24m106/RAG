@@ -30,16 +30,12 @@ cd telco-rag
 ```
 
 ### Prerequisites
-
 - Python 3.11
 - Node.js
-
-Other dependencies are listed in `requirements.txt`.
+<br>Other dependencies are listed in `requirements.txt`.
 
 ### Installation
-
 Install the necessary Python packages and download the 3GPP knowledge database:
-
 ```bash
 cd ./Telco-RAG_api
 pip install -r requirements.txt
@@ -47,7 +43,6 @@ python setup.py
 ```
 
 ### Running the Full Pipeline
-
 To run the full pipeline, use the following commands:
 ```bash
 npm install
@@ -62,15 +57,32 @@ This will open two terminals: one for the frontend and one for the Telco-RAG bac
 
 On your first connection, ensure to specify a valid OpenAI API key in the settings.
 
+
+#### **Config `package.json` based on platform**
+Inorder to launch client & server connections in 2 seperate terminals:
+1. For Linux: (choose any one)
+> - "dev:api:terminal": "gnome-terminal -- bash -c 'npm run dev:api; exec bash'"
+> - "dev:api:terminal": "x-terminal-emulator -e 'npm run dev:api'"
+<br>Make sure you have gnome-terminal or x-terminal-emulator installed.
+
+2. For Windows:
+> - "dev:api:terminal": "start cmd /k npm run dev:api",
+
+3. For VS-Code:
+> - manually launch 2 terminals, 
+> - and run `npm run dev:client` in one 
+> - and `npm run dev:api` in the other.
+
+4. Default: simply runs both client & server same terminal
+> - "dev:api:terminal": "npm run dev:api",
+
+
 ### Running Only the API Server
-
 If you only want to run the API server, use this command:
-
 ```bash
 cd ./Telco-RAG_api
 uvicorn api.deploy_api:app --reload
 ```
 
 ## License
-
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
