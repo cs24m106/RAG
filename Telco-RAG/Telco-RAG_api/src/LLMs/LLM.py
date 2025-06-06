@@ -12,7 +12,7 @@ from together import AsyncTogether, Together
 
 import time
 
-from src.LLMs.settings.config import get_settings
+from .settings.config import get_settings
 from groq import Groq, AsyncGroq
 
 import platform
@@ -23,15 +23,14 @@ settings = get_settings()
 rate_limit = settings.rate_limit 
 
 # API keys
-openai.api_key = settings.openai_api_key
-any_api_key = settings.any_api_key
+openai.api_key = settings.openai_api
+any_api_key = settings.any_api
 mistral_api = settings.mistral_api
 anthropic_api = settings.anthropic_api
 cohere_api = settings.cohere_api
 pplx_api = settings.pplx_api
 together_api = settings.together_api
-
-groq_api = ""
+groq_api = settings.groq_api
 
 # Models config
 models = [

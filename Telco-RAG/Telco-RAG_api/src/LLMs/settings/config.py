@@ -12,16 +12,17 @@ toml_files = list(pathlib.Path(join(setting_dir)).glob('*.toml'))
 
 
 default_settings_dict = {
-"openai_api_key" : "",
-"any_api_key" : "",
+"openai_api" : "",
+"any_api" : "",
 "mistral_api" : "",
 "anthropic_api" : "",
 "cohere_api" : "",
 "google_search_api" : "",
 "pplx_api" : "",
 "together_api" : "",
-"rate_limit" : 9,
-"fireworks_api" : ""
+"fireworks_api" : "",
+"groq_api" : "",
+"rate_limit" : 3,
 }
 
 if not toml_files:

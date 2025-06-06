@@ -7,7 +7,7 @@ import sys
 import git
 import asyncio
 import time
-from api.utils import update_secrets_file
+from src.LLMs.utils import update_secrets_file
 
 folder_url = "https://huggingface.co/datasets/netop/Embeddings3GPP-R18"
 clone_directory = "./3GPP-Release18"

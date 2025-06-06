@@ -17,6 +17,8 @@ from src.validator import validator_RAG
 from src.NNRouter import NNRouter
 from api.LLM import a_submit_prompt_flex_UI, submit_prompt_flex_UI
 
+resources_path = os.path.join(os.path.dirname(__file__), 'resources')
+
 class Query:
     def __init__(self, query, context):
         self.question = query
@@ -27,7 +29,7 @@ class Query:
         self.wg = []
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = NNRouter()
-        self.model.load_state_dict(torch.load(r'.\\src\\resources\\router_new.pth', map_location='cpu'))
+        self.model.load_state_dict(torch.load(os.path.join(resources_path, 'router_new.pth'), map_location='cpu'))
         self.model.to(self.device)
         self.model.eval()
         self.original_labels_mapping = np.arange(21, 39)
@@ -67,7 +69,7 @@ class Query:
     
     @staticmethod
     def get_col2(embeddings_list):
-        file_path = r'.\\src\\resources\\series_description.json'
+        file_path = os.path.join(resources_path, 'series_description.json')
         if os.path.isfile(file_path):
             with open(file_path, 'r') as file:
                 series_dict = json.load(file)
@@ -217,6 +219,3 @@ class Query:
 
 
         return online_info
-
-    
-    
