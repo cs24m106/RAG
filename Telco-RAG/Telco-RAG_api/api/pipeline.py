@@ -1,13 +1,15 @@
 import os
-import traceback
-from src.query import Query
-from api.generate import generate
-from api.LLM import submit_prompt_flex_UI
 import sys
 import git
 import asyncio
 import time
+import traceback
+
+from src.query import Query
+from api.generate import generate
+from api.LLM import submit_prompt_flex_UI
 from src.LLMs.utils import update_secrets_file
+from src.LLMs.settings.config import get_settings
 
 folder_url = "https://huggingface.co/datasets/netop/Embeddings3GPP-R18"
 clone_directory = "./3GPP-Release18"
@@ -21,7 +23,6 @@ else:
 async def TelcoRAG(query, model_name='gpt-4o-mini', api_key= None):
     if api_key == None:
         try:
-            from api.settings.config import get_settings
             settings = get_settings()
             api_key = settings.openai__api_key
         except:
