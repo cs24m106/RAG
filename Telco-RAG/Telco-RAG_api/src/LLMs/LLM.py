@@ -1,330 +1,95 @@
-import openai
-import tiktoken
-
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM
+from sentence_transformers import SentenceTransformer
+from typing import Dict, Any
 import asyncio
 
-import anthropic # type: ignore
-from mistralai.async_client import MistralAsyncClient
-from mistralai.client import MistralClient
-
-from together import AsyncTogether, Together
-
-
-import time
-
-from .settings.config import get_settings
-from groq import Groq, AsyncGroq
-
-import platform
-if platform.system()=='Windows':
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
-settings = get_settings()
-rate_limit = settings.rate_limit 
-
-# API keys
-openai.api_key = settings.openai_api
-any_api_key = settings.any_api
-mistral_api = settings.mistral_api
-anthropic_api = settings.anthropic_api
-cohere_api = settings.cohere_api
-pplx_api = settings.pplx_api
-together_api = settings.together_api
-groq_api = settings.groq_api
-
-# Models config
-models = [
-    "gpt-4o-mini",
-    "gpt-4",
-    'mixtral',
-    'mistral-small',
-    'mistral-medium',
-    "code-llama",
-    "command-R+",
-    'pplx',
-    'mixtral-8x22',
-    "mixtral-groq",
-    'llama-3',
-    'llama-3-any',
-    'llama-3-8B',
-    'wizard'
-]
-
-models_fullnames = {
-    "gpt-3.5": "gpt-4o-mini",
-    "gpt-4": "gpt-4-turbo-2024-04-09",
-    "gpt-4o": "gpt-4o-2024-05-13",
-    "gpt-4o-mini": "gpt-4o-mini",
-    "mixtral": "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    "mistral-small-old": 'open-mixtral-8x7b',
-    "mistral-small": 'mistral-small-latest',
-    "mistral-medium": 'mistral-medium-latest',
-    "mistral-large": 'mistral-large-latest',
+# Mapping of model names to Hugging Face repo IDs
+models_ids = {
+    "gpt-2": "openai-community/gpt2",
+    "gpt-3": "facebook/opt-125m",
+    "deepseek": "deepseek-ai/DeepSeek-V3",
+    "mistral-small": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+    "mistral-nemo": "mistralai/Mistral-Nemo-Instruct-2407",
+    "mistral-large": "mistralai/Mistral-Large-Instruct-2411",
     "code-llama": "codellama/CodeLlama-70b-Instruct-hf",
-    "claude-small": "claude-3-haiku-20240307",
-    "claude-medium": "claude-3-sonnet-20240229",
-    "claude-large": "claude-3-opus-20240229",
-    "command-R+": "command-r-plus",
-    "pplx": "llama-3-sonar-large-32k-online",
-    'mixtral-8x22': "mistralai/Mixtral-8x22B-Instruct-v0.1",
-    "mixtral-groq": "mistralai/Mixtral-8x7B-Instruct-v0.1",
-    'llama-3': 'meta-llama/Llama-3-70b-chat-hf',
-    'llama-3-any': 'meta-llama/Meta-Llama-3-70B-Instruct',
-    'llama-3-8B' : 'meta-llama/Llama-3-8b-chat-hf',
-    'wizard': "microsoft/WizardLM-2-8x22B"
+    "phi": "microsoft/phi-4",
+    "command-R+": "CohereLabs/c4ai-command-r-plus-08-2024",
+    "pplx": "perplexity-ai/r1-1776",
+    "llama-2": "meta-llama/Llama-2-70b-chat-hf",
+    "llama-3": "meta-llama/Llama-3.3-70B-Instruct",
+    "qwen": "Qwen/Qwen3-235B-A22B",
+    "gemma": "google/gemma-7b-it",
+    "wizard": "dreamgen/WizardLM-2-8x22B",
 }
 
-models_endpoints = {
-    "gpt-3.5": "openai",
-    "gpt-4": "openai",
-    "gpt-4o": "openai",
-    "gpt-4o-mini": "openai",
-    "mixtral": "anyscale",
-    "mistral-small-old": 'mistral',
-    "mistral-small": 'mistral',
-    "mistral-medium": 'mistral',
-    "mistral-large": 'mistral',
-    "code-llama": "anyscale",
-    "claude-small": "anthropic",
-    "claude-medium": "anthropic",
-    "claude-large": "anthropic",
-    "command-R+": "cohere",
-    "pplx": "perplexity",
-    'mixtral-8x22': 'anyscale',
-    "mixtral-groq": 'groq',
-    'llama-3': 'together',
-    'llama-3-any': 'anyscale',
-    'llama-3-8B': 'anyscale',
-    'wizard': 'together'
-}
+# Preload all models/tokenizers (optional for performance)
+model_cache: Dict[str, Any] = {}
 
-token_prices = {
-    "gpt-3.5": 0.0015 / 1000,
-    "gpt-4": 0.06 / 1000,
-    "mixtral": 0.5 / 1000000,
-    "mixtral-groq": 0.5 / 1000000,
-    "mistral-medium": 5 / 1000000,
-}
+def load_model(model_name: str):
+    """Load tokenizer and model for a given Hugging Face model."""
+    model_id = models_ids[model_name]
+    if model_name in model_cache:
+        return model_cache[model_name]
 
+    print(f"Loading model: {model_id}...")
+    tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=True)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token  # Fix for missing pad token
 
-class RateLimiter:
-    def __init__(self, calls_per_second=0.25):
-        self.calls_per_second = rate_limit
-        self.semaphore = asyncio.Semaphore(calls_per_second)
-        self.next_call_time = time.time()
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        device_map="auto",  # Automatically use GPU if available
+        torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+        trust_remote_code=True,
+    )
 
-    async def wait_for_rate_limit(self):
-        async with self.semaphore:
-            now = time.time()
-            sleep_time = self.next_call_time - now
-            self.next_call_time = max(self.next_call_time + 1 / self.calls_per_second, now)
-            if sleep_time > 0:
-                await asyncio.sleep(sleep_time)
-            self.next_call_time = max(self.next_call_time + 1 / self.calls_per_second, now)
+    model.eval()
+    model_cache[model_name] = (tokenizer, model)
+    return tokenizer, model
 
-
-def submit_prompt_flex(prompt, model="gpt-4o-mini", output_json=False):
-    if model in models_fullnames:
-        model_fullname = models_fullnames[model]
-        endpoint = models_endpoints[model]
-    else:
-        endpoint = ""
-        
-    if endpoint == "anyscale":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.OpenAI(
-            base_url = "https://api.endpoints.anyscale.com/v1",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "perplexity":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.OpenAI(
-            base_url = "https://api.perplexity.ai",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "groq":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = Groq(
-            api_key=groq_api,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "together":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")     
-        client = Together(api_key=together_api)  
-        generate = client.chat.completions.create 
-    elif endpoint == "openai":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.OpenAI(
-            api_key=openai.api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "mistral":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = MistralClient(api_key=mistral_api)
-        generate = client.chat
-    elif endpoint == "anthropic":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = anthropic.Anthropic(
-            api_key=anthropic_api,
-        )
-        def generate(**kwargs):
-            return client.messages.create(
-                max_tokens=4000,
-                **kwargs
-            )
-    else:
-        model_fullname = model
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.OpenAI(
-            base_url = "https://api.endpoints.anyscale.com/v1",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create        
-
-    if output_json:
-        generated_output = generate(
-          model=model_fullname,
-          response_format={"type":"json_object"},
-          messages=[
-              {"role": "user", "content": prompt}, 
-            ]
-        )
-        if endpoint != "anthropic":
-            output = generated_output.choices[0].message.content
-        else:
-            output = generated_output.content[0].text
-            
-        output = output.replace('"\n', '",\n')
-        output = output[:output.rfind("}")+1]
-        
-    else:
-        generated_output = generate(
-          model=model_fullname,
-          messages=[
-              {"role": "user", "content": prompt}, 
-            ]
-        )
-        if endpoint != "anthropic":
-            output = generated_output.choices[0].message.content
-        else:
-            output = generated_output.content[0].text
+def submit_prompt_flex(prompt: str, model_name: str = "gpt-2", output_json: bool = False, max_new_tokens: int = 4096):
+    """
+    Generate text using a Hugging Face model.
+    Args:
+        prompt: Input text.
+        model_name: Model name from `models_ids`.
+        max_new_tokens: Max tokens to generate.
+        output_json: Whether to format output as JSON (basic placeholder).
+    """
+    tokenizer, model = load_model(model_name)
     
-    return output
+    inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True)
+    inputs = {k: v.to(model.device) for k, v in inputs.items()}
 
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_new_tokens,
+            do_sample=True,
+            top_p=0.95,
+            temperature=0.7,
+            pad_token_id=tokenizer.pad_token_id,
+        )
 
-async def a_submit_prompt_flex(prompt, model="gpt-4o-mini", output_json=False):
-    if model in models_fullnames:
-        model_fullname = models_fullnames[model]
-        endpoint = models_endpoints[model]
-    else:
-        endpoint = ""
-        
-    if endpoint == "anyscale":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.AsyncOpenAI(
-            base_url = "https://api.endpoints.anyscale.com/v1",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "perplexity":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.AsyncOpenAI(
-            base_url = "https://api.perplexity.ai",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "groq":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = AsyncGroq(
-            api_key=groq_api,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "together":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")     
-        client = AsyncTogether(api_key=together_api)  
-        generate = client.chat.completions.create 
-    elif endpoint == "openai":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.AsyncOpenAI(
-            api_key=openai.api_key,
-        )
-        generate = client.chat.completions.create
-    elif endpoint == "mistral":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = MistralAsyncClient(api_key=mistral_api)
-        generate = client.chat
-    elif endpoint == "anthropic":
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = anthropic.AsyncAnthropic(
-            api_key=anthropic_api,
-        )
-        async def generate(**kwargs):
-            return await client.messages.create(
-                max_tokens=4000,
-                **kwargs
-            )
-    else:
-        model_fullname = model
-        print(f"Endpoint: {endpoint}")
-        print(f"Model: {model_fullname}")
-        client = openai.AsyncOpenAI(
-            base_url = "https://api.endpoints.anyscale.com/v1",
-            api_key=any_api_key,
-        )
-        generate = client.chat.completions.create        
-
-    if output_json:
-        generated_output = await generate(
-          model=model_fullname,
-          response_format={"type":"json_object"},
-          messages=[
-              {"role": "user", "content": prompt}, 
-            ]
-        )
-        if endpoint != "anthropic":
-            output = generated_output.choices[0].message.content
-        else:
-            output = generated_output.content[0].text
-            
-        output = output.replace('"\n', '",\n')
-        output = output[:output.rfind("}")+1]
-        
-    else:
-        generated_output = await generate(
-          model=model_fullname,
-          messages=[
-              {"role": "user", "content": prompt}, 
-            ]
-        )
-        if endpoint != "anthropic":
-            output = generated_output.choices[0].message.content
-        else:
-            output = generated_output.content[0].text
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
     
-    return output
+    if output_json:
+        response = response.replace('"\n', '",\n')
+        response = response[:response.rfind("}")+1]
+    
+    return response.strip()
 
-def embedding(input, dimension=1024):
-    client = openai.OpenAI(api_key=openai.api_key)
-    response = client.embeddings.create(
-                    input=input,
-                    model="text-embedding-3-large",
-                    dimensions=dimension,
-                )
-    return response
+async def a_submit_prompt_flex(prompt: str, model_name: str = "gpt-2", output_json: bool = False, max_new_tokens: int = 4096):
+    """Async wrapper for generate_text."""
+    loop = asyncio.get_event_loop()
+    result = await loop.run_in_executor(None, submit_prompt_flex, prompt, model_name, max_new_tokens, output_json)
+    return result
+
+def embedding(input_text, dimension=1024):
+    model = SentenceTransformer("BAAI/bge-m3")  # take any embedding model here
+    embeddings = model.encode([input_text], convert_to_tensor=True)
+    # Ensure dimension matches (this model should have 1024 dims)
+    if embeddings.shape[1] != dimension:
+        raise ValueError(f"Embedding dimension mismatch: expected {dimension}, got {embeddings.shape[1]}")
+    return embeddings[0].tolist()
