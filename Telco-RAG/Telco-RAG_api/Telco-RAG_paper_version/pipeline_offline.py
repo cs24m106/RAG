@@ -13,9 +13,8 @@ import argparse
 
 from src.query import Query
 from src.generate import generate, check_question
-from src.LLMs.LLM import models_endpoints, models_fullnames, submit_prompt_flex
+from src.LLMs.LLM import submit_prompt_flex
 from src.LLMs.utils import update_secrets_file
-from src.LLMs.settings.config import get_settings
 
 
 folder_url = "https://huggingface.co/datasets/netop/Embeddings3GPP-R18"
@@ -27,39 +26,9 @@ if not os.path.exists(clone_directory):
 else:
     print("Folder already exists. Skipping cloning.")
 
-def TelcoRAG(query, answer= None, options= None, model_name='gpt-4o-mini', api_key= None):
-    if model_name in models_fullnames:
-        model_fullname = models_fullnames[model_name]
-        print(f"Using model: {model_fullname}")
-        endpoint = models_endpoints[model_name]
-    else:
-        endpoint = ""
-
-    if api_key == None:
-        try:
-            settings = get_settings()
-            if endpoint == "openai":
-                api_key = settings.openai_api
-            elif endpoint == "perplexity": 
-                api_key = settings.pplx_api
-            elif endpoint == "groq":
-                api_key = settings.groq_api
-            elif endpoint == "together":
-                api_key = settings.together_api
-            elif endpoint == "mistral":
-                api_key = settings.mistral_api
-            elif endpoint == "anthropic":
-                api_key = settings.anthropic_api
-            elif endpoint == "cohere":
-                api_key = settings.cohere_api
-            else:
-                api_key = settings.any_api # defulat: for endpoint "anyscale"
-
-            assert api_key is not None and api_key != "", "API key is missing or empty."
-        except:
-            sys.exit(f"You do not have an \"{endpoint}\" api key stored.")
+def TelcoRAG(query, answer= None, options= None, model_name='gpt-2', max_new_tokens=4096):
     try:
-        update_secrets_file(model_name, api_key, endpoint)
+        #update_secrets_file(model_name, api_key, endpoint)
         start =  time.time()
         question = Query(query, [])
 
@@ -68,7 +37,7 @@ def TelcoRAG(query, answer= None, options= None, model_name='gpt-4o-mini', api_k
         
         {question.question}"""
 
-        concisequery = submit_prompt_flex(conciseprompt, model=model_name).rstrip('"')
+        concisequery = submit_prompt_flex(conciseprompt, model_name, max_new_tokens).rstrip('"')
 
         question.query = concisequery
 
@@ -99,12 +68,17 @@ def TelcoRAG(query, answer= None, options= None, model_name='gpt-4o-mini', api_k
         print(traceback.format_exc())
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="TelcoRAG Pipeline")
-    parser.add_argument("--model", type=str, default="llama-3", help="Model name to use")
-    parser.add_argument("--api", type=str, default=None, help="API key for the model")
+    parser = argparse.ArgumentParser(description="Telco-RAG Pipeline")
+    parser.add_argument("--model", type=str, default="gpt-2", 
+                        choices=["gpt-2", "gpt-3", "deepseek", "mistral-small", 
+                                 "mistral-nemo", "mistral-large", "code-llama", 
+                                 "phi", "command-R+", "pplx", "llama-2", 
+                                 "llama-3", "qwen", "gemma", "wizard"],
+                        help="Model name from Hugging Face list")
+    parser.add_argument("max", type=int, nargs="?", default=1024, help="Max new tokens for generation")
     args = parser.parse_args()
     model_name = args.model
-    api_key = args.api
+    max_new_tokens = args.max
 
     question =  {
         "question": "In supporting an MA PDU Session, what does Rel-17 enable in terms of 3GPP access over EPC? [3GPP Release 17]",
@@ -120,7 +94,7 @@ if __name__ == "__main__":
     }
     
     print("Question:", question['question'])
-    print("Options:")
+    print(f"Options: [max_new_tokens={max_new_tokens}]")
     for key, value in question['options'].items():
         print(f"  {key}: {value}")
     print("Expected Answer:", question['answer'])
@@ -129,13 +103,13 @@ if __name__ == "__main__":
     print()
 
     # Example using an MCQ
-    response, context = TelcoRAG(question['question'], question['answer'], question['options'], model_name=model_name, api_key=api_key)
+    response, context = TelcoRAG(question['question'], question['answer'], question['options'], model_name=model_name)
     print("Generated Output given the Question & Answer and the Options along with the Query:")
     print("Response:", response)
     print("Context:", context)
     print()
     # Example using an open-end question           
-    response, context = TelcoRAG(question['question'], model_name=model_name, api_key=api_key)
+    response, context = TelcoRAG(question['question'], model_name=model_name)
     print("Generated Output given only the Question and not the Options along with the Query:")
     print("Response:", response)
     print("Context:", context)

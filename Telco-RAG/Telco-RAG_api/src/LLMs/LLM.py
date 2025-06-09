@@ -48,7 +48,7 @@ def load_model(model_name: str):
     model_cache[model_name] = (tokenizer, model)
     return tokenizer, model
 
-def submit_prompt_flex(prompt: str, model_name: str = "gpt-2", output_json: bool = False, max_new_tokens: int = 4096):
+def submit_prompt_flex(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
     """
     Generate text using a Hugging Face model.
     Args:
@@ -80,7 +80,7 @@ def submit_prompt_flex(prompt: str, model_name: str = "gpt-2", output_json: bool
     
     return response.strip()
 
-async def a_submit_prompt_flex(prompt: str, model_name: str = "gpt-2", output_json: bool = False, max_new_tokens: int = 4096):
+async def a_submit_prompt_flex(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
     """Async wrapper for generate_text."""
     loop = asyncio.get_event_loop()
     result = await loop.run_in_executor(None, submit_prompt_flex, prompt, model_name, max_new_tokens, output_json)

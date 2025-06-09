@@ -15,7 +15,7 @@ def get_embeddings(series_docs):
     """Add embeddings to each chunk of documents from pre-saved NumPy files."""
     for doc_key, doc_chunks in series_docs.items():
         try:
-            embeddings = np.load(f'3GPP-Release18\Embeddings\Embeddings{doc_key}.npy')
+            embeddings = np.load(f'3GPP-Release18/Embeddings/Embeddings{doc_key}.npy')
         except FileNotFoundError:
             logging.error(f"Embedding file for {doc_key} not found.")
             continue
