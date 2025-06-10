@@ -14,7 +14,7 @@ class BaseRetrieval(ABC):
     
     @abstractmethod
     def search(self, index_name, query, **kwargs):
-        """搜索接口"""
+        """Search interface"""
     
     def _docs_to_embeddings(self, docs) -> Dict:
         return embed_documents(docs=docs, embed_model=self.embed_model)

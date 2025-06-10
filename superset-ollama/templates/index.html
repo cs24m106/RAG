@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superset Chat Interface</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat-container { max-width: 600px; margin: auto; }
+        #chat-output { border: 1px solid #ccc; padding: 10px; min-height: 200px; margin-bottom: 10px; }
+        #query-input { width: 80%; padding: 8px; }
+        #submit-btn { padding: 8px 16px; }
+        #chart-container { margin-top: 20px; }
+        #chart-canvas { width: 100%; max-height: 400px; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h2>Superset Chat Interface</h2>
+        <div id="chat-output"></div>
+        <input type="text" id="query-input" placeholder="e.g., Show sales by region for 2024">
+        <button id="submit-btn" onclick="sendQuery()">Submit</button>
+        <div id="chart-container">
+            <canvas id="chart-canvas"></canvas>
+        </div>
+    </div>
+
+    <script>
+        let chartInstance = null;
+
+        async function sendQuery() {
+            const queryInput = document.getElementById("query-input").value;
+            const outputDiv = document.getElementById("chat-output");
+            
+            if (!queryInput) {
+                outputDiv.innerHTML = "<p>Please enter a query.</p>";
+                return;
+            }
+
+            outputDiv.innerHTML += `<p><strong>You:</strong> ${queryInput}</p>`;
+            
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: queryInput })
+                });
+                const data = await response.json();
+                
+                if (data.error) {
+                    outputDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+                } else {
+                    outputDiv.innerHTML += `<p><strong>SQL Query:</strong> ${data.sql_query}</p>`;
+                    outputDiv.innerHTML += `<p><strong>Results:</strong> ${JSON.stringify(data.results)}</p>`;
+                    outputDiv.innerHTML += `<p><strong>Chart:</strong> <a href="${data.chart_url}" target="_blank">View Chart in Superset (ID: ${data.chart_id})</a></p>`;
+                    
+                    // Render chart with Chart.js
+                    const ctx = document.getElementById("chart-canvas").getContext("2d");
+                    if (chartInstance) {
+                        chartInstance.destroy();
+                    }
+                    chartInstance = new Chart(ctx, {
+                        type: "bar",
+                        data: {
+                            labels: data.results.map(row => row.enb_id),
+                            datasets: [{
+                                label: "EnbID view:",
+                                data: data.results.map(row => row["AVG(rrcsrnom)"] || row.rrcsrnom),
+                                backgroundColor: "rgba(75, 192, 192, 0.2)",
+                                borderColor: "rgba(75, 192, 192, 1)",
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                outputDiv.innerHTML += `<p><strong>Error:</strong> Failed to connect to server: ${error.message}</p>`;
+            }
+            
+            document.getElementById("query-input").value = "";
+        }
+    </script>
+</body>
+</html>
