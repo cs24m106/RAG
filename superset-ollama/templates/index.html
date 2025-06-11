@@ -7,10 +7,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
-        #chat-container { max-width: 600px; margin: auto; }
+        #chat-container { max-width: 800px; margin: auto; }
         #chat-output { border: 1px solid #ccc; padding: 10px; min-height: 200px; margin-bottom: 10px; }
-        #query-input { width: 80%; padding: 8px; }
-        #submit-btn { padding: 8px 16px; }
+        #query-input { width: 85%; padding: 8px; }
+        #submit-btn { padding: 8px 16px; width: 12%; }
         #chart-container { margin-top: 20px; }
         #chart-canvas { width: 100%; max-height: 400px; }
     </style>
@@ -48,13 +48,40 @@
                 });
                 const data = await response.json();
                 
+                outputDiv.innerHTML += `<p><strong>User Query:</strong> ${data.user_query || ''}</p>`;
+                outputDiv.innerHTML += `<p><strong>Payload:</strong><pre style="white-space: pre-wrap; word-break: break-word;">${
+                    JSON.stringify(data.payload, null, 2)
+                        .replace(/\\n/g, '\n')
+                        .replace(/\\t/g, '\t')
+                        .replace(/\\"/g, '"')
+                        .replace(/\\\\/g, '\\')
+                }</pre></p>`;
+                outputDiv.innerHTML += `<p><strong>SQL Query:</strong> ${data.sql_query || ''}</p>`;
+                outputDiv.innerHTML += `<p><strong>Explanation:</strong> ${data.explanation || ''}</p>`;
                 if (data.error) {
                     outputDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
-                } else {
-                    outputDiv.innerHTML += `<p><strong>SQL Query:</strong> ${data.sql_query}</p>`;
-                    outputDiv.innerHTML += `<p><strong>Results:</strong> ${JSON.stringify(data.results)}</p>`;
-                    outputDiv.innerHTML += `<p><strong>Chart:</strong> <a href="${data.chart_url}" target="_blank">View Chart in Superset (ID: ${data.chart_id})</a></p>`;
+                }
+                if (data.results && Array.isArray(data.results) && data.results.length > 0) {
+                    // Create table headers from keys of the first result
+                    const headers = Object.keys(data.results[0]);
+                    let tableHtml = '<table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;margin-top:10px;"><thead><tr>';
+                    headers.forEach(h => {
+                        tableHtml += `<th>${h}</th>`;
+                    });
+                    tableHtml += '</tr></thead><tbody>';
+                    data.results.forEach(row => {
+                        tableHtml += '<tr>';
+                        headers.forEach(h => {
+                            let val = row[h];
+                            if (val === null || val === undefined) val = 'null';
+                            tableHtml += `<td>${val}</td>`;
+                        });
+                        tableHtml += '</tr>';
+                    });
+                    tableHtml += '</tbody></table>';
+                    outputDiv.innerHTML += `<p><strong>Results:</strong></p>${tableHtml}`;
                     
+                    outputDiv.innerHTML += `<p><strong>Chart:</strong> <a href="${data.chart_url}" target="_blank">View Chart in Superset (ID: ${data.chart_id})</a></p>`;
                     // Render chart with Chart.js
                     const ctx = document.getElementById("chart-canvas").getContext("2d");
                     if (chartInstance) {
