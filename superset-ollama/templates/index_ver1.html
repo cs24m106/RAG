@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Superset Chat Interface</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> 
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chat-container { max-width: 600px; margin: auto; }
+        #chat-output { border: 1px solid #ccc; padding: 10px; min-height: 200px; margin-bottom: 10px; }
+        #query-input { width: 80%; padding: 8px; }
+        #submit-btn { padding: 8px 16px; }
+        #chart-container { margin-top: 20px; }
+        #chart-canvas { width: 100%; max-height: 400px; }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <h2>Superset Chat Interface</h2>
+        <div id="chat-output"></div>
+        <input type="text" id="query-input" placeholder="e.g., Show sales by region for 2024">
+        <button id="submit-btn" onclick="sendQuery()">Submit</button>
+        <div id="chart-container">
+            <div id="plotly-chart" style="width: 100%; max-height: 400px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let chartInstance = null;
+
+        async function sendQuery() {
+            const queryInput = document.getElementById("query-input").value;
+            const outputDiv = document.getElementById("chat-output");
+
+            if (!queryInput) {
+                outputDiv.innerHTML = "<p>Please enter a query.</p>";
+                return;
+            }
+
+            outputDiv.innerHTML += `<p><strong>You:</strong> ${queryInput}</p>`;
+
+            try {
+                const response = await fetch("/chat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ query: queryInput })
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    outputDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+                } else {
+                    outputDiv.innerHTML += `<p><strong>SQL Query:</strong> ${data.sql_query}</p>`;
+
+                    console.log("Results Data:", data.results);
+
+                    // Render results as a table
+                    if (data.results && data.results.length > 0) {
+                        let tableHTML = "<p><strong>Results:</strong></p>";
+                        tableHTML += "<table border='1' style='border-collapse: collapse; width: 100%; margin-bottom: 10px;'>";
+
+                        // Create table headers
+                        const headers = Object.keys(data.results[0]);
+                        tableHTML += "<tr>";
+                        headers.forEach(header => {
+                            tableHTML += `<th style="padding: 8px; background-color: #f2f2f2;">${header}</th>`;
+                        });
+                        tableHTML += "</tr>";
+
+                        // Create table rows
+                        data.results.forEach(row => {
+                            tableHTML += "<tr>";
+                            headers.forEach(header => {
+                                tableHTML += `<td style="padding: 6px;">${row[header]}</td>`;
+                            });
+                            tableHTML += "</tr>";
+                        });
+
+                        tableHTML += "</table>";
+                        outputDiv.innerHTML += tableHTML;
+                    }
+
+                    outputDiv.innerHTML += `<p><strong>Chart:</strong> <a href="${data.chart_url}" target="_blank">View Chart in Superset (ID: ${data.chart_id})</a></p>`;
+
+                    // Render chart with Plotly
+                    const plotlyDiv = document.getElementById("plotly-chart");
+                    plotlyDiv.innerHTML = ""; // Clear previous chart
+
+                    // Extract KPI column dynamically
+                    const headers = Object.keys(data.results[0]);
+                    const kpiKeys = headers.filter(key => key !== 'enb_id' && key !== 'time');
+                    const kpiKey = kpiKeys.length > 0 ? kpiKeys[0] : 'value';
+
+                    // Combine time + enb_id for x-axis labels
+                    const labels = data.results.map(row => `${row.time || 'N/A'}<br>${row.enb_id}`);
+                    const values = data.results.map(row => parseFloat(row[kpiKey]));
+                    const timestamps = data.results.map(row => row.time || 'N/A');
+
+                    const trace = {
+                        x: labels,
+                        y: values,
+                        text: timestamps.map((t, i) => `Time: ${t}<br>${kpiKey}: ${values[i]}`),
+                        mode: 'markers',
+                        type: 'bar',
+                        marker: {
+                            color: 'rgba(75, 192, 192, 0.6)'
+                        }
+                    };
+
+                    const layout = {
+                        title: `Top Sites by ${kpiKey}`,
+                        xaxis: {
+                            title: 'Timestamp<br>eNB ID',
+                            tickangle: 90, // Rotate labels 90 degrees for better readability
+                            type: 'category', // Treat as categorical axis
+                            categoryorder: 'array',
+                            categoryarray: labels,
+                            automargin: true, // Automatically adjust margins to fit labels
+                            showticklabels: true
+                        },
+                        yaxis: { title: kpiKey, zeroline: true },
+                        showlegend: false,
+                        margin: { t: 50, b: 100 }, // Increase bottom margin to accommodate rotated labels
+                        height: 400 // Ensure sufficient height for the chart
+                    };
+
+                    Plotly.newPlot(plotlyDiv, [trace], layout);
+                }
+            } catch (error) {
+                outputDiv.innerHTML += `<p><strong>Error:</strong> Failed to connect to server: ${error.message}</p>`;
+            }
+
+            document.getElementById("query-input").value = "";
+        }
+    </script>
+</body>
+</html>

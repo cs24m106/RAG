@@ -58,9 +58,9 @@
                 }</pre></p>`;
                 outputDiv.innerHTML += `<p><strong>SQL Query:</strong> ${data.sql_query || ''}</p>`;
                 outputDiv.innerHTML += `<p><strong>Explanation:</strong> ${data.explanation || ''}</p>`;
-                if (data.error) {
-                    outputDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
-                }
+                if (data.error && !data.error.startsWith("200")) // skip success status
+                        outputDiv.innerHTML += `<p><strong>Error:</strong> ${data.error}</p>`;
+
                 if (data.results && Array.isArray(data.results) && data.results.length > 0) {
                     // Create table headers from keys of the first result
                     const headers = Object.keys(data.results[0]);

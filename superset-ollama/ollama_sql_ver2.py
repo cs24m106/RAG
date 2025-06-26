@@ -17,6 +17,9 @@ class Attribute:
     
     def __str__(self):
         return f"\'{self.name}\' ({self.type}): {self.description}"
+    
+    def get(self):
+        return f"{self.name} ({self.type}), -- {self.description}"
 
 datebase = [
     Attribute(name='time', type='TIMESTAMP WITH TIME ZONE', description="Timestamp of the record"),
@@ -66,41 +69,22 @@ datebase = [
 ]
 
 # Definitions
-attributes = "\t"+"\n\t".join([str(attr) for attr in datebase])
+attributes = "\t"+"\n\t".join([str(attr.get()) for attr in datebase]) # use schema form for sqlcoder
 definitions = {
-    'drop_rate': "higher values indicate more dropped connections, which is undesirable, i.e. considered bad performance",
-    'success_rate': "higher values indicate more successful connections, which is desirable, i.e. considered good performance",
+    'drop_rate': "higher values indicate more dropped connections, which is considered as bad performance",
+    'success_rate': "higher values indicate more successful connections, which is considered as good performance",
+    #'val_denom': "if you notice the suffix 'denom' to any attribute, then it is the denominator part of the actual value",
+    #'nom': "if you notice the suffix 'nom' to any attribute, then it is the numerator part of the actual value",
+    #'actual_val': "the actual value of the respective attribute is calculated by (val_nom/val_denom)"
 }
 
 # Model List available from https://ollama.com/library
-model_ids = [
-    'deepseek-r1', 'gemma3', 'qwen3', 'devstral', 'llama4', 'qwen2.5vl', 'llama3.3', 'phi4', 'llama3.2', 'llama3.1', 
-    'nomic-embed-text', 'mistral', 'qwen2.5', 'llama3', 'llava', 'qwen2.5-coder', 'gemma2', 'qwen', 'qwen2', 
-    'mxbai-embed-large', 'llama2', 'phi3', 'codellama', 'llama3.2-vision', 'mistral-nemo', 'tinyllama', 'minicpm-v', 
-    'qwq', 'deepseek-v3', 'dolphin3', 'olmo2', 'bge-m3', 'llama2-uncensored', 'mixtral', 'llava-llama3', 'starcoder2', 
-    'mistral-small', 'smollm2', 'deepseek-coder-v2', 'deepseek-coder', 'snowflake-arctic-embed', 'codegemma', 
-    'dolphin-mixtral', 'all-minilm', 'phi', 'openthinker', 'wizardlm2', 'dolphin-mistral', 'orca-mini', 'dolphin-llama3', 
-    'codestral', 'command-r', 'hermes3', 'phi3.5', 'yi', 'smollm', 'zephyr', 'granite-code', 'wizard-vicuna-uncensored', 
-    'moondream', 'starcoder', 'vicuna', 'phi4-mini', 'mistral-openorca', 'openchat', 'deepseek-v2', 'openhermes', 
-    'llama2-chinese', 'codeqwen', 'deepseek-llm', 'codegeex4', 'aya', 'mistral-large', 'deepcoder', 'stable-code', 
-    'glm4', 'tinydolphin', 'nous-hermes2', 'qwen2-math', 'mistral-small3.1', 'command-r-plus', 'wizardcoder', 'bakllava', 
-    'neural-chat', 'stablelm2', 'cogito', 'sqlcoder', 'granite3.2', 'llama3-chatqa', 'reflection', 'bge-large', 'wizard-math', 
-    'llama3-gradient', 'granite3.3', 'granite3-dense', 'granite3.1-dense', 'llava-phi3', 'granite3.2-vision', 'samantha-mistral', 
-    'dolphincoder', 'exaone3.5', 'nous-hermes', 'snowflake-arctic-embed2', 'xwinlm', 'starling-lm', 'phind-codellama', 
-    'yi-coder', 'nemotron-mini', 'solar', 'athene-v2', 'deepscaler', 'yarn-llama2', 'internlm2', 'wizardlm', 'phi4-reasoning', 
-    'dolphin-phi', 'falcon', 'nemotron', 'llama3-groq-tool-use', 'wizardlm-uncensored', 'orca2', 'aya-expanse', 'paraphrase-multilingual', 
-    'stable-beluga', 'nous-hermes2-mixtral', 'smallthinker', 'falcon3', 'meditron', 'deepseek-v2.5', 'granite-embedding', 'medllama2', 
-    'opencoder', 'granite3-moe', 'exaone-deep', 'llama-pro', 'yarn-mistral', 'granite3.1-moe', 'nexusraven', 'shieldgemma', 'codeup', 
-    'everythinglm', 'llama-guard3', 'reader-lm', 'r1-1776', 'stablelm-zephyr', 'mathstral', 'solar-pro', 'marco-o1', 'command-r7b', 
-    'falcon2', 'duckdb-nsql', 'magicoder', 'mistrallite', 'codebooga', 'wizard-vicuna', 'nuextract', 'bespoke-minicheck', 'tulu3', 
-    'megadolphin', 'notux', 'open-orca-platypus2', 'notus', 'goliath', 'firefunction-v2', 'phi4-mini-reasoning', 'dbrx', 'granite3-guardian', 
-    'alfred', 'command-a', 'sailor2', 'command-r7b-arabic', 'magistral'
-]
 model = "mistral"  # default model taken for now
+MODEL_URL = "http://localhost:11434/api/tags" # Ollama API endpoint to get available models
 
 # Configuration
 # SUPERSET_URL = "http://localhost:8088"  # Superset instance URL
-SUPERSET_URL = "http://10.100.80.26:8088"
+SUPERSET_URL = "http://10.100.80.23:8088" #sys.26:port def
 OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama local endpoint
 DATABASE_ID = 2  # Superset database ID for SQL Lab
 SUPERSET_USERNAME = os.getenv("SUPERSET_USERNAME", "admin")  # Set in environment
@@ -213,58 +197,98 @@ def get_csrf_token():
         return None
 
 # Helper function to extract SQL from the generated response
-def refractor_response(output): # for model: phi4
-        if output:
-            # Remove any leading/trailing whitespace and code block markers
-            output = output.strip()
-            if output.startswith("```") and output.endswith("```"):
-                output = output[3:-3].strip()
-            # Remove any leading SQL language hints (e.g., "sql\n")
-            if output.lower().startswith("sql\n"):
-                output = output[4:].strip()
+def refractor_response(generated):
+    logger.debug(f"Need to refractor (into a parsable dict form) the generated response: {generated}")
+    output = {}
+    output['sql_query'] = generated
+    output['explanation'] = None
+
+    # if the generated response follows the given format
+    start = generated.find('{') 
+    end = generated.find('}', start) + 1 # sqlcoder gives lots of unnecessary text, lets stick with first '{' & '}'
+    if start != -1 and end != -1:
+        refractored = generated[start:end]    
+        try:
+            output = json.loads(refractored)
+            if output == {}:
+                raise ValueError(f"Ollama response is empty or invalid JSON. \n Response Generated: \n{generated}")
+        except Exception as e:
+            logger.error(f"Failed to parse Ollama response as JSON: {e}\nRefractored Response: \n{refractored}")
+    
+    if output and 'sql_query' in output: # return if 'sql_query' key is found in parsed dict
         return output
+    
+    # Try to extract SQL if sqlcoder returns code block formatting (e.g., ```sql ... ```)
+    if generated:
+        code_start = generated.find("```")
+        if code_start != -1:
+            # Try to find the next code block end
+            code_end = generated.find("```", code_start + 3)
+            if code_end != -1:
+                # Extract the code block content
+                sql_block = generated[code_start + 3:code_end].strip()
+                # Remove 'sql' language tag if present
+                if sql_block.lower().startswith("sql"):
+                    sql_block = sql_block[3:].strip()
+                explanation = (generated[:code_start] + generated[code_end + 3:]).strip()
+                output = {
+                    "sql_query": sql_block,
+                    "explanation": explanation
+                }
+                return output
+    
+    return output
 
 # Helper function to query Ollama (Mistral) for SQL generation
 def query_ollama(prompt):
-    
     payload = {
         "model": model,
         "prompt": f"""
+### Instructions:
 You are a data analyst using Apache Superset with a PostgreSQL database.
 You are also an expert in Wireless LTE/4G technology.
+Your task is to convert a question into a SQL query, given a Postgres database schema.
+Adhere to these rules:
+- **Deliberately go through the question and database schema word by word** to appropriately answer the question
+- **Use Table Aliases** to prevent ambiguity (if the query is ambiguous, give the most relavent answer)
+- **Use the Table Name** as provided withing the quotes as it is, do not change it
+- **Use only the attributes, i.e. column names provived** to form the sql query, add the schmema to your memory to answer carefully
+- Try to **avoid using null values for comparison** based queries, unless explicitly asked
+- **Follow the given Response Format strictly**, no additional texts or comments or examples outside the format is entertained
+- Just return the response in **plain text** with no markdown based formatting
 
-The database has a table named 'public.hrly_kpi_1'.
-Attributes: 
+### Input:
+This query will run on a database whose schema is represented in this string:
+CREATE TABLE 'public.hrly_kpi_1' (
 {attributes}
-        
+);
+
 Definitions: {definitions}
         
-Given the user query, generate a valid SQL query based the definitions provided to understand the analogy between the attributes.
+Given the user query, Generate a SQL query that answers the question based on the table schemas and definitions provided to understand the analogy between the attributes.
 User query: "{prompt}"
-The output of the query needs to be presented as a table.
-NOTE: Provide the Response in the below format ONLY: (if the query is ambiguous, give the most relavent answer)
+
+### Response Format:
 {{
     "sql_query": "give the sql query as plain text without any formatting, and no comments in between it",
     "explanation": "Reasoning: A brief explanation of the SQL query and how it relates to the user query",
 }}
-Strictly follow the format above, do not add any additional text or comments.
         """,
         "stream": False
     }
-    output = None
+    generated = None
     try:
         response = requests.post(OLLAMA_URL, json=payload)
         if response.status_code == 200:
             result = response.json()
-            output = json.loads(result.get("response", ""))
+            generated = result.get("response", "")
         else:
             logger.error(f"Ollama request failed: {response.status_code} {response.text}")
     except requests.RequestException as e:
         logger.error(f"Ollama error: {e}")
-    except Exception as e:
-        logger.error(f"Failed to parse Ollama response as JSON: {e}")
     
-    #output = refractor_response(output)
+    output = refractor_response(generated)    
+    logger.debug(f"Ollama Final Output: {output}")
     return output['sql_query'], output['explanation'], payload
 
 # Helper function to execute SQL query via Superset SQL Lab API
@@ -290,10 +314,12 @@ def execute_superset_query(sql_query):
         "queryLimit": 100
     }
     
+    data = None
+    text = ""
     try:
         response = session.post(f"{SUPERSET_URL}/api/v1/sqllab/execute/", headers=headers, json=payload)
         if response.status_code == 200:
-            return response.json().get("data", [])
+            data =  response.json().get("data", [])
         elif response.status_code == 401:
             logger.debug("Access token invalid, refreshing")
             access_token_new = refresh_superset_token()
@@ -303,20 +329,24 @@ def execute_superset_query(sql_query):
                 # Fetch new CSRF token after refreshing access token
                 csrf_token = get_csrf_token()
                 if not csrf_token:
-                    logger.error("Failed to get new CSRF token after refresh")
-                    return None
-                headers["X-CSRF-Token"] = csrf_token
-                response = session.post(f"{SUPERSET_URL}/api/v1/sqllab/execute/", headers=headers, json=payload)
-                if response.status_code == 200:
-                    return response.json().get("data", [])
-            logger.error(f"Superset query failed after refresh: {response.status_code} {response.text}")
-            return None
+                    text += "Failed to get new CSRF token after refresh. "
+                    logger.error(text)
+                else:
+                    headers["X-CSRF-Token"] = csrf_token
+                    response = session.post(f"{SUPERSET_URL}/api/v1/sqllab/execute/", headers=headers, json=payload)
+                    if response.status_code == 200:
+                        data = response.json().get("data", [])
+                    else:
+                        text += "Superset query failed after refresh. "
+                        logger.error(f"{text} {response.status_code} {response.text}")
         else:
-            logger.error(f"Superset query failed: {response.status_code} {response.text}")
-            return None
+            text += "Superset query failed.  "
+            logger.error(f"{text} {response.status_code} {response.text}")
     except requests.RequestException as e:
         logger.error(f"Superset query error: {e}")
-        return None
+    
+    text += f"{response.status_code} {response.text}"
+    return data, text
 
 # Route for chat interface
 @app.route("/")
@@ -325,9 +355,9 @@ def index():
     # Initialize access token on app startup
     if not access_token or datetime.now() >= token_expiry:
         if not authenticate_superset():
-            logger.error("Failed to initialize access token on startup")
+            logger.error("Failed to initialize access token on startup!")
             # Render index.html anyway to allow frontend to load
-    return render_template("index.html")
+    return render_template("index_ver2.html")
 
 # Route to handle chat queries
 @app.route("/chat", methods=["POST"])
@@ -336,28 +366,29 @@ def chat():
     # Ensure access token is initialized
     if not access_token or datetime.now() >= token_expiry:
         if not authenticate_superset():
-            return jsonify({"error": "Failed to authenticate with Superset"}), 500
+            return jsonify({"error": "Failed to authenticate with Superset!"}), 500
     
     output = {}
     output["user_query"] = request.json.get("query")
     if not output["user_query"]:
-        output["error"] = "No query provided"
+        output["error"] = "No query provided!"
         return jsonify(output), 400
     
     # Generate SQL using Mistral via Ollama
     output["sql_query"], output["explanation"], output["payload"] = query_ollama(output["user_query"])
     if not output["sql_query"]:
-        output["error"] = "Failed to generate SQL query"
+        output["error"] = "Failed to generate SQL query!"
         return jsonify(output), 500
     
     # Execute SQL query in Superset
-    output["results"] = execute_superset_query(output["sql_query"])
+    output["results"], output['error'] = execute_superset_query(output["sql_query"])
     #create_superset_chart(sql_query=output["sql_query"])
     if not output["results"]:
-        output["error"] = "Failed to execute query in Superset"
+        output["error"] += " Failed to execute query in Superset!"
         return jsonify(output), 500
     
     return jsonify(output)
+
 
 def create_superset_chart(sql_query, viz_type="bar"):
     headers = {"Authorization": f"Bearer {access_token}", "Content-Type": "application/json"}
@@ -369,6 +400,7 @@ def create_superset_chart(sql_query, viz_type="bar"):
     response = requests.post(f"{SUPERSET_URL}/api/v1/chart/", headers=headers, json=payload)
     return response.json().get("id") if response.status_code == 201 else None
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the Superset-Ollama Flask app.")
     parser.add_argument("--port", type=int, default=5000, help="Port to run the Flask app on")
@@ -376,9 +408,20 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Update model if provided and valid
-    if args.model in model_ids:
-        model = args.model
-    else:
-        logger.warning(f"Model '{args.model}' not in supported model_ids. Using default model '{model}'.")
+    if args.model:
+        # Check if the model exists in the Ollama library
+        try:
+            ollama_models_resp = requests.get(MODEL_URL)
+            if ollama_models_resp.status_code == 200:
+                available_models = [m["name"].replace(":latest", "") for m in ollama_models_resp.json().get("models", [])]
+                if args.model in available_models:
+                    model = args.model
+                else:
+                    logger.warning(f"Using default model '{model}' as given Model-arg:'{args.model}' not found in local Ollama-models: {available_models}.")
+            else:
+                logger.warning(f"Could not fetch Ollama model list (status {ollama_models_resp.status_code}). Using default model '{model}'.")
+        except Exception as e:
+            logger.warning(f"Error checking Ollama models: {e}. Using default model '{model}'.")
 
+    logger.info(f"Starting Flask app with model: {model} on port {args.port}")
     app.run(debug=True, port=args.port)
