@@ -1,15 +1,14 @@
 import sys
-import os
-ROOT_DIR = "Telco-RAG_api"
-curr_path = os.path.abspath(__file__)
-root_path = curr_path[:curr_path.find(ROOT_DIR) + len(ROOT_DIR)]
-sys.path.append(root_path)
+sys.path.append('..') # prehead
+from preheader import CLONE_PATH
 
+import os
 import traceback
 import git
 import time
 import argparse
 import logging
+logger = logging.getLogger(__name__) # Setup logging
 
 from src.query import Query
 from src.generate import generate, check_question
@@ -18,13 +17,12 @@ from src.LLMs.LLM import Mode, UPDATE_MODE, submit_prompt_flex
 
 # Downloads
 folder_url = "https://huggingface.co/datasets/netop/Embeddings3GPP-R18"
-clone_directory = os.path.join(root_path, "3GPP-Release18")
 
-if not os.path.exists(clone_directory):
-    git.Repo.clone_from(folder_url, clone_directory)
-    print("Folder cloned successfully!")
+if not os.path.exists(CLONE_PATH):
+    git.Repo.clone_from(folder_url, CLONE_PATH)
+    logger.info("Folder cloned successfully!")
 else:
-    print("Folder already exists. Skipping cloning.")
+    logger.info("Folder already exists. Skipping cloning.")
 
 # RAG api Class
 def TelcoRAG(query, answer=None, options=None, model_name='gpt-2', mode:Mode=Mode.HuggingFace, max_new_tokens=4096):
@@ -39,20 +37,32 @@ def TelcoRAG(query, answer=None, options=None, model_name='gpt-2', mode:Mode=Mod
         
         {question.question}"""
         
-        concisequery = submit_prompt_flex(conciseprompt, model_name, max_new_tokens).rstrip('"')
-
-        question.query = concisequery
-
+        print()
+        print('#'*100)
+        logger.info("Task-1 ToDo: Convert given question into 'consise query'\n")
+        question.query = submit_prompt_flex(conciseprompt, model_name, max_new_tokens).rstrip('"')
+        logger.info(f"Task-1 Over! 'concise query' : \n{repr(question.query)}\n")
+        print('#'*100)
+        print()
+        
+        print()
+        print('#'*100)
+        logger.info("Task-2 ToDo: Enhance the above concise query with Terms & Abbreviations\n")
         question.def_TA_question()
+        logger.info(f"Task-2 Over! 'enhanced query' : \n{repr(question.enhanced_query)}\n")
+        print('#'*100)
         print()
-        print('#'*50)
-        print(concisequery)
-        print('#'*50)
+        
         print()
-
+        print('#'*100)
+        logger.info("Task-3 ToDo: Get relavant 3GPP content for the above enhanced query\n")
         question.get_3GPP_context(k=10, model_name=model_name, validate_flag=False)
-
-        print(answer)
+        logger.info(f"Task-3 Over!")
+        print('#'*100)
+        print()
+        exit(1)
+        
+        logger.info(f"Check if answer is provided: {'None' if answer is None else answer}")
         response = None; context = None
         if answer is not None:
             response, context , _ = check_question(question, answer, options, model_name=model_name)
@@ -62,12 +72,12 @@ def TelcoRAG(query, answer=None, options=None, model_name='gpt-2', mode:Mode=Mod
             response, context, _ = generate(question, model_name)
         
         end=time.time()
-        print(f'Generation of this response took {end-start} seconds')
+        logger.info(f'Generation of this response took {end-start} seconds')
         return response, context
     
     except Exception as e:
-        print(f"An error occurred: {e}")
-        print(traceback.format_exc())
+        logger.error(f"An error occurred: {e}")
+        logger.warning(traceback.format_exc())
 
 # main()
 if __name__ == "__main__":

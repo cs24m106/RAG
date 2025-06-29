@@ -16,8 +16,10 @@ from src.LLMs.LLM import submit_prompt_flex, a_submit_prompt_flex, embedding
 from src.validator import validator_RAG
 from src.NNRouter import NNRouter
 from api.LLM import a_submit_prompt_flex_UI, submit_prompt_flex_UI
+import logging
 
 resources_path = os.path.join(os.path.dirname(__file__), 'resources')
+logger = logging.getLogger(__name__) # Setup logging
 
 class Query:
     def __init__(self, query, context):
@@ -59,8 +61,8 @@ class Query:
 
     @staticmethod
     def get_embeddings_list(text_list):
-        response = embedding(text_list)
-        embeddings = [item.embedding for item in response.data]
+        embeddings = embedding(text_list)
+        logger.info(f"text_list size:({len(text_list)}) :: embedding dims: {embeddings.shape}")
         return dict(zip(text_list, embeddings))
 
     @staticmethod
@@ -68,12 +70,17 @@ class Query:
         return sum(x * y for x, y in zip(a, b))
     
     @staticmethod
-    def get_col2(embeddings_list):
+    def get_col2(embeddings_list, reset=False):
         file_path = os.path.join(resources_path, 'series_description.json')
+        if reset and os.path.isfile(file_path):
+            os.remove(file_path)
+            
         if os.path.isfile(file_path):
+            logger.info("loading series description from existing file")
             with open(file_path, 'r') as file:
                 series_dict = json.load(file)
         else:
+            logger.info("creating new series description from pre-existing knowledge base")
             topics_with_series = [
                 ("Requirements (21 series): Focuses on the overarching requirements necessary for UMTS (Universal Mobile Telecommunications System) and later cellular standards, including GSM enhancements, security standards, and the general evolution of 3GPP systems.", "21 series"),
                 ("Service aspects ('stage 1') (22 series): This series details the initial specifications for services provided by the network, outlining the service requirements before the technical realization is detailed.", "22 series"),
@@ -98,7 +105,8 @@ class Query:
             with open(file_path, 'w') as file:
                 json.dump(series_dict, file, indent=4)
         
-        similarity_column = []
+        logger.debug(f"no.of series_dict entries: {len(series_dict)} | indices: {list(series_dict.keys())} | embedding dims: {[len(series_dict[idx]['embeddings']) for idx in series_dict]}")
+        similarity_column = [] # finding similarity score by dot-prod between query(s) embed and each series-descrip embed
         for embeddings in embeddings_list:
             coef = [Query.inner_product(embeddings, series_dict[series_id]['embeddings']) for series_id in series_dict]
             similarity_column.append(coef)
@@ -108,8 +116,10 @@ class Query:
     def preprocessing_softmax(embeddings_list):
         embeddings = np.array(embeddings_list)
         similarity = np.array(Query.get_col2(embeddings))
+        logger.info(f"similarity score of the query:embeddings w.r.t series-description:embeddings => dim={similarity.shape} vals=\n{similarity}")
         X_train_1_tensor = torch.tensor(embeddings, dtype=torch.float32)
         X_train_2_tensor = torch.nn.functional.softmax(10 * torch.tensor(similarity, dtype=torch.float32), dim=-1)
+        logger.info(f"creating DataLoader with train data with embeddings[dim:{X_train_1_tensor.shape}] & softmax(similarity_scores)[dim:{X_train_2_tensor.shape}]")
         dataset = TensorDataset(X_train_1_tensor, X_train_2_tensor)
         return DataLoader(dataset, batch_size=128, shuffle=True)
     
@@ -121,15 +131,19 @@ class Query:
     def predict_wg(self):
         text_embeddings = Query.get_embeddings_list([self.enhanced_query])
         embeddings = text_embeddings[self.enhanced_query]
+        logger.info("1.1 Enhanced Query converted to Embeddings!")
         test_dataloader = Query.preprocessing_softmax([embeddings])
+        logger.info("1.2 Applied Softmax-Preprocessing onto Embeddings!")
         label_list = []
         with torch.no_grad():
             for X1, X2 in test_dataloader:
                 X1, X2 = X1.to(self.device), X2.to(self.device)
                 outputs = self.model(X1, X2)
-                _, top_indices = outputs.topk(5, dim=1)
+                logger.debug(f"NN-Router model: [inp:({X1},{X2})] => [out:{outputs}]")
+                _, top_indices = outputs.topk(5, dim=1) # a fn inside PyTorch.Tensors to get top k vals in resp dim
                 predicted_labels = self.original_labels_mapping[top_indices.cpu().numpy()]
                 label_list = predicted_labels
+        logger.info(f"1.3 Found out all prediction_labels: {label_list} based on NN-Router model with existing weights!")
         self.wg = label_list[0]
         
     def get_question_context_faiss(self, batch, k, use_context=False):
@@ -151,13 +165,22 @@ class Query:
         
     def get_3GPP_context(self, k=10, model_name='gpt-4o-mini', validate_flag=True, UI_flag=False):
         self.predict_wg()
-        document_ds = get_documents(self.wg)
-        Document_ds = [chunk_doc(doc) for doc in document_ds]
+        logger.info(f"1. predict_wg() completed! predicted series no.s = {self.wg}")
+        
+        doc_ds = get_documents(self.wg)
+        logger.info(f"2. get_documents() completed! Total no.of docs within series{self.wg} = {len(doc_ds)}")
+        
+        Document_ds = [chunk_doc(doc) for doc in doc_ds]
+        total_no_chunks = sum(len(doc_list) for doc_list in Document_ds)
+        logger.info(f"3. chunking() completed! Database size after chucking each doc = {total_no_chunks}, sample chunk_entry: \n{Document_ds[0][0]}")
+        
         series_doc = {'Summaries': []}
         for series_number in self.wg:
+            # first 2 char of the file name, represents the series no. to which it belongs
             series_doc[f'Series{series_number}'] = [doc for doc in Document_ds if doc[0]['source'][:2].isnumeric() and int(doc[0]['source'][:2]) == series_number]
         series_doc['Summaries'] = [doc for doc in Document_ds if not doc[0]['source'][:2].isnumeric()]
-        
+        logger.info(f"4. categoriezed all doc chucks w.r.t to their series numbers!")
+
         series_docs = get_embeddings(series_doc)
         embedded_docs = [serie for serie in series_docs.values()]
         self.get_question_context_faiss(batch=embedded_docs, k=10, use_context=False)

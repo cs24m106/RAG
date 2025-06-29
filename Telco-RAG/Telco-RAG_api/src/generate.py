@@ -21,7 +21,7 @@ Please answer the following question, add between paranthesis the retrieval(e.g.
         print(prompt)
         logging.info("Generated system prompt for OpenAI completion.")
         
-        predicted_answers_str = submit_prompt_flex(prompt, model=model_name)
+        predicted_answers_str = submit_prompt_flex(prompt, model_name=model_name)
         logging.info("Model response generated successfully.")
 
         context = f"The retrieved context provided to the LLM is:\n{content}"
@@ -94,7 +94,7 @@ def check_question(question, answer, options, model_name='gpt-4o-mini'):
         """
         print(syst_prompt)
         # Generating the model's response based on the constructed prompt.
-        predicted_answers_str = submit_prompt_flex(syst_prompt, model=model_name)
+        predicted_answers_str = submit_prompt_flex(syst_prompt, model_name=model_name)
         predicted_answers_str = predicted_answers_str.replace('"\n', '",\n')
         print(predicted_answers_str)
         print(answer)

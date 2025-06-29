@@ -6,9 +6,10 @@ import asyncio
 import aiohttp
 import requests
 import logging
+import json
 from enum import Enum
 
-OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama local endpoint
+OLLAMA_URL = "http://localhost:11434/api/"  # Ollama local endpoint
 
 # GLOBAL Declaration model LLM Backend MODE
 class Mode(Enum):
@@ -20,9 +21,7 @@ def UPDATE_MODE(mode:Mode):
     global LLM_mode
     LLM_mode = mode # public meth
 
-# Setup logging
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__) # Setup logging
 
 # Mapping of model names to Hugging Face repo IDs
 models_ids = {
@@ -63,10 +62,10 @@ def load_model(model_name: str):
         torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
         trust_remote_code=True,
     )
-
     model.eval()
     model_cache[model_name] = (tokenizer, model)
     return tokenizer, model
+
 
 def submit_prompt_flex_huggingface(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
     """
@@ -77,8 +76,7 @@ def submit_prompt_flex_huggingface(prompt: str, model_name: str = "gpt-2", max_n
         max_new_tokens: Max tokens to generate.
         output_json: Whether to format output as JSON (basic placeholder).
     """
-    logger.debug(f"\"submit_prompt_flex_huggingface\" called with model={model_name}, max_new_tokens:{max_new_tokens}, output_json={output_json}")
-    logger.debug(f"prompt:\n{prompt}")
+    logger.info(f"=> called with model={model_name}, max_new_tokens:{max_new_tokens}, output_json={output_json}, prompt: \n{repr(prompt)}")
     tokenizer, model = load_model(model_name)
     
     inputs = tokenizer(prompt, return_tensors="pt", padding=True, truncation=True)
@@ -94,12 +92,11 @@ def submit_prompt_flex_huggingface(prompt: str, model_name: str = "gpt-2", max_n
             pad_token_id=tokenizer.pad_token_id,
         )
 
-    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)    
     if output_json:
-        response = jsonify(response)
-    
+        response = jsonify(response)    
     return response.strip()
+
 
 async def a_submit_prompt_flex_huggingface(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
     """Async wrapper for generate_text."""
@@ -107,36 +104,57 @@ async def a_submit_prompt_flex_huggingface(prompt: str, model_name: str = "gpt-2
     result = await loop.run_in_executor(None, submit_prompt_flex_huggingface, prompt, model_name, max_new_tokens, output_json)
     return result
 
+
 def submit_prompt_flex_ollama(prompt, model_name="mistral", output_json=False):
-    logger.debug(f"\"submit_prompt_flex_ollama\" called with model={model_name}, output_json={output_json}")
-    logger.debug(f"prompt:\n{prompt}")
+    """
+    prompt using -> '/api/generate'
     
+    NOTE: This endpoint can return streamed responses (one JSON object per line), 
+    especially when used for chat or large language model generation. However, your code is using response.json(), 
+    which expects a single valid JSON object — hence the Extra data error when it encounters additional JSON objects or garbage data.
+    """
+    logger.info(f"=> called with model={model_name}, output_json={output_json}, prompt: \n{repr(prompt)}")
+    url = OLLAMA_URL + "generate" # lets use generate api for sync fn
+
     generated = ""
     try:
-        response = requests.post(OLLAMA_URL, json={"model": model_name,"prompt": prompt})
+        response = requests.post(url, json={"model": model_name,"prompt": prompt})
         response.raise_for_status()
-        if response.status_code == 200:
-            result = response.json()
-            generated = result.get("response", "")
-        else:
-            logger.error(f"Ollama request failed: {response.status_code} {response.text}")
-    except requests.RequestException as e:
-        logger.error(f"FATAL: {e}")
+        # if response.status_code == 200: means llm had responded properly
+        # Parse each line as a separate JSON object
+        for line in response.iter_lines():
+            if line:
+                try:
+                    result = json.loads(line)
+                    generated += result.get("response", "")
+                except json.JSONDecodeError as je:
+                    logger.warning(f"Skipping non-JSON line: {line} | Error: {je}")
+        generated = generated.strip()
+        logger.info("ollama request successfully parsed!")
+    except Exception as e:
+        logger.error(f"FATAL [status:{response.status_code}]: {e}, response: {response.text}")
     
     if output_json:
         generated = jsonify(generated)
     return generated
 
-async def a_submit_prompt_flex_ollama(prompt, model_name="mistral", output_json=False):    
-    logger.debug(f"\"a_submit_prompt_flex_ollama\" called with model={model_name}, output_json={output_json}")
-    logger.debug(f"prompt:\n{prompt}")
+
+async def a_submit_prompt_flex_ollama(prompt, model_name="mistral", output_json=False):
+    """
+    prompt using -> '/api/chat'
     
+    NOTE: for structured chat-based responses, which *may* return a single JSON object instead of a stream.
+    keep it check later for now...
+    """
+    logger.info(f"=> called with model={model_name}, output_json={output_json}, prompt: \n{repr(prompt)}")
+    url = OLLAMA_URL + "chat" # lets use chat api for async fn
+
     generated = ""
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                OLLAMA_URL,
-                json={"model": model_name, "prompt": prompt}
+                url,
+                json={"model": model_name, "messages": [{"role": "user", "content": prompt}]}
             ) as response:
                 response.raise_for_status()
                 
@@ -152,28 +170,33 @@ async def a_submit_prompt_flex_ollama(prompt, model_name="mistral", output_json=
         generated = jsonify(generated)
     return generated
 
+
 def jsonify(response):
     response = response.replace('"\n', '",\n')
     response = response[:response.rfind("}")+1]
     return response
 
+
 def submit_prompt_flex(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
-    logger.debug(f"\"submit_prompt_flex\" called with LLM_mode={LLM_mode}")
+    logger.info(f"=> called with LLM_mode={LLM_mode}")
     if LLM_mode == Mode.HuggingFace:
         return submit_prompt_flex_huggingface(prompt, model_name, max_new_tokens, output_json)
     elif LLM_mode == Mode.Ollama:
         return submit_prompt_flex_ollama(prompt, model_name, output_json)
 
 async def a_submit_prompt_flex(prompt: str, model_name: str = "gpt-2", max_new_tokens: int = 4096, output_json: bool = False):
+    logger.info(f"=> called with LLM_mode={LLM_mode}")
     if LLM_mode == Mode.HuggingFace:
         return a_submit_prompt_flex_huggingface(prompt, model_name, max_new_tokens, output_json)
     elif LLM_mode == Mode.Ollama:
         return a_submit_prompt_flex_ollama(prompt, model_name, output_json)
 
-def embedding(input_text, dimension=1024):
-    model = SentenceTransformer("BAAI/bge-m3")  # take any embedding model here
-    embeddings = model.encode([input_text], convert_to_tensor=True)
+
+def embedding(text_list:list, model_name:str ="BAAI/bge-m3", dimension:int =1024):
+    logger.info(f"Finding Emdeddings based on params: [model:{model_name}, dim:{dimension}]")
+    model = SentenceTransformer(model_name)  # take any embedding model here
+    embeddings = model.encode(text_list, convert_to_tensor=True)
     # Ensure dimension matches (this model should have 1024 dims)
     if embeddings.shape[1] != dimension:
         raise ValueError(f"Embedding dimension mismatch: expected {dimension}, got {embeddings.shape[1]}")
-    return embeddings[0].tolist()
+    return embeddings

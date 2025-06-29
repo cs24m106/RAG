@@ -47,6 +47,13 @@ def custom_text_splitter(text, chunk_size, chunk_overlap, word_split=False):
 
 
 def chunk_doc(doc):
+    """
+    Each doc in split into chunks of default values:
+    chunk_size = 500, chunk_overlap = 25, word_split = True
+    
+    returns a list of chunked entries in same dict format as of doc_entry
+    => [chunk_entry -> each : {'text': chunk_content, 'source': doc_file_name}]
+    """
     chunks= custom_text_splitter( doc["text"], 500, 25, word_split = True)
     return [{"text": chunk, "source": doc["source"]} for chunk in chunks]
  
