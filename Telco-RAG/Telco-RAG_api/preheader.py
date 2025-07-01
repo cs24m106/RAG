@@ -9,11 +9,20 @@ ROOT_PATH = curr_path[:curr_path.find(ROOT_DIR) + len(ROOT_DIR)]
 sys.path.append(ROOT_PATH)
 
 # These are env var for this project under the root dir (modify accordingly)
-CLONE_DIR = "3GPP-Release18"
+RELEASE_VER = 18
+CLONE_DIR = f"3GPP-Release{RELEASE_VER}"
 CLONE_PATH = os.path.join(ROOT_PATH, CLONE_DIR)
 # Keeping Download directory outside git-repo to avoid of loss of data when local repo is refreshed
 DOWN_DIR = "3GPP-Latest"
 DOWN_PATH = os.path.join(VENV_PATH, DOWN_DIR) # could keep inside Root_dir as well
+
+# Update abs path to 'TeleQnA.txt' dataset here that can be used to random test the rag model
+TeleQA_PATH = os.path.join(VENV_PATH, "RAG/TeleQnA/TeleQnA.txt")
+
+# set rand.seed value for reproducibility
+SEED = 2025
+import random
+random.seed(SEED)
 
 # Special logging functionalities: colorful log in terminal + backup log into file
 import logging
@@ -29,13 +38,14 @@ class CustomFormatter(logging.Formatter):
     reset = "\x1b[0m"
 
     #note: logger name to be set based on filename for easy to locate
-    fmt_lvl = "[%(levelname).3s | %(name)s:%(lineno)s - "
-    fmt_fn = "%(funcName)s()] " 
+    fmt_lvl = "[%(levelname).3s | %(name)s:%(lineno)s"
+    fmt_fn = " - %(funcName)s()] " 
     msg = "%(message)s"
     _format = fmt_lvl + fmt_fn + msg
+    _simple = fmt_lvl+ "] " + msg
 
     FORMATS = {
-        logging.DEBUG: grey + fmt_lvl + green + fmt_fn + reset + msg,
+        logging.DEBUG: grey + msg + reset, # debug will print only msg with no formats
         logging.INFO: cyan + fmt_lvl + green + fmt_fn + white + msg + reset,
         logging.WARNING: yellow + fmt_lvl + green + fmt_fn + white + msg + reset,
         logging.ERROR: magenta + fmt_lvl + green + fmt_fn + white + msg + reset,
@@ -46,6 +56,20 @@ class CustomFormatter(logging.Formatter):
         log_fmt = self.FORMATS.get(record.levelno)
         formatter = logging.Formatter(log_fmt)
         return formatter.format(record)
+
+class FileFormatter(logging.Formatter):
+    def __init__(self, full_fmt, debug_fmt):
+        self.full_fmt = full_fmt
+        self.debug_fmt = debug_fmt
+        super().__init__(full_fmt)  # Initialize with full format
+
+    def format(self, record):
+        # Switch the format based on log level
+        if record.levelno == logging.DEBUG:
+            self._style._fmt = self.debug_fmt  # Update the style's format
+        else:
+            self._style._fmt = self.full_fmt   # Revert to full format
+        return super().format(record)
 
 # globaL format refernce
 cf = CustomFormatter()
@@ -60,7 +84,7 @@ CONSOLE.setFormatter(cf)
 LOG_FILE = "TelcoRAG.log"
 FILE_HANDLER = logging.FileHandler(LOG_FILE, mode='w')  # 'w' means overwrite each run
 FILE_HANDLER.setLevel(logging.DEBUG)
-FILE_HANDLER.setFormatter(logging.Formatter(FORMAT))
+FILE_HANDLER.setFormatter(FileFormatter(full_fmt=cf._format, debug_fmt=cf.msg))
 
 # Configure root logger
 root_logger = logging.getLogger()

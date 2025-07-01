@@ -1,5 +1,5 @@
 import os
-from preheader import CLONE_PATH, DOWN_PATH
+from preheader import CLONE_PATH, DOWN_PATH, RELEASE_VER
 docs_dir = os.path.join(CLONE_PATH, "Documents")
 down_dir = DOWN_PATH
 
@@ -101,7 +101,7 @@ def get_documents(series_list, folder_path=docs_dir, storage_name='Documents.db'
     file_list = []
 
     # Download and extract Documents (set reset flag carefully, will take time)
-    download_documents(release=18, reset=hard_reset) # debug for release 18 only for now
+    download_documents(release=RELEASE_VER, reset=hard_reset) # debug for release 18 only for now
     extract_zipfiles(out_folder=folder_path, reset=hard_reset)
 
     # Check and convert .doc files to .docx

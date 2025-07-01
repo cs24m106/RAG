@@ -197,6 +197,6 @@ def embedding(text_list:list, model_name:str ="BAAI/bge-m3", dimension:int =1024
     model = SentenceTransformer(model_name)  # take any embedding model here
     embeddings = model.encode(text_list, convert_to_tensor=True)
     # Ensure dimension matches (this model should have 1024 dims)
-    if embeddings.shape[1] != dimension:
-        raise ValueError(f"Embedding dimension mismatch: expected {dimension}, got {embeddings.shape[1]}")
+    if embeddings.shape[-1] != dimension:
+        raise ValueError(f"Embedding dimension mismatch: expected {dimension}, got embedding dim {embeddings.shape}")
     return embeddings

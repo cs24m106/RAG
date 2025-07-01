@@ -41,23 +41,24 @@ class Query:
         self.enhanced_query = self.query
 
     def candidate_answers(self, model_name='gpt-4o-mini', UI_flag=True):
-        try:
-            row_context = f"""
-            Provide all the possible answers to the following question considering your knowledge and the text provided.
-            Question: {self.query}
-            Considering the following context:
-            {self.context}
-            Provide all the possible answers to the following question considering your knowledge and the text provided.
-            Question: {self.question}
-            Ensure none of the answers provided contradicts your knowledge and each answer has at most 100 characters.
-            """
-            generated_output_str = submit_prompt_flex_UI(row_context, model=model_name) if UI_flag else submit_prompt_flex(row_context, model=model_name)
+        row_context = f"""
+Provide all the possible answers to the following question considering your knowledge and the text provided.
+Question: {self.query}
+Considering the following context:
+{self.context}
+Provide all the possible answers to the following question considering your knowledge and the text provided.
+Question: {self.question}
+Ensure none of the answers provided contradicts your knowledge and each answer has at most 100 characters.
+        """
+        logger.info("generating candidate answers based on retrieved content. prompt-format: <--ins-->[query] <--use-->[content] <--gen-->[question]")
+        try:            
+            generated_output_str = submit_prompt_flex_UI(row_context, model=model_name) if UI_flag else submit_prompt_flex(row_context, model_name=model_name)
             if generated_output_str != "NO": 
                 self.context = generated_output_str 
-                print(self.context)
+                logger.info(f"generated context: {repr(self.context)}")
                 self.enhanced_query = self.query + '\n' + self.context
         except Exception as e:
-            print(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
 
     @staticmethod
     def get_embeddings_list(text_list):
@@ -131,27 +132,32 @@ class Query:
     def predict_wg(self):
         text_embeddings = Query.get_embeddings_list([self.enhanced_query])
         embeddings = text_embeddings[self.enhanced_query]
-        logger.info("1.1 Enhanced Query converted to Embeddings!")
+        logger.info("(i) Enhanced Query converted to Embeddings!")
         test_dataloader = Query.preprocessing_softmax([embeddings])
-        logger.info("1.2 Applied Softmax-Preprocessing onto Embeddings!")
+        logger.info("(ii) Applied Softmax-Preprocessing onto Embeddings!")
         label_list = []
         with torch.no_grad():
             for X1, X2 in test_dataloader:
                 X1, X2 = X1.to(self.device), X2.to(self.device)
                 outputs = self.model(X1, X2)
-                logger.debug(f"NN-Router model: [inp:({X1},{X2})] => [out:{outputs}]")
+                logger.debug(f"NN-Router model: [inp:(queryEmbed.dim:{X1.shape},softSimScore.dim{X2.shape})] => [out(dim:{outputs.shape})=\n{outputs}]")
                 _, top_indices = outputs.topk(5, dim=1) # a fn inside PyTorch.Tensors to get top k vals in resp dim
                 predicted_labels = self.original_labels_mapping[top_indices.cpu().numpy()]
                 label_list = predicted_labels
-        logger.info(f"1.3 Found out all prediction_labels: {label_list} based on NN-Router model with existing weights!")
+        logger.info(f"(iii) Found out all prediction_labels: {label_list} based on NN-Router model with existing weights!")
         self.wg = label_list[0]
         
     def get_question_context_faiss(self, batch, k, use_context=False):
+        logger.info(f"=> called with batch.size={len(batch)} (no.of series + summaries inclusive), k={k}, use_context={use_context}")
         try:
             faiss_index, faiss_index_to_data_mapping, source_mapping, embedding_mapping = get_faiss_batch_index(batch)
+            logger.info(f"---> get_faiss_batch_index() completed for given batch! Sample Entriy for Index[0]: source_mapping = {source_mapping[0]}, embedding_mapping.size = {embedding_mapping[0].shape}, \nfaiss_index_to_data_mapping = {repr(faiss_index_to_data_mapping[0])}")
             result = find_nearest_neighbors_faiss(self.query, faiss_index, faiss_index_to_data_mapping, k, source_mapping=source_mapping, embedding_mapping=embedding_mapping, context=self.context if use_context else None)
+            logger.info(f"---> find_nearest_neighbors_faiss() completed with above params! \n {k}-Closest Results:")
+            for entry in result:
+                logger.debug(f"\t\tindex:{entry[0]}, source:{entry[2]}, embedding.size:{entry[3].shape}, text:\n{repr(entry[1])}")
             if isinstance(result, list):
-                self.context = [f"\nRetrieval {i+1}:\n...{data}...\nThis retrieval is performed from the document 3GPP {source}.\n" for i, (index, data, source, _) in enumerate(result)]
+                self.context = [f"\nRetrieval {i+1}:\n...{data}...\nThis retrieval is performed from the document 3GPP {source}.\n" for i, (_, data, source, _) in enumerate(result)]
                 self.context_source = [f"Index: {index}, Source: {source}" for index, _, source, _ in result]
             else:
                 self.context = result
@@ -165,7 +171,7 @@ class Query:
         
     def get_3GPP_context(self, k=10, model_name='gpt-4o-mini', validate_flag=True, UI_flag=False):
         self.predict_wg()
-        logger.info(f"1. predict_wg() completed! predicted series no.s = {self.wg}")
+        logger.info(f"1. initital predict_wg() completed! predicted series no.s = {sorted(self.wg)}")
         
         doc_ds = get_documents(self.wg)
         logger.info(f"2. get_documents() completed! Total no.of docs within series{self.wg} = {len(doc_ds)}")
@@ -179,25 +185,42 @@ class Query:
             # first 2 char of the file name, represents the series no. to which it belongs
             series_doc[f'Series{series_number}'] = [doc for doc in Document_ds if doc[0]['source'][:2].isnumeric() and int(doc[0]['source'][:2]) == series_number]
         series_doc['Summaries'] = [doc for doc in Document_ds if not doc[0]['source'][:2].isnumeric()]
-        logger.info(f"4. categoriezed all doc chucks w.r.t to their series numbers!")
+        logger.info("4. categoriezed all doc chucks w.r.t to their series numbers!")
 
         series_docs = get_embeddings(series_doc)
         embedded_docs = [serie for serie in series_docs.values()]
         self.get_question_context_faiss(batch=embedded_docs, k=10, use_context=False)
+        logger.info("5. get_question_context_faiss(use_context=False) completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.")
         self.candidate_answers(model_name=model_name, UI_flag=UI_flag)
+        logger.info(f"6. candidate_answers() completed! question context enhanced with possible answers. enhanced_query:\n{repr(self.enhanced_query)}")
 
         old_list = self.wg
         self.predict_wg()
-        new_series = {f'Series{series_number}': [doc for doc in Document_ds if doc[0]['source'][:2].isnumeric() and int(doc[0]['source'][:2]) == series_number] for series_number in self.wg if series_number not in old_list}
-        new_series = get_embeddings(new_series)
+        logger.info(f"7. checking predict_wg() completed! newly predicted series no.s = {sorted(self.wg)} vs old predictions = {sorted(old_list)}")
+
+        new_list = [series_number for series_number in self.wg if series_number not in old_list] # set difference
+        new_doc_ds = get_documents(new_list) # fetch documents of newly predicted series
+        new_Document_ds = [chunk_doc(doc) for doc in new_doc_ds]
+        new_series = {}
+        for series_number in new_list:
+            new_series[f'Series{series_number}'] = [doc for doc in new_Document_ds if doc[0]['source'][:2].isnumeric() and int(doc[0]['source'][:2]) == series_number]
+        
+        logger.info(f"new series no.s that were not present in previously predicted series no.s = {new_series.keys()}")
+        new_series = get_embeddings(new_series) # getting doc-chucks of [new-series-no] that are not present [in old-series-no]
+        # copy the common series's data{'text','source','embeddings'} that are in common with newly predicted series
         old_series = {'Summaries': series_docs['Summaries'], **{f'Series{series_number}': series_docs[f'Series{series_number}'] for series_number in self.wg if series_number in old_list}}
         
-        embedded_docs = [serie for serie in new_series.values()] + [serie for serie in old_series.values()]
+        embedded_docs = [serie for serie in new_series.values()] + [serie for serie in old_series.values()] # combine all doc-chunks of newly pred series-no.s
         if validate_flag:
+            logger.info(f"validate_flag is set to True, thus performing 'get_question_context_faiss()' with k = 2 times prev val:{k} = {2*k}")
             self.get_question_context_faiss(batch=embedded_docs, k=2*k, use_context=True)
-            self.validate_context(model_name=model_name, k=k, UI_flag=UI_flag)
         else:  
             self.get_question_context_faiss(batch=embedded_docs, k=k, use_context=True)
+        logger.info("8. get_question_context_faiss(use_context=True) based on new predictions completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.")
+        
+        if validate_flag:
+            self.validate_context(model_name=model_name, k=k, UI_flag=UI_flag)
+            logger.info(f"spl.Task: validate_context() completed! question_context after validation:\n{repr(self.context)}")
 
 
     async def get_online_context(self, model_name='gpt-4o-mini', validator_flag= True, options=None):
