@@ -1,0 +1,961 @@
+Popen(['git', 'version'], cwd=/home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/paper_version, stdin=None, shell=False, universal_newlines=False)
+Popen(['git', 'version'], cwd=/home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/paper_version, stdin=None, shell=False, universal_newlines=False)
+Environment variable FAISS_OPT_LEVEL is not set, so let's pick the instruction set according to the current CPU
+[INF | faiss.loader:86 - <module>()] Loading faiss with AVX2 support.
+[INF | faiss.loader:88 - <module>()] Successfully loaded faiss with AVX2 support.
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "HEAD /datasets/netop/Embeddings3GPP-R18 HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /datasets/netop/3GPP-R18 HTTP/1.1" 200 0
+[INF | __main__:49 - <module>()] Folder already exists. Skipping cloning.
+Question[5313]: Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?
+Options: [max_new_tokens=1024]
+  option 1: Spread Spectrum
+  option 2: AN Generation
+  option 3: Cooperative Relaying
+  option 4: (Massive) Multiple Antennas
+  option 5: Millimeter-Wave Communications
+Expected Answer: option 4: (Massive) Multiple Antennas
+Explanation: The use of multiple antennas can improve the stealthiness of wireless channels through directional transmission.
+Category: Research publications
+
+
+####################################################################################################
+[INF | __main__:68 - TelcoRAG()] Task-1 ToDo: Convert given question into 'consise query'
+
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'Rephrase the question to be clear and concise:\n        \n        Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?'
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+
+Task-1 Over! 'concise query' : 
+'What is the technique that enhances the covertness of wireless channels by using multiple antennas?'
+####################################################################################################
+
+
+####################################################################################################
+[INF | __main__:74 - TelcoRAG()] Task-2 ToDo: Enhance the above concise query with Terms & Abbreviations
+
+
+Task-2 Over! 'enhanced_query' : 
+'What is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n'
+####################################################################################################
+
+
+####################################################################################################
+[INF | __main__:80 - TelcoRAG()] Task-3 ToDo: Get relavant 3GPP content for the above enhanced query
+
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.query:66 - get_embeddings_list()] text_list size:(1) :: embedding dims: torch.Size([1, 1024])
+[INF | src.query:135 - predict_wg()] (i) Enhanced Query converted to Embeddings!
+[INF | src.query:80 - get_col2()] loading series description from existing file
+no.of series_dict entries: 18 | indices: ['21 series', '22 series', '23 series', '24 series', '25 series', '26 series', '27 series', '28 series', '29 series', '30 series', '31 series', '32 series', '33 series', '34 series', '35 series', '36 series', '37 series', '38 series'] | embedding dims: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+[INF | src.query:120 - preprocessing_softmax()] similarity score of the query:embeddings w.r.t series-description:embeddings => dim=(1, 18) vals=
+[[0.05623476 0.04580461 0.01852749 0.06282349 0.04438731 0.00121257
+  0.03581124 0.04802651 0.05450386 0.02693768 0.03769065 0.06061105
+  0.03679389 0.0575256  0.06994673 0.04045614 0.06008899 0.02800544]]
+[INF | src.query:123 - preprocessing_softmax()] creating DataLoader with train data with embeddings[dim:torch.Size([1, 1024])] & softmax(similarity_scores)[dim:torch.Size([1, 18])]
+[INF | src.query:137 - predict_wg()] (ii) Applied Softmax-Preprocessing onto Embeddings!
+NN-Router model: [inp:(queryEmbed.dim:torch.Size([1, 1024]),softSimScore.dimtorch.Size([1, 18]))] => [out(dim:torch.Size([1, 18]))=
+tensor([[-11.0158,  -3.8053,  -1.8558,   1.6360, -19.5758,   7.7791,  -2.9770,
+          -3.1089,   0.4649, -20.9342,  -1.8252,  -2.1914,  -2.4971, -19.8850,
+         -20.1189,  -5.4234,  -2.8495,  -7.0755]])]
+[INF | src.query:147 - predict_wg()] (iii) Found out all prediction_labels: [[26 24 29 31 23]] based on NN-Router model with existing weights!
+[INF | src.query:174 - get_3GPP_context()] 1. initital predict_wg() completed! predicted series no.s = [23, 24, 26, 29, 31]
+[INF | src.input:29 - download_documents()] Download Dest-folder /home/techie/logeshv/3GPP-Latest/Rel-18 already exists => skipping downloading...
+[INF | src.input:56 - extract_zipfiles()] Extracting Out-folder /home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/3GPP-Release18/Documents already exists => skipping extracting...
+[INF | src.query:177 - get_3GPP_context()] 2. get_documents() completed! Total no.of docs within series[26 24 29 31 23] = 269
+[INF | src.query:181 - get_3GPP_context()] 3. chunking() completed! Database size after chucking each doc = 165600, sample chunk_entry: 
+{'text': '\nContents\nForeword\t8\nIntroduction\t9\n1\tScope\t10\n2\tReferences\t10\n3\tDefinitions of terms and abbreviations\t11\n3.1\tTerms\t11\n3.2\tAbbreviations\t11\n4\tArchitectural requirements\t13\n4.1\tGeneral\t13\n4.2\tSupport for communications between UAVs\t13\n4.2.1\tDescription\t13\n4.2.2\tRequirements\t13\n4.3\tQoS provisioning for C2 communication\t13\n4.3.1\tDescription\t13\n4.3.2\tRequirements\t13\n4.4\tC2 communication mode switching\t13\n4.4.1\tDescription\t13\n4.4.2\tRequirements\t13\n4.5\tSupport for monitoring of UAV location deviation\t', 'source': '23255-i20.docx'}
+[INF | src.query:188 - get_3GPP_context()] 4. categoriezed all doc chucks w.r.t to their series numbers!
+[INF | src.embeddings:39 - get_embeddings()] Getting embedding for the docs listed: dict_keys(['Summaries', 'Series26', 'Series24', 'Series29', 'Series31', 'Series23'])
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Summaries found and loaded successfully! shape = (3159, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series26 found and loaded successfully! shape = (8541, 1024)
+[WAR | src.embeddings:53 - get_embeddings()] no.of text-chunks [len=8423] and no.of embeddings [shape[0]=8541] found in savefile dont match!
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series24 found and loaded successfully! shape = (52376, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series29 found and loaded successfully! shape = (42664, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series31 found and loaded successfully! shape = (1711, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series23 found and loaded successfully! shape = (57267, 1024)
+[INF | src.embeddings:81 - get_embeddings()] Successfully added 'embeddings' to each chunk entries. each doc_key contain keys: dict_keys(['text', 'source', 'embedding'])
+[INF | src.query:151 - get_question_context_faiss()] => called with batch.size=6 (no.of series + summaries inclusive), k=10, use_context=False
+[INF | src.index:39 - get_faiss_batch_index()] Generating FAISS indicies for the given embedding batch ...
+[INF | src.index:23 - create_faiss_index_IndexFlatIP()] Creating IndexFlatIP...
+[INF | src.index:31 - create_faiss_index_IndexFlatIP()] Creating FAISS index success! Number of vectors in index: 165600, Dimension of vectors: 1024
+[INF | src.query:154 - get_question_context_faiss()] ---> get_faiss_batch_index() completed for given batch! Sample Entriy for Index[0]: source_mapping = rel_17.docx, embedding_mapping.size = (1024,), 
+faiss_index_to_data_mapping = '3GPP TR 21.917 V17.0.1 (2023-01)\nTechnical Report\n3rd Generation Partnership Project;\nTechnical Specification Group Services and System Aspects;\nRelease 17 Description;\nSummary of Rel-17 Work Items\n(Release 17)\n\n\t\n\nThe present document has been developed within the 3rd Generation Partnership Project (3GPP TM) and may be further elaborated for the purposes of 3GPP.\nThe present document has not been subject to any approval process by the 3GPP Organizational Partners and shall not be implemented.\nThis '
+[INF | src.retrieval:52 - find_nearest_neighbors_faiss()] Finding nearest neighbours based on FAISS ...
+[INF | src.retrieval:39 - get_query_embedding_OpenAILarge()] generating embeddings for the given query + no context ...
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.embeddings:23 - get_embeddings_byLLM()] embedding [shape=torch.Size([1024])] generated for the text: 
+'What is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n'
+[INF | root:55 - find_nearest_neighbors_faiss()] (i) generated query embeddings! shape:(1024,)
+[INF | root:58 - find_nearest_neighbors_faiss()] (ii) search_faiss_index(k=10) success! K-Closest neighbours = Indices:[[133058  46253  46240 122939  57302  16030  46345  46239  90947  46284]], Distances:[[0.12747116 0.125723   0.1254969  0.12497357 0.12352341 0.12006089
+  0.11763094 0.11564662 0.11558953 0.1153834 ]]
+[INF | src.query:156 - get_question_context_faiss()] ---> find_nearest_neighbors_faiss() completed with above params! 
+ 10-Closest Results:
+		index:133058, source:23379-i80.docx, embedding.size:(1024,), text:
+"the participants of the ongoing group call and generates group call release message to release ongoing session.\n3.\tThe MCPTT server of the primary MCPTT system initiates a group call release request message via SIP core towards each accessible participant of the ongoing group call (3a). The MCPTT server of the primary MCPTT system may not have access to group members' information of the constituent group belonging to a partner MCPTT system. For such group members, the MCPTT server of the primary "
+		index:46253, source:24554-i30.docx, embedding.size:(1024,), text:
+'7.4; and\nii)\tthe target user info set to the application layer ID of the target UE provided by the upper layers;\n\tAny parameter that is not mentioned above shall follow the definitions in clause\xa07.2.2.2.\n7.7.2.3\tPath switching procedure from the direct communication path over Uu to the direct communication path over PC5 accepted by the target UE\nUpon receipt of the PROSE DIRECT LINK MODIFICATION REQUEST message as specified in clause\xa07.7.2.2, if the received PROSE DIRECT LINK MODIFICATION REQUEST '
+		index:46240, source:24554-i30.docx, embedding.size:(1024,), text:
+'reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message; and\n2)\tshall include appropriate cause value.\n7.6.2.1.6\tUsage information report list sending procedure unsuccessful completion by the UE\nUpon receipt of the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message containing a <response-reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message, '
+		index:122939, source:23700-80-i00.docx, embedding.size:(1024,), text:
+"to support the UE selection by considering the UE's current location and direction. AF includes the External Group Identifier and the following filtering info as part of the FL UE selection request:\n\tFL Coverage Area: The FL training server's coverage area, i.e. the coverage area of the FL training server where the selected UEs participate in the FL operation.\n\tWhen providing a target area for FL, the AF may provide sub-areas (e.g. cell 1,2,3), and provide a maximum number of UEs (e.g. 2) that should "
+		index:57302, source:24229-i40.docx, embedding.size:(1024,), text:
+'control concepts", as specified in 3GPP\xa0TS\xa023.228\xa0[7], are to be applied in an IM CN subsystem, then these are to be provided by capabilities within the IBCF, and the IBCF acts as an entry point for this network (instead of the I-CSCF). In this case the IBCF and the I-CSCF can be co-located as a single physical node. If "border control concepts" are not applied, then the I-CSCF is considered as an entry point of a network. If the P-CSCF is in the home network, then the I-CSCF is considered as an '
+		index:16030, source:24526-i50.docx, embedding.size:(1024,), text:
+'NAS layer indicates the successful change of the PLMN; or\nk)\tthe UE NAS layer indicates that current TAI is in the list of TAs for which the S-NSSAI is allowed (see 3GPP\xa0TS\xa024.501\xa0[11] clause\xa04.6.3.6).\nIf the re-evaluation leads to a change of the association of an application or a PIN to a PDU session, the UE may enforce such change immediately or when UE returns to 5GMM-IDLE mode.\nNOTE\xa016:\tThe time when the UE enforces the change of the association of an application or a PIN to a PDU Session is '
+		index:46345, source:24554-i30.docx, embedding.size:(1024,), text:
+'the connectivity service which the UE is authorized to monitor, the UE shall use the associated DUSK, if received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay is used) and the UTC-based counter obtained during the monitoring operation to unscramble the PROSE PC5 DISCOVERY message as described in 3GPP\xa0TS\xa033.503\xa0[34]. Then, if a DUCK is received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay '
+		index:46239, source:24554-i30.docx, embedding.size:(1024,), text:
+'message, the usage information report list sending procedure is successfully completed.\n7.6.2.1.5\tUsage information report list sending procedure not accepted by the 5G DDNMF\nIf the PROSE_USAGE_INFORMATION_REPORT_LIST message is not accepted by the 5G DDNMF CTF (ADF), the 5G DDNMF CTF (ADF) shall send a PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message to the UE. In the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message, the 5G DDNMF CTF (ADF):\n1)\tshall include a <response-reject> element with '
+		index:90947, source:29512-i40.docx, embedding.size:(1024,), text:
+'authorized Session-AMBR within the "subsSessAmbr" attribute;\nNOTE\xa01:\tWhen both, the UDM subscribed Session-AMBR and the DN-AAA authorized Session-AMBR are available in the NF service consumer, the NF service consumer includes the DN-AAA authorized Session-AMBR.\n-\tif the "VPLMN-QoS-Control" feature is supported, the highest Session-AMBR and the default QoS supported in the VPLMN within the "vplmnQos" attribute, if available;\nNOTE\xa02:\tIn home routed roaming, the H-SMF may provide the QoS constraints '
+		index:46284, source:24554-i30.docx, embedding.size:(1024,), text:
+'s): \na)\tare not able to perform the communication path switching procedure from the direct communication path over PC5 to the direct communication path over Uu as specified in clause\xa07.7.4; or\nb)\tare not able to be supported because of e.g the QoS requirements for the direct communication path over Uu;\nthe target UE shall send a PROSE PATH SWITCHING REJECT message with the PC5 signalling protocol cause value #18 "path switching is not allowed for the ProSe applications". In this case, the initiating '
+[INF | src.query:193 - get_3GPP_context()] 5. get_question_context_faiss(use_context=False) completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.
+[INF | src.query:53 - candidate_answers()] generating candidate answers based on retrieved content. prompt-format: <--ins-->[query] <--use-->[content] <--gen-->[question]
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'\nProvide all the possible answers to the following question considering your knowledge and the text provided.\nQuestion: What is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\nConsidering the following context:\n["\\nRetrieval 1:\\n...the participants of the ongoing group call and generates group call release message to release ongoing session.\\n3.\\tThe MCPTT server of the primary MCPTT system initiates a group call release request message via SIP core towards each accessible participant of the ongoing group call (3a). The MCPTT server of the primary MCPTT system may not have access to group members\' information of the constituent group belonging to a partner MCPTT system. For such group members, the MCPTT server of the primary ...\\nThis retrieval is performed from the document 3GPP 23379-i80.docx.\\n", \'\\nRetrieval 2:\\n...7.4; and\\nii)\\tthe target user info set to the application layer ID of the target UE provided by the upper layers;\\n\\tAny parameter that is not mentioned above shall follow the definitions in clause\\xa07.2.2.2.\\n7.7.2.3\\tPath switching procedure from the direct communication path over Uu to the direct communication path over PC5 accepted by the target UE\\nUpon receipt of the PROSE DIRECT LINK MODIFICATION REQUEST message as specified in clause\\xa07.7.2.2, if the received PROSE DIRECT LINK MODIFICATION REQUEST ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 3:\\n...reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message; and\\n2)\\tshall include appropriate cause value.\\n7.6.2.1.6\\tUsage information report list sending procedure unsuccessful completion by the UE\\nUpon receipt of the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message containing a <response-reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message, ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', "\\nRetrieval 4:\\n...to support the UE selection by considering the UE\'s current location and direction. AF includes the External Group Identifier and the following filtering info as part of the FL UE selection request:\\n\\tFL Coverage Area: The FL training server\'s coverage area, i.e. the coverage area of the FL training server where the selected UEs participate in the FL operation.\\n\\tWhen providing a target area for FL, the AF may provide sub-areas (e.g. cell 1,2,3), and provide a maximum number of UEs (e.g. 2) that should ...\\nThis retrieval is performed from the document 3GPP 23700-80-i00.docx.\\n", \'\\nRetrieval 5:\\n...control concepts", as specified in 3GPP\\xa0TS\\xa023.228\\xa0[7], are to be applied in an IM CN subsystem, then these are to be provided by capabilities within the IBCF, and the IBCF acts as an entry point for this network (instead of the I-CSCF). In this case the IBCF and the I-CSCF can be co-located as a single physical node. If "border control concepts" are not applied, then the I-CSCF is considered as an entry point of a network. If the P-CSCF is in the home network, then the I-CSCF is considered as an ...\\nThis retrieval is performed from the document 3GPP 24229-i40.docx.\\n\', \'\\nRetrieval 6:\\n...NAS layer indicates the successful change of the PLMN; or\\nk)\\tthe UE NAS layer indicates that current TAI is in the list of TAs for which the S-NSSAI is allowed (see 3GPP\\xa0TS\\xa024.501\\xa0[11] clause\\xa04.6.3.6).\\nIf the re-evaluation leads to a change of the association of an application or a PIN to a PDU session, the UE may enforce such change immediately or when UE returns to 5GMM-IDLE mode.\\nNOTE\\xa016:\\tThe time when the UE enforces the change of the association of an application or a PIN to a PDU Session is ...\\nThis retrieval is performed from the document 3GPP 24526-i50.docx.\\n\', \'\\nRetrieval 7:\\n...the connectivity service which the UE is authorized to monitor, the UE shall use the associated DUSK, if received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay is used) and the UTC-based counter obtained during the monitoring operation to unscramble the PROSE PC5 DISCOVERY message as described in 3GPP\\xa0TS\\xa033.503\\xa0[34]. Then, if a DUCK is received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 8:\\n...message, the usage information report list sending procedure is successfully completed.\\n7.6.2.1.5\\tUsage information report list sending procedure not accepted by the 5G DDNMF\\nIf the PROSE_USAGE_INFORMATION_REPORT_LIST message is not accepted by the 5G DDNMF CTF (ADF), the 5G DDNMF CTF (ADF) shall send a PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message to the UE. In the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message, the 5G DDNMF CTF (ADF):\\n1)\\tshall include a <response-reject> element with ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 9:\\n...authorized Session-AMBR within the "subsSessAmbr" attribute;\\nNOTE\\xa01:\\tWhen both, the UDM subscribed Session-AMBR and the DN-AAA authorized Session-AMBR are available in the NF service consumer, the NF service consumer includes the DN-AAA authorized Session-AMBR.\\n-\\tif the "VPLMN-QoS-Control" feature is supported, the highest Session-AMBR and the default QoS supported in the VPLMN within the "vplmnQos" attribute, if available;\\nNOTE\\xa02:\\tIn home routed roaming, the H-SMF may provide the QoS constraints ...\\nThis retrieval is performed from the document 3GPP 29512-i40.docx.\\n\', \'\\nRetrieval 10:\\n...s): \\na)\\tare not able to perform the communication path switching procedure from the direct communication path over PC5 to the direct communication path over Uu as specified in clause\\xa07.7.4; or\\nb)\\tare not able to be supported because of e.g the QoS requirements for the direct communication path over Uu;\\nthe target UE shall send a PROSE PATH SWITCHING REJECT message with the PC5 signalling protocol cause value #18 "path switching is not allowed for the ProSe applications". In this case, the initiating ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\']\nProvide all the possible answers to the following question considering your knowledge and the text provided.\nQuestion: Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?\nEnsure none of the answers provided contradicts your knowledge and each answer has at most 100 characters.\n        '
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+[INF | src.query:58 - candidate_answers()] generated context: "Based on the provided texts, there's no direct mention of a specific technique that utilizes multiple antennas to enhance the covertness or stealthiness of wireless channels. However, such a technique could be Multiple Input Multiple Output (MIMO) technology, which is commonly used in modern communication systems to improve data rates and signal quality by using multiple antennas at both the transmitter and receiver ends. In a stealthy context, MIMO could potentially be used for adaptive beamforming, where the antenna array directs its transmission towards specific directions while minimizing radiation in other directions, thus improving covertness by reducing the chance of detection. This is speculative and requires further research or confirmation."
+[INF | src.query:195 - get_3GPP_context()] 6. candidate_answers() completed! question context enhanced with possible answers. enhanced_query:
+"What is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\nBased on the provided texts, there's no direct mention of a specific technique that utilizes multiple antennas to enhance the covertness or stealthiness of wireless channels. However, such a technique could be Multiple Input Multiple Output (MIMO) technology, which is commonly used in modern communication systems to improve data rates and signal quality by using multiple antennas at both the transmitter and receiver ends. In a stealthy context, MIMO could potentially be used for adaptive beamforming, where the antenna array directs its transmission towards specific directions while minimizing radiation in other directions, thus improving covertness by reducing the chance of detection. This is speculative and requires further research or confirmation."
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.query:66 - get_embeddings_list()] text_list size:(1) :: embedding dims: torch.Size([1, 1024])
+[INF | src.query:135 - predict_wg()] (i) Enhanced Query converted to Embeddings!
+[INF | src.query:80 - get_col2()] loading series description from existing file
+no.of series_dict entries: 18 | indices: ['21 series', '22 series', '23 series', '24 series', '25 series', '26 series', '27 series', '28 series', '29 series', '30 series', '31 series', '32 series', '33 series', '34 series', '35 series', '36 series', '37 series', '38 series'] | embedding dims: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+[INF | src.query:120 - preprocessing_softmax()] similarity score of the query:embeddings w.r.t series-description:embeddings => dim=(1, 18) vals=
+[[0.06957343 0.06728628 0.03184703 0.07608979 0.05940875 0.01437018
+  0.04417449 0.05167895 0.07394632 0.03884455 0.04331289 0.07269106
+  0.03692006 0.06342084 0.05728478 0.05658672 0.05715773 0.04568878]]
+[INF | src.query:123 - preprocessing_softmax()] creating DataLoader with train data with embeddings[dim:torch.Size([1, 1024])] & softmax(similarity_scores)[dim:torch.Size([1, 18])]
+[INF | src.query:137 - predict_wg()] (ii) Applied Softmax-Preprocessing onto Embeddings!
+NN-Router model: [inp:(queryEmbed.dim:torch.Size([1, 1024]),softSimScore.dimtorch.Size([1, 18]))] => [out(dim:torch.Size([1, 18]))=
+tensor([[ -6.4507,  -0.7642,  -3.0807,   0.3654, -16.0634,   7.5036,  -3.3367,
+          -2.1808,  -0.2010, -16.6738,  -3.9342,  -1.6180,  -3.6884, -16.3680,
+         -15.9426,  -4.6628,  -1.0043,  -4.4226]])]
+[INF | src.query:147 - predict_wg()] (iii) Found out all prediction_labels: [[26 24 29 22 37]] based on NN-Router model with existing weights!
+[INF | src.query:199 - get_3GPP_context()] 7. checking predict_wg() completed! newly predicted series no.s = [22, 24, 26, 29, 37] vs old predictions = [23, 24, 26, 29, 31]
+[INF | src.input:29 - download_documents()] Download Dest-folder /home/techie/logeshv/3GPP-Latest/Rel-18 already exists => skipping downloading...
+[INF | src.input:56 - extract_zipfiles()] Extracting Out-folder /home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/3GPP-Release18/Documents already exists => skipping extracting...
+[INF | src.query:208 - get_3GPP_context()] new series no.s that were not present in previously predicted series no.s = dict_keys(['Series22', 'Series37'])
+[INF | src.embeddings:39 - get_embeddings()] Getting embedding for the docs listed: dict_keys(['Series22', 'Series37'])
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series22 found and loaded successfully! shape = (6449, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series37 found and loaded successfully! shape = (7596, 1024)
+[INF | src.embeddings:81 - get_embeddings()] Successfully added 'embeddings' to each chunk entries. each doc_key contain keys: dict_keys(['text', 'source', 'embedding'])
+[INF | src.query:151 - get_question_context_faiss()] => called with batch.size=6 (no.of series + summaries inclusive), k=10, use_context=True
+[INF | src.index:39 - get_faiss_batch_index()] Generating FAISS indicies for the given embedding batch ...
+[INF | src.index:23 - create_faiss_index_IndexFlatIP()] Creating IndexFlatIP...
+[INF | src.index:31 - create_faiss_index_IndexFlatIP()] Creating FAISS index success! Number of vectors in index: 120667, Dimension of vectors: 1024
+[INF | src.query:154 - get_question_context_faiss()] ---> get_faiss_batch_index() completed for given batch! Sample Entriy for Index[0]: source_mapping = 22011-i50.docx, embedding_mapping.size = (1024,), 
+faiss_index_to_data_mapping = '3GPP TS 22.011 V18.5.0 (2023-06)\nTechnical Specification\n3rd Generation Partnership Project;\nTechnical Specification Group Services and System Aspects;\nService accessibility\n(Release 18)\n\n\t\nThe present document has been developed within the 3rd Generation Partnership Project (3GPP TM) and may be further elaborated for the purposes of 3GPP.\nThe present document has not been subject to any approval process by the 3GPP Organisational Partners and shall not be implemented.\nThis Specification is provided '
+[INF | src.retrieval:52 - find_nearest_neighbors_faiss()] Finding nearest neighbours based on FAISS ...
+[INF | src.retrieval:39 - get_query_embedding_OpenAILarge()] generating embeddings for the given query + context ...
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.embeddings:23 - get_embeddings_byLLM()] embedding [shape=torch.Size([1024])] generated for the text: 
+"What is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\n Based on the provided texts, there's no direct mention of a specific technique that utilizes multiple antennas to enhance the covertness or stealthiness of wireless channels. However, such a technique could be Multiple Input Multiple Output (MIMO) technology, which is commonly used in modern communication systems to improve data rates and signal quality by using multiple antennas at both the transmitter and receiver ends. In a stealthy context, MIMO could potentially be used for adaptive beamforming, where the antenna array directs its transmission towards specific directions while minimizing radiation in other directions, thus improving covertness by reducing the chance of detection. This is speculative and requires further research or confirmation."
+[INF | root:55 - find_nearest_neighbors_faiss()] (i) generated query embeddings! shape:(1024,)
+[INF | root:58 - find_nearest_neighbors_faiss()] (ii) search_faiss_index(k=10) success! K-Closest neighbours = Indices:[[  1735   4202 101765   2064  21982  14178   3291   3306   1933 111059]], Distances:[[0.14253643 0.1365811  0.13656235 0.13558999 0.1353348  0.13433841
+  0.1342576  0.13019961 0.12972714 0.12932059]]
+[INF | src.query:156 - get_question_context_faiss()] ---> find_nearest_neighbors_faiss() completed with above params! 
+ 10-Closest Results:
+		index:1735, source:22280-i50.docx, embedding.size:(1024,), text:
+"the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.\nEditor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.\n6.8.8.4\tMCX Service Emergency Alert\n6.8.8.4.1\tRequirements\n[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.\n[R-6.8.8.4.1-002] The MCX User shall be notified "
+		index:4202, source:22839-i10.docx, embedding.size:(1024,), text:
+'is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.\nAlice parks her car in a parking lot near the spot of the music festival. John is a stranger '
+		index:101765, source:29273-i30.docx, embedding.size:(1024,), text:
+'Answer (STA) Command\nThe Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF\xa0RFC\xa06733\xa0[58], Session-Termination-Answer command.\n   <Session-Termination-Answer> ::=\t< Diameter Header: 275, PXY, 16777250 >\n< Session-Id >\n[ DRMP ]\n{ Result-Code }\n{ Origin-Host }\n{ Origin-Realm }\n[ OC-Supported-Features ]\n[ '
+		index:2064, source:22101-i50.docx, embedding.size:(1024,), text:
+'[19] \t3GPP TS 31.102: "USIM Application Characteristics".\n[20]\t3GPP TS 23.221: "Architectural Requirements".\n[21]\t3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".\n[22]\tVoid\n[23]\t3GPP TS 29.002: "Mobile Application Part (MAP) specification".\n[24]\t3GPP TR 23.972: "Circuit switched multimedia telephony".\n[25]\t3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".\n[26]\t3GPP TS 22.226: "Global Text Telephony, Stage 1".\n[27]\t3GPP TS 22.228: "Service '
+		index:21982, source:26114-i50.docx, embedding.size:(1024,), text:
+'in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. \nWhen replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” '
+		index:14178, source:rel_17.docx, embedding.size:(1024,), text:
+'of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). \nAll these aspects are detailed below.\nImprovement of positioning accuracy\nTo improve positioning accuracy, several solutions were considered:\nMitigation of gNB/UE '
+		index:3291, source:22847-i20.docx, embedding.size:(1024,), text:
+'haptic belt actuator to navigate the workers.\n5.5.2\tPre-conditions\nMulti-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.\nThe MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help '
+		index:3306, source:22847-i20.docx, embedding.size:(1024,), text:
+'is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.\nThe network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.\nNOTE: \tWhen motion prediction doesn’t work, '
+		index:1933, source:22115-i00.docx, embedding.size:(1024,), text:
+"of new requirements for charging and billing, for example with the addition of a number of new requirements for charging and billing; these are noted in the appropriate sections below. The technical standards for each release should be developed in such a way that it is possible and practical to introduce these requirements, ideally in a backward compatible manner.\nNote:\tWhen a change is introduced which affects the 3GPP technical standards, it is said to be 'backward compatible' if existing equipment "
+		index:111059, source:29573-i50.docx, embedding.size:(1024,), text:
+'SEPP-A2 in PLMN-A, the SEPP-A1 shall send 307 Temporary Redirect response to the SEPP-B and may include a RedirectResponse data structure (see 3GPP\xa0TS\xa029.571\xa0[12]) in the response, where the "cause" attribute shall not be set to "SEPP_REDIRECTION" and the "targetSepp" attribute shall be absent. The Location header shall contain the URI of the SEPP-A2.\nNOTE\xa01:\tA sender that receives a redirectResponse with the cause "SEPP_REDIRECTION" ignores the Location header as specified in clause\xa06.10.9.1 in '
+[INF | src.query:219 - get_3GPP_context()] 8. get_question_context_faiss(use_context=True) based on new predictions completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.
+
+Task-3 Over!
+####################################################################################################
+
+[INF | __main__:85 - TelcoRAG()] Check if answer is provided: "option 4: (Massive) Multiple Antennas"
+
+####################################################################################################
+[INF | __main__:89 - TelcoRAG()] Task-4 (answer is provided) ToDo: check_question(question,answer,**)
+
+[INF | src.generate:74 - check_question()] Generated system prompt for LLM completion: 
+
+Please provide the answers to the following multiple choice question.
+What is the technique that enhances the covertness of wireless channels by using multiple antennas?
+
+Terms and Definitions:
+
+
+
+
+Abbreviations:
+
+
+
+
+
+Considering the following context:
+
+Retrieval 1:
+...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.
+Editor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.
+6.8.8.4	MCX Service Emergency Alert
+6.8.8.4.1	Requirements
+[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.
+[R-6.8.8.4.1-002] The MCX User shall be notified ...
+This retrieval is performed from the document 3GPP 22280-i50.docx.
+
+
+Retrieval 2:
+...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.
+Alice parks her car in a parking lot near the spot of the music festival. John is a stranger ...
+This retrieval is performed from the document 3GPP 22839-i10.docx.
+
+
+Retrieval 3:
+...Answer (STA) Command
+The Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF RFC 6733 [58], Session-Termination-Answer command.
+   <Session-Termination-Answer> ::=	< Diameter Header: 275, PXY, 16777250 >
+< Session-Id >
+[ DRMP ]
+{ Result-Code }
+{ Origin-Host }
+{ Origin-Realm }
+[ OC-Supported-Features ]
+[ ...
+This retrieval is performed from the document 3GPP 29273-i30.docx.
+
+
+Retrieval 4:
+...[19] 	3GPP TS 31.102: "USIM Application Characteristics".
+[20]	3GPP TS 23.221: "Architectural Requirements".
+[21]	3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".
+[22]	Void
+[23]	3GPP TS 29.002: "Mobile Application Part (MAP) specification".
+[24]	3GPP TR 23.972: "Circuit switched multimedia telephony".
+[25]	3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".
+[26]	3GPP TS 22.226: "Global Text Telephony, Stage 1".
+[27]	3GPP TS 22.228: "Service ...
+This retrieval is performed from the document 3GPP 22101-i50.docx.
+
+
+Retrieval 5:
+...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. 
+When replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...
+This retrieval is performed from the document 3GPP 26114-i50.docx.
+
+
+Retrieval 6:
+...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). 
+All these aspects are detailed below.
+Improvement of positioning accuracy
+To improve positioning accuracy, several solutions were considered:
+Mitigation of gNB/UE ...
+This retrieval is performed from the document 3GPP rel_17.docx.
+
+
+Retrieval 7:
+...haptic belt actuator to navigate the workers.
+5.5.2	Pre-conditions
+Multi-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.
+The MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 8:
+...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.
+The network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.
+NOTE: 	When motion prediction doesn’t work, ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 9:
+...of new requirements for charging and billing, for example with the addition of a number of new requirements for charging and billing; these are noted in the appropriate sections below. The technical standards for each release should be developed in such a way that it is possible and practical to introduce these requirements, ideally in a backward compatible manner.
+Note:	When a change is introduced which affects the 3GPP technical standards, it is said to be 'backward compatible' if existing equipment ...
+This retrieval is performed from the document 3GPP 22115-i00.docx.
+
+
+Retrieval 10:
+...SEPP-A2 in PLMN-A, the SEPP-A1 shall send 307 Temporary Redirect response to the SEPP-B and may include a RedirectResponse data structure (see 3GPP TS 29.571 [12]) in the response, where the "cause" attribute shall not be set to "SEPP_REDIRECTION" and the "targetSepp" attribute shall be absent. The Location header shall contain the URI of the SEPP-A2.
+NOTE 1:	A sender that receives a redirectResponse with the cause "SEPP_REDIRECTION" ignores the Location header as specified in clause 6.10.9.1 in ...
+This retrieval is performed from the document 3GPP 29573-i50.docx.
+
+
+Please provide the answers to the following multiple choice question.
+Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?
+
+Options:
+Write only the option number corresponding to the correct answer:
+option 1: Spread Spectrum
+option 2: AN Generation
+option 3: Cooperative Relaying
+option 4: (Massive) Multiple Antennas
+option 5: Millimeter-Wave Communications
+
+Answer format should be: Answer option <option_id>
+    
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'\nPlease provide the answers to the following multiple choice question.\nWhat is the technique that enhances the covertness of wireless channels by using multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\n\nConsidering the following context:\n\nRetrieval 1:\n...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.\nEditor\'s Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.\n6.8.8.4\tMCX Service Emergency Alert\n6.8.8.4.1\tRequirements\n[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.\n[R-6.8.8.4.1-002] The MCX User shall be notified ...\nThis retrieval is performed from the document 3GPP 22280-i50.docx.\n\n\nRetrieval 2:\n...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.\nAlice parks her car in a parking lot near the spot of the music festival. John is a stranger ...\nThis retrieval is performed from the document 3GPP 22839-i10.docx.\n\n\nRetrieval 3:\n...Answer (STA) Command\nThe Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF\xa0RFC\xa06733\xa0[58], Session-Termination-Answer command.\n   <Session-Termination-Answer> ::=\t< Diameter Header: 275, PXY, 16777250 >\n< Session-Id >\n[ DRMP ]\n{ Result-Code }\n{ Origin-Host }\n{ Origin-Realm }\n[ OC-Supported-Features ]\n[ ...\nThis retrieval is performed from the document 3GPP 29273-i30.docx.\n\n\nRetrieval 4:\n...[19] \t3GPP TS 31.102: "USIM Application Characteristics".\n[20]\t3GPP TS 23.221: "Architectural Requirements".\n[21]\t3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".\n[22]\tVoid\n[23]\t3GPP TS 29.002: "Mobile Application Part (MAP) specification".\n[24]\t3GPP TR 23.972: "Circuit switched multimedia telephony".\n[25]\t3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".\n[26]\t3GPP TS 22.226: "Global Text Telephony, Stage 1".\n[27]\t3GPP TS 22.228: "Service ...\nThis retrieval is performed from the document 3GPP 22101-i50.docx.\n\n\nRetrieval 5:\n...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. \nWhen replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...\nThis retrieval is performed from the document 3GPP 26114-i50.docx.\n\n\nRetrieval 6:\n...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). \nAll these aspects are detailed below.\nImprovement of positioning accuracy\nTo improve positioning accuracy, several solutions were considered:\nMitigation of gNB/UE ...\nThis retrieval is performed from the document 3GPP rel_17.docx.\n\n\nRetrieval 7:\n...haptic belt actuator to navigate the workers.\n5.5.2\tPre-conditions\nMulti-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.\nThe MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n\n\nRetrieval 8:\n...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.\nThe network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.\nNOTE: \tWhen motion prediction doesn’t work, ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n\n\nRetrieval 9:\n...of new requirements for charging and billing, for example with the addition of a number of new requirements for charging and billing; these are noted in the appropriate sections below. The technical standards for each release should be developed in such a way that it is possible and practical to introduce these requirements, ideally in a backward compatible manner.\nNote:\tWhen a change is introduced which affects the 3GPP technical standards, it is said to be \'backward compatible\' if existing equipment ...\nThis retrieval is performed from the document 3GPP 22115-i00.docx.\n\n\nRetrieval 10:\n...SEPP-A2 in PLMN-A, the SEPP-A1 shall send 307 Temporary Redirect response to the SEPP-B and may include a RedirectResponse data structure (see 3GPP\xa0TS\xa029.571\xa0[12]) in the response, where the "cause" attribute shall not be set to "SEPP_REDIRECTION" and the "targetSepp" attribute shall be absent. The Location header shall contain the URI of the SEPP-A2.\nNOTE\xa01:\tA sender that receives a redirectResponse with the cause "SEPP_REDIRECTION" ignores the Location header as specified in clause\xa06.10.9.1 in ...\nThis retrieval is performed from the document 3GPP 29573-i50.docx.\n\n\nPlease provide the answers to the following multiple choice question.\nWhich technique utilizes multiple antennas to improve the stealthiness of wireless channels?\n\nOptions:\nWrite only the option number corresponding to the correct answer:\noption 1: Spread Spectrum\noption 2: AN Generation\noption 3: Cooperative Relaying\noption 4: (Massive) Multiple Antennas\noption 5: Millimeter-Wave Communications\n\nAnswer format should be: Answer option <option_id>\n    '
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+[INF | src.generate:82 - check_question()] Model response generated successfully. 
+Actual answer[opt-id:['4']]: option 4: (Massive) Multiple Antennas 
+Predicted Answer [opt-id:['4']]: Answer option 4
+[INF | src.generate:85 - check_question()] Answers match => Correct!
+
+
+Task-4 Over! response & context received successfully.
+####################################################################################################
+
+[INF | __main__:100 - TelcoRAG()] Generation of this response took 142.61424946784973 seconds
+[INF | __main__:167 - <module>()] Generated Output given the Question & Answer and the Options along with the Query:
+[INF | __main__:168 - <module>()] >>> Response: [Correctness:True] Predicted Ans: Option ['4'], Actual Ans: option 4: (Massive) Multiple Antennas
+[INF | __main__:169 - <module>()] >>> Context: ["\nRetrieval 1:\n...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.\nEditor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.\n6.8.8.4\tMCX Service Emergency Alert\n6.8.8.4.1\tRequirements\n[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.\n[R-6.8.8.4.1-002] The MCX User shall be notified ...\nThis retrieval is performed from the document 3GPP 22280-i50.docx.\n", '\nRetrieval 2:\n...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.\nAlice parks her car in a parking lot near the spot of the music festival. John is a stranger ...\nThis retrieval is performed from the document 3GPP 22839-i10.docx.\n', '\nRetrieval 3:\n...Answer (STA) Command\nThe Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF\xa0RFC\xa06733\xa0[58], Session-Termination-Answer command.\n   <Session-Termination-Answer> ::=\t< Diameter Header: 275, PXY, 16777250 >\n< Session-Id >\n[ DRMP ]\n{ Result-Code }\n{ Origin-Host }\n{ Origin-Realm }\n[ OC-Supported-Features ]\n[ ...\nThis retrieval is performed from the document 3GPP 29273-i30.docx.\n', '\nRetrieval 4:\n...[19] \t3GPP TS 31.102: "USIM Application Characteristics".\n[20]\t3GPP TS 23.221: "Architectural Requirements".\n[21]\t3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".\n[22]\tVoid\n[23]\t3GPP TS 29.002: "Mobile Application Part (MAP) specification".\n[24]\t3GPP TR 23.972: "Circuit switched multimedia telephony".\n[25]\t3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".\n[26]\t3GPP TS 22.226: "Global Text Telephony, Stage 1".\n[27]\t3GPP TS 22.228: "Service ...\nThis retrieval is performed from the document 3GPP 22101-i50.docx.\n', '\nRetrieval 5:\n...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. \nWhen replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...\nThis retrieval is performed from the document 3GPP 26114-i50.docx.\n', '\nRetrieval 6:\n...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). \nAll these aspects are detailed below.\nImprovement of positioning accuracy\nTo improve positioning accuracy, several solutions were considered:\nMitigation of gNB/UE ...\nThis retrieval is performed from the document 3GPP rel_17.docx.\n', '\nRetrieval 7:\n...haptic belt actuator to navigate the workers.\n5.5.2\tPre-conditions\nMulti-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.\nThe MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n', '\nRetrieval 8:\n...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.\nThe network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.\nNOTE: \tWhen motion prediction doesn’t work, ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n', "\nRetrieval 9:\n...of new requirements for charging and billing, for example with the addition of a number of new requirements for charging and billing; these are noted in the appropriate sections below. The technical standards for each release should be developed in such a way that it is possible and practical to introduce these requirements, ideally in a backward compatible manner.\nNote:\tWhen a change is introduced which affects the 3GPP technical standards, it is said to be 'backward compatible' if existing equipment ...\nThis retrieval is performed from the document 3GPP 22115-i00.docx.\n", '\nRetrieval 10:\n...SEPP-A2 in PLMN-A, the SEPP-A1 shall send 307 Temporary Redirect response to the SEPP-B and may include a RedirectResponse data structure (see 3GPP\xa0TS\xa029.571\xa0[12]) in the response, where the "cause" attribute shall not be set to "SEPP_REDIRECTION" and the "targetSepp" attribute shall be absent. The Location header shall contain the URI of the SEPP-A2.\nNOTE\xa01:\tA sender that receives a redirectResponse with the cause "SEPP_REDIRECTION" ignores the Location header as specified in clause\xa06.10.9.1 in ...\nThis retrieval is performed from the document 3GPP 29573-i50.docx.\n']
+
+
+####################################################################################################
+[INF | __main__:68 - TelcoRAG()] Task-1 ToDo: Convert given question into 'consise query'
+
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'Rephrase the question to be clear and concise:\n        \n        Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?'
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+
+Task-1 Over! 'concise query' : 
+'What is the technique that enhances the covertness of wireless channels by employing multiple antennas?'
+####################################################################################################
+
+
+####################################################################################################
+[INF | __main__:74 - TelcoRAG()] Task-2 ToDo: Enhance the above concise query with Terms & Abbreviations
+
+
+Task-2 Over! 'enhanced_query' : 
+'What is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n'
+####################################################################################################
+
+
+####################################################################################################
+[INF | __main__:80 - TelcoRAG()] Task-3 ToDo: Get relavant 3GPP content for the above enhanced query
+
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+[INF | src.query:66 - get_embeddings_list()] text_list size:(1) :: embedding dims: torch.Size([1, 1024])
+[INF | src.query:135 - predict_wg()] (i) Enhanced Query converted to Embeddings!
+[INF | src.query:80 - get_col2()] loading series description from existing file
+no.of series_dict entries: 18 | indices: ['21 series', '22 series', '23 series', '24 series', '25 series', '26 series', '27 series', '28 series', '29 series', '30 series', '31 series', '32 series', '33 series', '34 series', '35 series', '36 series', '37 series', '38 series'] | embedding dims: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+[INF | src.query:120 - preprocessing_softmax()] similarity score of the query:embeddings w.r.t series-description:embeddings => dim=(1, 18) vals=
+[[0.0554373  0.044586   0.01821683 0.06256262 0.04330618 0.00224517
+  0.0346577  0.04816766 0.05422956 0.02554556 0.03517073 0.06088767
+  0.03628885 0.0555851  0.07031556 0.03998154 0.06032869 0.02666474]]
+[INF | src.query:123 - preprocessing_softmax()] creating DataLoader with train data with embeddings[dim:torch.Size([1, 1024])] & softmax(similarity_scores)[dim:torch.Size([1, 18])]
+[INF | src.query:137 - predict_wg()] (ii) Applied Softmax-Preprocessing onto Embeddings!
+NN-Router model: [inp:(queryEmbed.dim:torch.Size([1, 1024]),softSimScore.dimtorch.Size([1, 18]))] => [out(dim:torch.Size([1, 18]))=
+tensor([[-11.3246,  -3.8973,  -1.8652,   1.5714, -20.0840,   7.9297,  -2.8548,
+          -3.1740,   0.1730, -21.5039,  -1.7266,  -2.2296,  -2.5815, -20.3857,
+         -20.6025,  -5.4586,  -2.7007,  -7.2727]])]
+[INF | src.query:147 - predict_wg()] (iii) Found out all prediction_labels: [[26 24 29 31 23]] based on NN-Router model with existing weights!
+[INF | src.query:174 - get_3GPP_context()] 1. initital predict_wg() completed! predicted series no.s = [23, 24, 26, 29, 31]
+[INF | src.input:29 - download_documents()] Download Dest-folder /home/techie/logeshv/3GPP-Latest/Rel-18 already exists => skipping downloading...
+[INF | src.input:56 - extract_zipfiles()] Extracting Out-folder /home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/3GPP-Release18/Documents already exists => skipping extracting...
+[INF | src.query:177 - get_3GPP_context()] 2. get_documents() completed! Total no.of docs within series[26 24 29 31 23] = 269
+[INF | src.query:181 - get_3GPP_context()] 3. chunking() completed! Database size after chucking each doc = 165600, sample chunk_entry: 
+{'text': '\nContents\nForeword\t8\nIntroduction\t9\n1\tScope\t10\n2\tReferences\t10\n3\tDefinitions of terms and abbreviations\t11\n3.1\tTerms\t11\n3.2\tAbbreviations\t11\n4\tArchitectural requirements\t13\n4.1\tGeneral\t13\n4.2\tSupport for communications between UAVs\t13\n4.2.1\tDescription\t13\n4.2.2\tRequirements\t13\n4.3\tQoS provisioning for C2 communication\t13\n4.3.1\tDescription\t13\n4.3.2\tRequirements\t13\n4.4\tC2 communication mode switching\t13\n4.4.1\tDescription\t13\n4.4.2\tRequirements\t13\n4.5\tSupport for monitoring of UAV location deviation\t', 'source': '23255-i20.docx'}
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+[INF | src.query:188 - get_3GPP_context()] 4. categoriezed all doc chucks w.r.t to their series numbers!
+[INF | src.embeddings:39 - get_embeddings()] Getting embedding for the docs listed: dict_keys(['Summaries', 'Series26', 'Series24', 'Series29', 'Series31', 'Series23'])
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Summaries found and loaded successfully! shape = (3159, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series26 found and loaded successfully! shape = (8541, 1024)
+[WAR | src.embeddings:53 - get_embeddings()] no.of text-chunks [len=8423] and no.of embeddings [shape[0]=8541] found in savefile dont match!
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series24 found and loaded successfully! shape = (52376, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series29 found and loaded successfully! shape = (42664, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series31 found and loaded successfully! shape = (1711, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series23 found and loaded successfully! shape = (57267, 1024)
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+[INF | src.embeddings:81 - get_embeddings()] Successfully added 'embeddings' to each chunk entries. each doc_key contain keys: dict_keys(['text', 'source', 'embedding'])
+[INF | src.query:151 - get_question_context_faiss()] => called with batch.size=6 (no.of series + summaries inclusive), k=10, use_context=False
+[INF | src.index:39 - get_faiss_batch_index()] Generating FAISS indicies for the given embedding batch ...
+[INF | src.index:23 - create_faiss_index_IndexFlatIP()] Creating IndexFlatIP...
+[INF | src.index:31 - create_faiss_index_IndexFlatIP()] Creating FAISS index success! Number of vectors in index: 165600, Dimension of vectors: 1024
+[INF | src.query:154 - get_question_context_faiss()] ---> get_faiss_batch_index() completed for given batch! Sample Entriy for Index[0]: source_mapping = rel_17.docx, embedding_mapping.size = (1024,), 
+faiss_index_to_data_mapping = '3GPP TR 21.917 V17.0.1 (2023-01)\nTechnical Report\n3rd Generation Partnership Project;\nTechnical Specification Group Services and System Aspects;\nRelease 17 Description;\nSummary of Rel-17 Work Items\n(Release 17)\n\n\t\n\nThe present document has been developed within the 3rd Generation Partnership Project (3GPP TM) and may be further elaborated for the purposes of 3GPP.\nThe present document has not been subject to any approval process by the 3GPP Organizational Partners and shall not be implemented.\nThis '
+[INF | src.retrieval:52 - find_nearest_neighbors_faiss()] Finding nearest neighbours based on FAISS ...
+[INF | src.retrieval:39 - get_query_embedding_OpenAILarge()] generating embeddings for the given query + no context ...
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.embeddings:23 - get_embeddings_byLLM()] embedding [shape=torch.Size([1024])] generated for the text: 
+'What is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n'
+[INF | root:55 - find_nearest_neighbors_faiss()] (i) generated query embeddings! shape:(1024,)
+[INF | root:58 - find_nearest_neighbors_faiss()] (ii) search_faiss_index(k=10) success! K-Closest neighbours = Indices:[[122939  46253  46240 133058  57302  16030  46345  90947  46284  46239]], Distances:[[0.12606695 0.1248452  0.12473011 0.12415864 0.12377851 0.11853761
+  0.11785013 0.11557976 0.11495547 0.11483517]]
+[INF | src.query:156 - get_question_context_faiss()] ---> find_nearest_neighbors_faiss() completed with above params! 
+ 10-Closest Results:
+		index:122939, source:23700-80-i00.docx, embedding.size:(1024,), text:
+"to support the UE selection by considering the UE's current location and direction. AF includes the External Group Identifier and the following filtering info as part of the FL UE selection request:\n\tFL Coverage Area: The FL training server's coverage area, i.e. the coverage area of the FL training server where the selected UEs participate in the FL operation.\n\tWhen providing a target area for FL, the AF may provide sub-areas (e.g. cell 1,2,3), and provide a maximum number of UEs (e.g. 2) that should "
+		index:46253, source:24554-i30.docx, embedding.size:(1024,), text:
+'7.4; and\nii)\tthe target user info set to the application layer ID of the target UE provided by the upper layers;\n\tAny parameter that is not mentioned above shall follow the definitions in clause\xa07.2.2.2.\n7.7.2.3\tPath switching procedure from the direct communication path over Uu to the direct communication path over PC5 accepted by the target UE\nUpon receipt of the PROSE DIRECT LINK MODIFICATION REQUEST message as specified in clause\xa07.7.2.2, if the received PROSE DIRECT LINK MODIFICATION REQUEST '
+		index:46240, source:24554-i30.docx, embedding.size:(1024,), text:
+'reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message; and\n2)\tshall include appropriate cause value.\n7.6.2.1.6\tUsage information report list sending procedure unsuccessful completion by the UE\nUpon receipt of the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message containing a <response-reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message, '
+		index:133058, source:23379-i80.docx, embedding.size:(1024,), text:
+"the participants of the ongoing group call and generates group call release message to release ongoing session.\n3.\tThe MCPTT server of the primary MCPTT system initiates a group call release request message via SIP core towards each accessible participant of the ongoing group call (3a). The MCPTT server of the primary MCPTT system may not have access to group members' information of the constituent group belonging to a partner MCPTT system. For such group members, the MCPTT server of the primary "
+		index:57302, source:24229-i40.docx, embedding.size:(1024,), text:
+'control concepts", as specified in 3GPP\xa0TS\xa023.228\xa0[7], are to be applied in an IM CN subsystem, then these are to be provided by capabilities within the IBCF, and the IBCF acts as an entry point for this network (instead of the I-CSCF). In this case the IBCF and the I-CSCF can be co-located as a single physical node. If "border control concepts" are not applied, then the I-CSCF is considered as an entry point of a network. If the P-CSCF is in the home network, then the I-CSCF is considered as an '
+		index:16030, source:24526-i50.docx, embedding.size:(1024,), text:
+'NAS layer indicates the successful change of the PLMN; or\nk)\tthe UE NAS layer indicates that current TAI is in the list of TAs for which the S-NSSAI is allowed (see 3GPP\xa0TS\xa024.501\xa0[11] clause\xa04.6.3.6).\nIf the re-evaluation leads to a change of the association of an application or a PIN to a PDU session, the UE may enforce such change immediately or when UE returns to 5GMM-IDLE mode.\nNOTE\xa016:\tThe time when the UE enforces the change of the association of an application or a PIN to a PDU Session is '
+		index:46345, source:24554-i30.docx, embedding.size:(1024,), text:
+'the connectivity service which the UE is authorized to monitor, the UE shall use the associated DUSK, if received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay is used) and the UTC-based counter obtained during the monitoring operation to unscramble the PROSE PC5 DISCOVERY message as described in 3GPP\xa0TS\xa033.503\xa0[34]. Then, if a DUCK is received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay '
+		index:90947, source:29512-i40.docx, embedding.size:(1024,), text:
+'authorized Session-AMBR within the "subsSessAmbr" attribute;\nNOTE\xa01:\tWhen both, the UDM subscribed Session-AMBR and the DN-AAA authorized Session-AMBR are available in the NF service consumer, the NF service consumer includes the DN-AAA authorized Session-AMBR.\n-\tif the "VPLMN-QoS-Control" feature is supported, the highest Session-AMBR and the default QoS supported in the VPLMN within the "vplmnQos" attribute, if available;\nNOTE\xa02:\tIn home routed roaming, the H-SMF may provide the QoS constraints '
+		index:46284, source:24554-i30.docx, embedding.size:(1024,), text:
+'s): \na)\tare not able to perform the communication path switching procedure from the direct communication path over PC5 to the direct communication path over Uu as specified in clause\xa07.7.4; or\nb)\tare not able to be supported because of e.g the QoS requirements for the direct communication path over Uu;\nthe target UE shall send a PROSE PATH SWITCHING REJECT message with the PC5 signalling protocol cause value #18 "path switching is not allowed for the ProSe applications". In this case, the initiating '
+		index:46239, source:24554-i30.docx, embedding.size:(1024,), text:
+'message, the usage information report list sending procedure is successfully completed.\n7.6.2.1.5\tUsage information report list sending procedure not accepted by the 5G DDNMF\nIf the PROSE_USAGE_INFORMATION_REPORT_LIST message is not accepted by the 5G DDNMF CTF (ADF), the 5G DDNMF CTF (ADF) shall send a PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message to the UE. In the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message, the 5G DDNMF CTF (ADF):\n1)\tshall include a <response-reject> element with '
+[INF | src.query:193 - get_3GPP_context()] 5. get_question_context_faiss(use_context=False) completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.
+[INF | src.query:53 - candidate_answers()] generating candidate answers based on retrieved content. prompt-format: <--ins-->[query] <--use-->[content] <--gen-->[question]
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'\nProvide all the possible answers to the following question considering your knowledge and the text provided.\nQuestion: What is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\nConsidering the following context:\n["\\nRetrieval 1:\\n...to support the UE selection by considering the UE\'s current location and direction. AF includes the External Group Identifier and the following filtering info as part of the FL UE selection request:\\n\\tFL Coverage Area: The FL training server\'s coverage area, i.e. the coverage area of the FL training server where the selected UEs participate in the FL operation.\\n\\tWhen providing a target area for FL, the AF may provide sub-areas (e.g. cell 1,2,3), and provide a maximum number of UEs (e.g. 2) that should ...\\nThis retrieval is performed from the document 3GPP 23700-80-i00.docx.\\n", \'\\nRetrieval 2:\\n...7.4; and\\nii)\\tthe target user info set to the application layer ID of the target UE provided by the upper layers;\\n\\tAny parameter that is not mentioned above shall follow the definitions in clause\\xa07.2.2.2.\\n7.7.2.3\\tPath switching procedure from the direct communication path over Uu to the direct communication path over PC5 accepted by the target UE\\nUpon receipt of the PROSE DIRECT LINK MODIFICATION REQUEST message as specified in clause\\xa07.7.2.2, if the received PROSE DIRECT LINK MODIFICATION REQUEST ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 3:\\n...reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message; and\\n2)\\tshall include appropriate cause value.\\n7.6.2.1.6\\tUsage information report list sending procedure unsuccessful completion by the UE\\nUpon receipt of the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message containing a <response-reject> element with transaction ID set to the value of the transaction ID included in the PROSE_USAGE_INFORMATION_REPORT_LIST message, ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', "\\nRetrieval 4:\\n...the participants of the ongoing group call and generates group call release message to release ongoing session.\\n3.\\tThe MCPTT server of the primary MCPTT system initiates a group call release request message via SIP core towards each accessible participant of the ongoing group call (3a). The MCPTT server of the primary MCPTT system may not have access to group members\' information of the constituent group belonging to a partner MCPTT system. For such group members, the MCPTT server of the primary ...\\nThis retrieval is performed from the document 3GPP 23379-i80.docx.\\n", \'\\nRetrieval 5:\\n...control concepts", as specified in 3GPP\\xa0TS\\xa023.228\\xa0[7], are to be applied in an IM CN subsystem, then these are to be provided by capabilities within the IBCF, and the IBCF acts as an entry point for this network (instead of the I-CSCF). In this case the IBCF and the I-CSCF can be co-located as a single physical node. If "border control concepts" are not applied, then the I-CSCF is considered as an entry point of a network. If the P-CSCF is in the home network, then the I-CSCF is considered as an ...\\nThis retrieval is performed from the document 3GPP 24229-i40.docx.\\n\', \'\\nRetrieval 6:\\n...NAS layer indicates the successful change of the PLMN; or\\nk)\\tthe UE NAS layer indicates that current TAI is in the list of TAs for which the S-NSSAI is allowed (see 3GPP\\xa0TS\\xa024.501\\xa0[11] clause\\xa04.6.3.6).\\nIf the re-evaluation leads to a change of the association of an application or a PIN to a PDU session, the UE may enforce such change immediately or when UE returns to 5GMM-IDLE mode.\\nNOTE\\xa016:\\tThe time when the UE enforces the change of the association of an application or a PIN to a PDU Session is ...\\nThis retrieval is performed from the document 3GPP 24526-i50.docx.\\n\', \'\\nRetrieval 7:\\n...the connectivity service which the UE is authorized to monitor, the UE shall use the associated DUSK, if received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay is used) and the UTC-based counter obtained during the monitoring operation to unscramble the PROSE PC5 DISCOVERY message as described in 3GPP\\xa0TS\\xa033.503\\xa0[34]. Then, if a DUCK is received from the 5G DDNMF or 5G PKMF (if security procedure over user plane for 5G ProSe UE-to-network relay ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 8:\\n...authorized Session-AMBR within the "subsSessAmbr" attribute;\\nNOTE\\xa01:\\tWhen both, the UDM subscribed Session-AMBR and the DN-AAA authorized Session-AMBR are available in the NF service consumer, the NF service consumer includes the DN-AAA authorized Session-AMBR.\\n-\\tif the "VPLMN-QoS-Control" feature is supported, the highest Session-AMBR and the default QoS supported in the VPLMN within the "vplmnQos" attribute, if available;\\nNOTE\\xa02:\\tIn home routed roaming, the H-SMF may provide the QoS constraints ...\\nThis retrieval is performed from the document 3GPP 29512-i40.docx.\\n\', \'\\nRetrieval 9:\\n...s): \\na)\\tare not able to perform the communication path switching procedure from the direct communication path over PC5 to the direct communication path over Uu as specified in clause\\xa07.7.4; or\\nb)\\tare not able to be supported because of e.g the QoS requirements for the direct communication path over Uu;\\nthe target UE shall send a PROSE PATH SWITCHING REJECT message with the PC5 signalling protocol cause value #18 "path switching is not allowed for the ProSe applications". In this case, the initiating ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\', \'\\nRetrieval 10:\\n...message, the usage information report list sending procedure is successfully completed.\\n7.6.2.1.5\\tUsage information report list sending procedure not accepted by the 5G DDNMF\\nIf the PROSE_USAGE_INFORMATION_REPORT_LIST message is not accepted by the 5G DDNMF CTF (ADF), the 5G DDNMF CTF (ADF) shall send a PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message to the UE. In the PROSE_USAGE_INFORMATION_REPORT_LIST_RESPONSE message, the 5G DDNMF CTF (ADF):\\n1)\\tshall include a <response-reject> element with ...\\nThis retrieval is performed from the document 3GPP 24554-i30.docx.\\n\']\nProvide all the possible answers to the following question considering your knowledge and the text provided.\nQuestion: Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?\nEnsure none of the answers provided contradicts your knowledge and each answer has at most 100 characters.\n        '
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+[INF | src.query:58 - candidate_answers()] generated context: 'Based on the provided texts, there\'s no explicit mention of a technique that enhances the covertness or stealthiness of wireless channels by employing multiple antennas. However, one possible answer could be "MIMO (Multiple Input Multiple Output) Technique", as it is commonly used in modern communication systems and can potentially improve the stealthiness of wireless transmissions by exploiting spatial diversity and multiplexing, which could make the signals harder to intercept or detect. But please note that this interpretation is speculative and not directly confirmed from the given texts.'
+[INF | src.query:195 - get_3GPP_context()] 6. candidate_answers() completed! question context enhanced with possible answers. enhanced_query:
+'What is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\nBased on the provided texts, there\'s no explicit mention of a technique that enhances the covertness or stealthiness of wireless channels by employing multiple antennas. However, one possible answer could be "MIMO (Multiple Input Multiple Output) Technique", as it is commonly used in modern communication systems and can potentially improve the stealthiness of wireless transmissions by exploiting spatial diversity and multiplexing, which could make the signals harder to intercept or detect. But please note that this interpretation is speculative and not directly confirmed from the given texts.'
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+Starting new HTTPS connection (1): huggingface.co:443
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+[INF | src.query:66 - get_embeddings_list()] text_list size:(1) :: embedding dims: torch.Size([1, 1024])
+[INF | src.query:135 - predict_wg()] (i) Enhanced Query converted to Embeddings!
+[INF | src.query:80 - get_col2()] loading series description from existing file
+no.of series_dict entries: 18 | indices: ['21 series', '22 series', '23 series', '24 series', '25 series', '26 series', '27 series', '28 series', '29 series', '30 series', '31 series', '32 series', '33 series', '34 series', '35 series', '36 series', '37 series', '38 series'] | embedding dims: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+[INF | src.query:120 - preprocessing_softmax()] similarity score of the query:embeddings w.r.t series-description:embeddings => dim=(1, 18) vals=
+[[0.05646904 0.05515896 0.01861389 0.06750065 0.04744575 0.00271544
+  0.02968585 0.05852879 0.07123753 0.0344854  0.02326061 0.06328604
+  0.01816339 0.04957056 0.04905927 0.04629025 0.04932298 0.03465751]]
+[INF | src.query:123 - preprocessing_softmax()] creating DataLoader with train data with embeddings[dim:torch.Size([1, 1024])] & softmax(similarity_scores)[dim:torch.Size([1, 18])]
+[INF | src.query:137 - predict_wg()] (ii) Applied Softmax-Preprocessing onto Embeddings!
+NN-Router model: [inp:(queryEmbed.dim:torch.Size([1, 1024]),softSimScore.dimtorch.Size([1, 18]))] => [out(dim:torch.Size([1, 18]))=
+tensor([[ -9.2943,   1.6179,  -2.0459,  -0.3420, -16.0472,   6.2780,  -4.3427,
+          -1.2055,  -0.3776, -16.6457,  -4.4584,  -1.6299,  -3.8813, -16.4632,
+         -15.6515,  -4.9858,  -0.6114,  -4.2394]])]
+[INF | src.query:147 - predict_wg()] (iii) Found out all prediction_labels: [[26 22 24 29 37]] based on NN-Router model with existing weights!
+[INF | src.query:199 - get_3GPP_context()] 7. checking predict_wg() completed! newly predicted series no.s = [22, 24, 26, 29, 37] vs old predictions = [23, 24, 26, 29, 31]
+[INF | src.input:29 - download_documents()] Download Dest-folder /home/techie/logeshv/3GPP-Latest/Rel-18 already exists => skipping downloading...
+[INF | src.input:56 - extract_zipfiles()] Extracting Out-folder /home/techie/logeshv/RAG/Telco-RAG/Telco-RAG_api/3GPP-Release18/Documents already exists => skipping extracting...
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+[INF | src.query:208 - get_3GPP_context()] new series no.s that were not present in previously predicted series no.s = dict_keys(['Series22', 'Series37'])
+[INF | src.embeddings:39 - get_embeddings()] Getting embedding for the docs listed: dict_keys(['Series22', 'Series37'])
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series22 found and loaded successfully! shape = (6449, 1024)
+[INF | src.embeddings:51 - get_embeddings()] Embeddings for Series37 found and loaded successfully! shape = (7596, 1024)
+[INF | src.embeddings:81 - get_embeddings()] Successfully added 'embeddings' to each chunk entries. each doc_key contain keys: dict_keys(['text', 'source', 'embedding'])
+[INF | src.query:151 - get_question_context_faiss()] => called with batch.size=6 (no.of series + summaries inclusive), k=10, use_context=True
+[INF | src.index:39 - get_faiss_batch_index()] Generating FAISS indicies for the given embedding batch ...
+[INF | src.index:23 - create_faiss_index_IndexFlatIP()] Creating IndexFlatIP...
+[INF | src.index:31 - create_faiss_index_IndexFlatIP()] Creating FAISS index success! Number of vectors in index: 120667, Dimension of vectors: 1024
+[INF | src.query:154 - get_question_context_faiss()] ---> get_faiss_batch_index() completed for given batch! Sample Entriy for Index[0]: source_mapping = 22011-i50.docx, embedding_mapping.size = (1024,), 
+faiss_index_to_data_mapping = '3GPP TS 22.011 V18.5.0 (2023-06)\nTechnical Specification\n3rd Generation Partnership Project;\nTechnical Specification Group Services and System Aspects;\nService accessibility\n(Release 18)\n\n\t\nThe present document has been developed within the 3rd Generation Partnership Project (3GPP TM) and may be further elaborated for the purposes of 3GPP.\nThe present document has not been subject to any approval process by the 3GPP Organisational Partners and shall not be implemented.\nThis Specification is provided '
+[INF | src.retrieval:52 - find_nearest_neighbors_faiss()] Finding nearest neighbours based on FAISS ...
+[INF | src.retrieval:39 - get_query_embedding_OpenAILarge()] generating embeddings for the given query + context ...
+[INF | src.LLMs.LLM:196 - embedding()] Finding Emdeddings based on params: [model:BAAI/bge-m3, dim:1024]
+[INF | sentence_transformers.SentenceTransformer:211 - __init__()] Use pytorch device_name: cpu
+[INF | sentence_transformers.SentenceTransformer:219 - __init__()] Load pretrained SentenceTransformer: BAAI/bge-m3
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config_sentence_transformers.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config_sentence_transformers.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/README.md HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/README.md HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/modules.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/modules.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/sentence_bert_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/sentence_bert_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/adapter_config.json HTTP/1.1" 404 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/model.safetensors HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/main HTTP/1.1" 200 9525
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/main/tokenizer_config.json HTTP/1.1" 307 0
+https://huggingface.co:443 "HEAD /api/resolve-cache/models/BAAI/bge-m3/5617a9f61b028005a4858fdac845db406aefb181/tokenizer_config.json HTTP/1.1" 200 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/discussions?p=0 HTTP/1.1" 200 30475
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/tree/main/additional_chat_templates?recursive=False&expand=False HTTP/1.1" 404 64
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/commits/refs%2Fpr%2F118 HTTP/1.1" 200 10490
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors.index.json HTTP/1.1" 404 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3/revision/main HTTP/1.1" 200 5193
+https://huggingface.co:443 "HEAD /BAAI/bge-m3/resolve/refs%2Fpr%2F118/model.safetensors HTTP/1.1" 302 0
+https://huggingface.co:443 "GET /api/models/BAAI/bge-m3 HTTP/1.1" 200 5193
+[INF | src.embeddings:23 - get_embeddings_byLLM()] embedding [shape=torch.Size([1024])] generated for the text: 
+'What is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\n Based on the provided texts, there\'s no explicit mention of a technique that enhances the covertness or stealthiness of wireless channels by employing multiple antennas. However, one possible answer could be "MIMO (Multiple Input Multiple Output) Technique", as it is commonly used in modern communication systems and can potentially improve the stealthiness of wireless transmissions by exploiting spatial diversity and multiplexing, which could make the signals harder to intercept or detect. But please note that this interpretation is speculative and not directly confirmed from the given texts.'
+[INF | root:55 - find_nearest_neighbors_faiss()] (i) generated query embeddings! shape:(1024,)
+[INF | root:58 - find_nearest_neighbors_faiss()] (ii) search_faiss_index(k=10) success! K-Closest neighbours = Indices:[[  1735 101765   2064  14178  21982  22877   1844   3291   3306   4202]], Distances:[[0.13975218 0.12954488 0.12772778 0.12733194 0.12684208 0.12660472
+  0.12407349 0.12382694 0.12346021 0.12284236]]
+[INF | src.query:156 - get_question_context_faiss()] ---> find_nearest_neighbors_faiss() completed with above params! 
+ 10-Closest Results:
+		index:1735, source:22280-i50.docx, embedding.size:(1024,), text:
+"the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.\nEditor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.\n6.8.8.4\tMCX Service Emergency Alert\n6.8.8.4.1\tRequirements\n[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.\n[R-6.8.8.4.1-002] The MCX User shall be notified "
+		index:101765, source:29273-i30.docx, embedding.size:(1024,), text:
+'Answer (STA) Command\nThe Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF\xa0RFC\xa06733\xa0[58], Session-Termination-Answer command.\n   <Session-Termination-Answer> ::=\t< Diameter Header: 275, PXY, 16777250 >\n< Session-Id >\n[ DRMP ]\n{ Result-Code }\n{ Origin-Host }\n{ Origin-Realm }\n[ OC-Supported-Features ]\n[ '
+		index:2064, source:22101-i50.docx, embedding.size:(1024,), text:
+'[19] \t3GPP TS 31.102: "USIM Application Characteristics".\n[20]\t3GPP TS 23.221: "Architectural Requirements".\n[21]\t3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".\n[22]\tVoid\n[23]\t3GPP TS 29.002: "Mobile Application Part (MAP) specification".\n[24]\t3GPP TR 23.972: "Circuit switched multimedia telephony".\n[25]\t3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".\n[26]\t3GPP TS 22.226: "Global Text Telephony, Stage 1".\n[27]\t3GPP TS 22.228: "Service '
+		index:14178, source:rel_17.docx, embedding.size:(1024,), text:
+'of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). \nAll these aspects are detailed below.\nImprovement of positioning accuracy\nTo improve positioning accuracy, several solutions were considered:\nMitigation of gNB/UE '
+		index:21982, source:26114-i50.docx, embedding.size:(1024,), text:
+'in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. \nWhen replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” '
+		index:22877, source:26511-i00.docx, embedding.size:(1024,), text:
+'4.2.1.1.\n-\tIt shall support the following playback requirements as documented in clause 8 of CTA-WAVE 5003 [9] for any content conforming to a CMAF Switching Set as defined in clause 4.2.2.3.2.3 namely:\n-\t8.2 Sequential Track Playback\n-\t8.3\tRandom Access to Fragment\n-\t8.4 Random Access to Time\n-\t8.5 Switching Set Playback\n-\t8.6 Regular Playback of Chunked Content\n-\t8.7 Regular Playback of Chunked Content, non-aligned append\n-\tIt should support the following playback requirements as documented in '
+		index:1844, source:22280-i50.docx, embedding.size:(1024,), text:
+'group, MCX Emergency, Imminent Peril). \n[R-7.6-006] The Off-Network MCX Service shall support multiple pre-emptive priorities.\n[R-7.6-007] The Off-Network MCX Service shall provide a mechanism for MCX Administrators to create, a pre-emption hierarchy for MCX Group communications and their associated users (i.e., to facilitate local management of the service and its resources). \n[R-7.6-008] The Off-Network MCX Service shall support MCX Groups with the permission to pre-empt other MCX communications. \n['
+		index:3291, source:22847-i20.docx, embedding.size:(1024,), text:
+'haptic belt actuator to navigate the workers.\n5.5.2\tPre-conditions\nMulti-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.\nThe MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help '
+		index:3306, source:22847-i20.docx, embedding.size:(1024,), text:
+'is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.\nThe network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.\nNOTE: \tWhen motion prediction doesn’t work, '
+		index:4202, source:22839-i10.docx, embedding.size:(1024,), text:
+'is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.\nAlice parks her car in a parking lot near the spot of the music festival. John is a stranger '
+[INF | src.query:219 - get_3GPP_context()] 8. get_question_context_faiss(use_context=True) based on new predictions completed! question_context is now rephrased with 'Retrieval [no]: [doc-chunk-text] from 3GPP document [source-file-name]' for all above entries.
+
+Task-3 Over!
+####################################################################################################
+
+[INF | __main__:85 - TelcoRAG()] Check if answer is provided: "None"
+
+####################################################################################################
+[INF | __main__:94 - TelcoRAG()] Task-4 (answer is NOT provided) ToDo: generate(question,**)
+
+[INF | src.generate:23 - generate()] Generated prompt for LLM completion: 
+
+Please answer the following question:
+What is the technique that enhances the covertness of wireless channels by employing multiple antennas?
+
+Terms and Definitions:
+
+
+
+
+Abbreviations:
+
+
+
+
+
+Considering the following context:
+
+Retrieval 1:
+...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.
+Editor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.
+6.8.8.4	MCX Service Emergency Alert
+6.8.8.4.1	Requirements
+[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.
+[R-6.8.8.4.1-002] The MCX User shall be notified ...
+This retrieval is performed from the document 3GPP 22280-i50.docx.
+
+
+Retrieval 2:
+...Answer (STA) Command
+The Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF RFC 6733 [58], Session-Termination-Answer command.
+   <Session-Termination-Answer> ::=	< Diameter Header: 275, PXY, 16777250 >
+< Session-Id >
+[ DRMP ]
+{ Result-Code }
+{ Origin-Host }
+{ Origin-Realm }
+[ OC-Supported-Features ]
+[ ...
+This retrieval is performed from the document 3GPP 29273-i30.docx.
+
+
+Retrieval 3:
+...[19] 	3GPP TS 31.102: "USIM Application Characteristics".
+[20]	3GPP TS 23.221: "Architectural Requirements".
+[21]	3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".
+[22]	Void
+[23]	3GPP TS 29.002: "Mobile Application Part (MAP) specification".
+[24]	3GPP TR 23.972: "Circuit switched multimedia telephony".
+[25]	3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".
+[26]	3GPP TS 22.226: "Global Text Telephony, Stage 1".
+[27]	3GPP TS 22.228: "Service ...
+This retrieval is performed from the document 3GPP 22101-i50.docx.
+
+
+Retrieval 4:
+...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). 
+All these aspects are detailed below.
+Improvement of positioning accuracy
+To improve positioning accuracy, several solutions were considered:
+Mitigation of gNB/UE ...
+This retrieval is performed from the document 3GPP rel_17.docx.
+
+
+Retrieval 5:
+...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. 
+When replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...
+This retrieval is performed from the document 3GPP 26114-i50.docx.
+
+
+Retrieval 6:
+...4.2.1.1.
+-	It shall support the following playback requirements as documented in clause 8 of CTA-WAVE 5003 [9] for any content conforming to a CMAF Switching Set as defined in clause 4.2.2.3.2.3 namely:
+-	8.2 Sequential Track Playback
+-	8.3	Random Access to Fragment
+-	8.4 Random Access to Time
+-	8.5 Switching Set Playback
+-	8.6 Regular Playback of Chunked Content
+-	8.7 Regular Playback of Chunked Content, non-aligned append
+-	It should support the following playback requirements as documented in ...
+This retrieval is performed from the document 3GPP 26511-i00.docx.
+
+
+Retrieval 7:
+...group, MCX Emergency, Imminent Peril). 
+[R-7.6-006] The Off-Network MCX Service shall support multiple pre-emptive priorities.
+[R-7.6-007] The Off-Network MCX Service shall provide a mechanism for MCX Administrators to create, a pre-emption hierarchy for MCX Group communications and their associated users (i.e., to facilitate local management of the service and its resources). 
+[R-7.6-008] The Off-Network MCX Service shall support MCX Groups with the permission to pre-empt other MCX communications. 
+[...
+This retrieval is performed from the document 3GPP 22280-i50.docx.
+
+
+Retrieval 8:
+...haptic belt actuator to navigate the workers.
+5.5.2	Pre-conditions
+Multi-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.
+The MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 9:
+...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.
+The network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.
+NOTE: 	When motion prediction doesn’t work, ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 10:
+...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.
+Alice parks her car in a parking lot near the spot of the music festival. John is a stranger ...
+This retrieval is performed from the document 3GPP 22839-i10.docx.
+
+
+Please answer the following question, add between paranthesis the retrieval(e.g. Retrieval 3) that you used for each eleement of your reasoning:
+Which technique utilizes multiple antennas to improve the stealthiness of wireless channels?
+    
+[INF | src.LLMs.LLM:181 - submit_prompt_flex()] => called with LLM_mode=Mode.Ollama
+[INF | src.LLMs.LLM:116 - submit_prompt_flex_ollama()] => called with model=mistral, output_json=False, prompt: 
+'\nPlease answer the following question:\nWhat is the technique that enhances the covertness of wireless channels by employing multiple antennas?\n\nTerms and Definitions:\n\n\n\n\nAbbreviations:\n\n\n\n\n\nConsidering the following context:\n\nRetrieval 1:\n...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.\nEditor\'s Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.\n6.8.8.4\tMCX Service Emergency Alert\n6.8.8.4.1\tRequirements\n[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.\n[R-6.8.8.4.1-002] The MCX User shall be notified ...\nThis retrieval is performed from the document 3GPP 22280-i50.docx.\n\n\nRetrieval 2:\n...Answer (STA) Command\nThe Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF\xa0RFC\xa06733\xa0[58], Session-Termination-Answer command.\n   <Session-Termination-Answer> ::=\t< Diameter Header: 275, PXY, 16777250 >\n< Session-Id >\n[ DRMP ]\n{ Result-Code }\n{ Origin-Host }\n{ Origin-Realm }\n[ OC-Supported-Features ]\n[ ...\nThis retrieval is performed from the document 3GPP 29273-i30.docx.\n\n\nRetrieval 3:\n...[19] \t3GPP TS 31.102: "USIM Application Characteristics".\n[20]\t3GPP TS 23.221: "Architectural Requirements".\n[21]\t3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".\n[22]\tVoid\n[23]\t3GPP TS 29.002: "Mobile Application Part (MAP) specification".\n[24]\t3GPP TR 23.972: "Circuit switched multimedia telephony".\n[25]\t3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".\n[26]\t3GPP TS 22.226: "Global Text Telephony, Stage 1".\n[27]\t3GPP TS 22.228: "Service ...\nThis retrieval is performed from the document 3GPP 22101-i50.docx.\n\n\nRetrieval 4:\n...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). \nAll these aspects are detailed below.\nImprovement of positioning accuracy\nTo improve positioning accuracy, several solutions were considered:\nMitigation of gNB/UE ...\nThis retrieval is performed from the document 3GPP rel_17.docx.\n\n\nRetrieval 5:\n...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. \nWhen replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...\nThis retrieval is performed from the document 3GPP 26114-i50.docx.\n\n\nRetrieval 6:\n...4.2.1.1.\n-\tIt shall support the following playback requirements as documented in clause 8 of CTA-WAVE 5003 [9] for any content conforming to a CMAF Switching Set as defined in clause 4.2.2.3.2.3 namely:\n-\t8.2 Sequential Track Playback\n-\t8.3\tRandom Access to Fragment\n-\t8.4 Random Access to Time\n-\t8.5 Switching Set Playback\n-\t8.6 Regular Playback of Chunked Content\n-\t8.7 Regular Playback of Chunked Content, non-aligned append\n-\tIt should support the following playback requirements as documented in ...\nThis retrieval is performed from the document 3GPP 26511-i00.docx.\n\n\nRetrieval 7:\n...group, MCX Emergency, Imminent Peril). \n[R-7.6-006] The Off-Network MCX Service shall support multiple pre-emptive priorities.\n[R-7.6-007] The Off-Network MCX Service shall provide a mechanism for MCX Administrators to create, a pre-emption hierarchy for MCX Group communications and their associated users (i.e., to facilitate local management of the service and its resources). \n[R-7.6-008] The Off-Network MCX Service shall support MCX Groups with the permission to pre-empt other MCX communications. \n[...\nThis retrieval is performed from the document 3GPP 22280-i50.docx.\n\n\nRetrieval 8:\n...haptic belt actuator to navigate the workers.\n5.5.2\tPre-conditions\nMulti-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.\nThe MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n\n\nRetrieval 9:\n...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.\nThe network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.\nNOTE: \tWhen motion prediction doesn’t work, ...\nThis retrieval is performed from the document 3GPP 22847-i20.docx.\n\n\nRetrieval 10:\n...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.\nAlice parks her car in a parking lot near the spot of the music festival. John is a stranger ...\nThis retrieval is performed from the document 3GPP 22839-i10.docx.\n\n\nPlease answer the following question, add between paranthesis the retrieval(e.g. Retrieval 3) that you used for each eleement of your reasoning:\nWhich technique utilizes multiple antennas to improve the stealthiness of wireless channels?\n    '
+Starting new HTTP connection (1): localhost:11434
+http://localhost:11434 "POST /api/generate HTTP/1.1" 200 None
+[INF | src.LLMs.LLM:133 - submit_prompt_flex_ollama()] ollama request successfully parsed!
+[INF | src.generate:26 - generate()] Model response generated successfully. Predicted Answer:
+The technique that utilizes multiple antennas to improve the covertness (stealthiness) of wireless channels is known as MIMO (Multiple Input Multiple Output). This technique enhances the covertness by employing multiple antennas at both the transmitter and receiver sides, enabling simultaneous data transmission or reception over different wireless paths. It increases the channel capacity and improves the reliability of the communication system, making it harder to detect and intercept the signal (Retrieval 3: 3GPP TS 31.102: "USIM Application Characteristics").
+
+Task-4 Over! response & context received successfully.
+####################################################################################################
+
+[INF | __main__:100 - TelcoRAG()] Generation of this response took 154.26778483390808 seconds
+[INF | __main__:175 - <module>()] Generated Output given only the Question and not the Options along with the Query:
+[INF | __main__:176 - <module>()] >>> Response: The technique that utilizes multiple antennas to improve the covertness (stealthiness) of wireless channels is known as MIMO (Multiple Input Multiple Output). This technique enhances the covertness by employing multiple antennas at both the transmitter and receiver sides, enabling simultaneous data transmission or reception over different wireless paths. It increases the channel capacity and improves the reliability of the communication system, making it harder to detect and intercept the signal (Retrieval 3: 3GPP TS 31.102: "USIM Application Characteristics").
+[INF | __main__:177 - <module>()] >>> Context: The retrieved context provided to the LLM is:
+
+Retrieval 1:
+...the initial Imminent Peril group communication was requested until the In-progress Imminent Peril condition is cancelled.
+Editor's Note: Whether imminent peril and MCX Service Emergency Group Communications can be generalized is FFS.
+6.8.8.4	MCX Service Emergency Alert
+6.8.8.4.1	Requirements
+[R-6.8.8.4.1-001] The MCX Service may allow MCX UEs that are unauthorized, not registered, or authenticated to activate the MCX Service Emergency Alert capability.
+[R-6.8.8.4.1-002] The MCX User shall be notified ...
+This retrieval is performed from the document 3GPP 22280-i50.docx.
+
+
+Retrieval 2:
+...Answer (STA) Command
+The Session-Termination-Answer (STA) command, indicated by the Command-Code field set to 275 and the "R" bit cleared in the Command Flags field, is sent from a 3GPP AAA server to a non-3GPP access network. The Command Code value and ABNF are re-used from the IETF RFC 6733 [58], Session-Termination-Answer command.
+   <Session-Termination-Answer> ::=	< Diameter Header: 275, PXY, 16777250 >
+< Session-Id >
+[ DRMP ]
+{ Result-Code }
+{ Origin-Host }
+{ Origin-Realm }
+[ OC-Supported-Features ]
+[ ...
+This retrieval is performed from the document 3GPP 29273-i30.docx.
+
+
+Retrieval 3:
+...[19] 	3GPP TS 31.102: "USIM Application Characteristics".
+[20]	3GPP TS 23.221: "Architectural Requirements".
+[21]	3GPP TS 22.002: "Circuit Bearer Services (BS) supported by a Public Land Mobile Network (PLMN)".
+[22]	Void
+[23]	3GPP TS 29.002: "Mobile Application Part (MAP) specification".
+[24]	3GPP TR 23.972: "Circuit switched multimedia telephony".
+[25]	3GPP TS 22.140: "Multimedia Messaging Service (MMS); Stage 1".
+[26]	3GPP TS 22.226: "Global Text Telephony, Stage 1".
+[27]	3GPP TS 22.228: "Service ...
+This retrieval is performed from the document 3GPP 22101-i50.docx.
+
+
+Retrieval 4:
+...of positioning accuracy and latency of Rel-16 NR positioning methods, improvements of network efficiency (On-Demand PRS transmission), improvement of device efficiency (positioning in RRC_INACTIVE), providing high integrity and reliability requirements (GNSS integrity) and enhancements of A-GNSS positioning (BDS B2a,/B3I and NavIC to NR). 
+All these aspects are detailed below.
+Improvement of positioning accuracy
+To improve positioning accuracy, several solutions were considered:
+Mitigation of gNB/UE ...
+This retrieval is performed from the document 3GPP rel_17.docx.
+
+
+Retrieval 5:
+...in an SDP offer, it shall not perform any replacement and will not include the attribute in its SDP answer. 
+When replacement is to be performed by the ITT4RT-MRF and the SDP negotiation is initiated by the ITT4RT-MRF, the offer sent by the ITT4RT-MRF to the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement”. If the ITT4RT-Tx client in terminal accepts the offer by the MRF to perform replacement, the ITT4RT-Tx client in terminal shall include the attribute “a=3gpp_360video_replacement” ...
+This retrieval is performed from the document 3GPP 26114-i50.docx.
+
+
+Retrieval 6:
+...4.2.1.1.
+-	It shall support the following playback requirements as documented in clause 8 of CTA-WAVE 5003 [9] for any content conforming to a CMAF Switching Set as defined in clause 4.2.2.3.2.3 namely:
+-	8.2 Sequential Track Playback
+-	8.3	Random Access to Fragment
+-	8.4 Random Access to Time
+-	8.5 Switching Set Playback
+-	8.6 Regular Playback of Chunked Content
+-	8.7 Regular Playback of Chunked Content, non-aligned append
+-	It should support the following playback requirements as documented in ...
+This retrieval is performed from the document 3GPP 26511-i00.docx.
+
+
+Retrieval 7:
+...group, MCX Emergency, Imminent Peril). 
+[R-7.6-006] The Off-Network MCX Service shall support multiple pre-emptive priorities.
+[R-7.6-007] The Off-Network MCX Service shall provide a mechanism for MCX Administrators to create, a pre-emption hierarchy for MCX Group communications and their associated users (i.e., to facilitate local management of the service and its resources). 
+[R-7.6-008] The Off-Network MCX Service shall support MCX Groups with the permission to pre-empt other MCX communications. 
+[...
+This retrieval is performed from the document 3GPP 22280-i50.docx.
+
+
+Retrieval 8:
+...haptic belt actuator to navigate the workers.
+5.5.2	Pre-conditions
+Multi-modal UEs, with sensor, haptic and audio/visual capabilities, are interconnected, through the 5G Network provided by the MNO, both locally, or remotly over the MNO 5G Network.
+The MNO provides service data flows for multi-modal information delivered over one common session to different UEs. E.g., a single user may receive haptic information be sent to her/his haptic glove and belt and audio to be sent to her/his headset to help ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 9:
+...is guaranteed; when the congestion is relieved, 5GS increases QoS of Camera#4 while target QoS of Camera#1 is still guaranteed.
+The network congestion gets more serious, and target QoS of Camera#2 can’t be guaranteed. Since the motion data collected by Camera#2 is mandatory for motion prediction without which the motion prediction can’t be made, 5GS releases resources of Camera#2 and Camera#5 based on the coordination policy of the multi-modal service.
+NOTE: 	When motion prediction doesn’t work, ...
+This retrieval is performed from the document 3GPP 22847-i20.docx.
+
+
+Retrieval 10:
+...is connected to the base station on her car, which has been set to provide private access only. Alice pickup her friend Mary at Mary’s home when she drives her car to the fesitval, and Mary’s UE is connected to the base station on Alice’s car since Alice grant Mary to access, e.g. by giving Mary an Token. Mary uses her UE and the Token to access the Internet via the base station on the car during Alice drives.
+Alice parks her car in a parking lot near the spot of the music festival. John is a stranger ...
+This retrieval is performed from the document 3GPP 22839-i10.docx.
+
+
