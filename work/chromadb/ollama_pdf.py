@@ -158,7 +158,7 @@ Ensure none of the answers provided contradicts your knowledge and each answer h
 
 # main()
 if __name__ == "__main__":
-    # Example usage Define Question to query the RAG model
-    question = "What is artificial intelligence?"  # 
+    # Example usage: Define Question to query the RAG model
+    question = "Describe active E-RABs in a few lines."  # 
     response = rag_pipeline(question)
     logger.info(f"######### ------ Response from LLM ------ #########\n{response}")
