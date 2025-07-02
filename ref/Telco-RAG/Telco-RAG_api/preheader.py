@@ -4,8 +4,10 @@ import os
 curr_path = os.path.abspath(__file__)
 VENV_PATH = os.environ.get('VIRTUAL_ENV') # virtual environment path
 
-ROOT_DIR = "Telco-RAG_api"
-ROOT_PATH = curr_path[:curr_path.find(ROOT_DIR) + len(ROOT_DIR)]
+REPO_DIR = "Telco-RAG"
+REPO_PATH = curr_path[:curr_path.find(REPO_DIR) + len(REPO_DIR)]
+ROOT_DIR = REPO_DIR + "_api"
+ROOT_PATH = os.path.join(REPO_PATH, ROOT_DIR)
 sys.path.append(ROOT_PATH)
 
 # These are env var for this project under the root dir (modify accordingly)
@@ -17,11 +19,12 @@ DOWN_DIR = "3GPP-Latest"
 DOWN_PATH = os.path.join(VENV_PATH, DOWN_DIR) # could keep inside Root_dir as well
 
 # Update abs path to 'TeleQnA.txt' dataset here that can be used to random test the rag model
-TeleQA_PATH = os.path.join(VENV_PATH, "RAG/TeleQnA/TeleQnA.txt")
+TeleQA_PATH = os.path.normpath(os.path.join(REPO_PATH, "../TeleQnA/TeleQnA.txt"))
 
-# set rand.seed value for reproducibility
-SEED = 2025
+# set rand.seed value manually for reproducibility
 import random
+import datetime
+SEED = int(datetime.datetime.now().timestamp())
 random.seed(SEED)
 
 # Special logging functionalities: colorful log in terminal + backup log into file
@@ -81,7 +84,7 @@ CONSOLE.setLevel(logging.DEBUG)
 CONSOLE.setFormatter(cf)
 
 # File handler - overwrites log file every time
-LOG_FILE = "TelcoRAG.log"
+LOG_FILE = os.path.dirname(os.getcwd()) + ".log"
 FILE_HANDLER = logging.FileHandler(LOG_FILE, mode='w')  # 'w' means overwrite each run
 FILE_HANDLER.setLevel(logging.DEBUG)
 FILE_HANDLER.setFormatter(FileFormatter(full_fmt=cf._format, debug_fmt=cf.msg))

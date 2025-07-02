@@ -43,7 +43,7 @@ next-env.d.ts
 
 # downloads & clone dirs
 **/3GPP-*/
-**TelcoRAG.log
 
+# cache and env dirs
 **/__pycache__/
 /new_venv4

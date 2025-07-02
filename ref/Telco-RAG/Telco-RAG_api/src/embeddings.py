@@ -76,7 +76,7 @@ def get_embeddings(series_docs):
                     logger.error(f"Error processing chunk {idx} for {doc_key}: {e}")
         
         series_docs[doc_key] = updated_chunks
-    if doc_key is not "":
+    if doc_key != "":
         sample_keys = series_docs[doc_key][0].keys() if len(series_docs[doc_key])>1 else series_docs[doc_key]
         logger.info(f"Successfully added 'embeddings' to each chunk entries. each doc_key contain keys: {sample_keys}")
     else:

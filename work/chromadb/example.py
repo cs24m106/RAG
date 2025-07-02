@@ -5,6 +5,7 @@
 
 # Step 3: Implement RAG with Ollama and ChromaDB
 # Import required libraries
+# ' pip install langchain_ollama '
 from langchain_ollama import OllamaEmbeddings, OllamaLLM
 import chromadb
 import os
@@ -29,6 +30,9 @@ class ChromaDBEmbeddingFunction:
         if isinstance(input, str):
             input = [input]
         return self.langchain_embeddings.embed_documents(input)
+    
+    def name(self):
+        return "ollama-" + llm_model
 
 # Initialize the embedding function with Ollama embeddings
 embedding = ChromaDBEmbeddingFunction(
