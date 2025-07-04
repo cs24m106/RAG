@@ -31,8 +31,14 @@ def custom_text_splitter(text, chunk_size, chunk_overlap, word_split=False):
                 
         if end == start:
             end = start + 1
-            
-        chunks.append(text[start:end])
+        
+        sub = text[start:end]
+        # Remove any whitespace (spaces, tabs, etc.) between newlines,
+        chunk = re.sub(r'[ \t\r\f\v]*\n[ \t\r\f\v]*', '\n', sub)
+        # then collapse multiple newlines to a single newline
+        chunk = re.sub(r'\n+', '\n', chunk).strip()
+        chunks.append(chunk)
+
         start = end - chunk_overlap
         
         if word_split:
