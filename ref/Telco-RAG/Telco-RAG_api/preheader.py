@@ -84,7 +84,8 @@ CONSOLE.setLevel(logging.DEBUG)
 CONSOLE.setFormatter(cf)
 
 # File handler - overwrites log file every time
-LOG_FILE = os.path.dirname(os.getcwd()) + ".log"
+#LOG_FILE = os.path.dirname(os.getcwd()) + ".log"
+LOG_FILE = os.path.splitext(os.path.basename(sys.argv[0]))[0] + ".log"
 FILE_HANDLER = logging.FileHandler(LOG_FILE, mode='w')  # 'w' means overwrite each run
 FILE_HANDLER.setLevel(logging.DEBUG)
 FILE_HANDLER.setFormatter(FileFormatter(full_fmt=cf._format, debug_fmt=cf.msg))
