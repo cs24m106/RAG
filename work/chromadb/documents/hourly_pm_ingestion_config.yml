@@ -1,0 +1,1618 @@
+hourly-pm-db-ingestion-config:
+  tables:
+    - name: HRLY_PM_1
+      columns:
+        - pm-metric-name: rru_rarsent
+          operation: avg
+        - pm-metric-name: avg_peruser_cellthp_ul
+          operation: avg
+        - pm-metric-name: rru_rachpreamblededmean
+          operation: avg
+        - pm-metric-name: avg_peruser_cellthp_dl
+          operation: avg
+        - pm-metric-name: rru_rachpreamblebmean
+          operation: avg
+        - pm-metric-name: rru_rachpreambleamean
+          operation: avg
+        - pm-metric-name: rru_prbtotul
+          operation: avg
+        - pm-metric-name: rru_prbtotdl
+          operation: avg
+        - pm-metric-name: rru_cellunavailabletime_pwrfailure
+          operation: avg
+        - pm-metric-name: rru_cellavailabletime_activetime
+          operation: sum   # TODO should be last
+        - pm-metric-name: rru_cellunavailabletime_downtime
+          operation: sum
+        - pm-metric-name: rrc_connestabfailenbcause_s1aplinkdown
+          operation: sum
+        - pm-metric-name: rrc_avgconnectionnumberr
+          operation: avg
+        - pm-metric-name: rrc_avgactiveuenbr
+          operation: avg
+        - pm-metric-name: rrc_connectiondrop_num
+          operation: sum
+        - pm-metric-name: rrc_conntotal
+          operation: sum
+        - pm-metric-name: rrc_connmax
+          operation: avg
+        - pm-metric-name: rrc_connmean
+          operation: sum
+        - pm-metric-name: rrc_connreestabfail_sum
+          operation: sum
+        - pm-metric-name: rrc_connreestabsucc_sum
+          operation: sum
+        - pm-metric-name: rrc_connreestabatt_sum
+          operation: sum
+        - pm-metric-name: rrc_connestabfailenbcause_congestion
+          operation: sum
+        - pm-metric-name: rrc_connestabsucc_modata
+          operation: sum
+        - pm-metric-name: rrc_connestabsucc_mosignalling
+          operation: sum
+        - pm-metric-name: rrc_connestabsucc_mtaccess
+          operation: sum
+        - pm-metric-name: rrc_connestabsucc_highpriorityaccess
+          operation: sum
+        - pm-metric-name: rrc_connestabsucc_emergency
+          operation: sum
+        - pm-metric-name: rrc_connestabatt_modata
+          operation: sum
+        - pm-metric-name: rrc_connestabatt_mosignalling
+          operation: sum
+        - pm-metric-name: rrc_connestabatt_mtaccess
+          operation: sum
+        - pm-metric-name: rrc_connestabatt_highpriorityaccess
+          operation: sum
+        - pm-metric-name: rrc_connestabatt_emergency
+          operation: sum
+        - pm-metric-name: pdcpulbytesconsumed
+          operation: sum
+        - pm-metric-name: pdcpdlbytesconsumed
+          operation: sum
+        - pm-metric-name: max_cellthp_dl
+          operation: max
+        - pm-metric-name: max_cellthp_ul
+          operation: max
+        - pm-metric-name: ho_intraenboutatt_sum
+          operation: avg
+        - pm-metric-name: ho_erab_estabsuccnbr_qci8
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci6
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci4
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci2
+          operation: sum
+        - pm-metric-name: ho_interenboutatt_sum
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci9
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci7
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci5
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci3
+          operation: sum
+        - pm-metric-name: ho_erab_estabsuccnbr_qci1
+          operation: sum
+        - pm-metric-name: erab_sessiontime_qci1
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci9
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci7
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci5
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci3
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci8
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci6
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci4
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci2
+          operation: sum
+        - pm-metric-name: erab_totalconnections_qci1
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci9
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci7
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci5
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci3
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci1
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci8
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci6
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci4
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason_qci2
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci8
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci6
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci4
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci2
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci9
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci7
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci5
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci3
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost_qci1
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioresourcesnotavailable_qci1
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_noradioresourcesavailableintargetcell_qci1
+          operation: sum
+        - pm-metric-name: erab_volte_congestion
+          operation: sum
+        - pm-metric-name: erab_congestion_qci8
+          operation: sum
+        - pm-metric-name: erab_congestion_qci6
+          operation: sum
+        - pm-metric-name: erab_congestion_qci4
+          operation: sum
+        - pm-metric-name: erab_congestion_qci2
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci9
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci7
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci5
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci3
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci1
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci8
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci6
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci4
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci2
+          operation: sum
+        - pm-metric-name: erab_congestion_qci9
+          operation: sum
+        - pm-metric-name: erab_congestion_qci7
+          operation: sum
+        - pm-metric-name: erab_congestion_qci5
+          operation: sum
+        - pm-metric-name: erab_congestion_qci3
+          operation: sum
+        - pm-metric-name: erab_congestion_qci1
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci8
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci6
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci4
+          operation: sum
+        - pm-metric-name: erab_estabaddsuccnbr_qci2
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci9
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci7
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci5
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci3
+          operation: sum
+        - pm-metric-name: erab_estabaddattnbr_qci1
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_sum
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci9
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci8
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci7
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci6
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci5
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci4
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci3
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci2
+          operation: sum
+        - pm-metric-name: erab_estabinitsuccnbr_qci1
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_sum
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci9
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci8
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci7
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci6
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci5
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci4
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci3
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci2
+          operation: sum
+        - pm-metric-name: erab_estabinitattnbr_qci1
+          operation: sum
+        - pm-metric-name: rrc_connestabfailenbcause_energysaving
+          operation: sum
+        - pm-metric-name: ho_neighbours_count
+          operation: sum
+
+    - name: HRLY_PM_2
+      type: pm
+      columns:
+        - pm-metric-name: ho_targetenbexecutionatt
+          operation: sum
+        - pm-metric-name: ho_targetenbpreparationsucc
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedexecutionatt_qci1
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedexecutionsucc
+          operation: sum
+        - pm-metric-name: ho_targetenbexecutionsucc
+          operation: sum
+        - pm-metric-name: ho_targetenbpreparationatt
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedexecutionatt
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedpreparationatt
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc_qci9
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc_qci8
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutfailure
+          operation: sum
+        - pm-metric-name: ho_intraenbexecutionsucc
+          operation: sum
+        - pm-metric-name: ho_intraenbpreparationatt_qci1
+          operation: sum
+        - pm-metric-name: ho_intraenbpreparationsucc
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedexecutionatt_qci1
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedexecutionsucc
+          operation: sum
+        - pm-metric-name: ho_intraenbexecutionatt
+          operation: sum
+        - pm-metric-name: ho_intraenbpreparationsucc_qci1
+          operation: sum
+        - pm-metric-name: ho_intraenbpreparationatt
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedexecutionatt
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedpreparationatt
+          operation: sum
+        - pm-metric-name: ho_x2succ_num
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc_qci7
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc_qci6
+          operation: sum
+        - pm-metric-name: ho_srvccgeransucc
+          operation: sum
+        - pm-metric-name: ho_srvccutransucc
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc_qci9
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc_qci7
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc_qci1
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutsucc_qci1
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt_qci9
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt_qci8
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt_qci7
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt_qci6
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt_qci9
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt_qci8
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt_qci7
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt_qci6
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt_qci1
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc_qci9
+          operation: sum
+        - pm-metric-name: ho_s1succ_num
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc_qci8
+          operation: sum
+        - pm-metric-name: ho_srvccgeranatt
+          operation: sum
+        - pm-metric-name: ho_srvccutranatt
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc_qci8
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc_qci6
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutsucc
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutatt
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt_qci9
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt_qci7
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc_qci7
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc_qci6
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt_qci1
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt_qci8
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt_qci6
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutatt
+          operation: sum
+        - pm-metric-name: ho_csfallback_utransucc
+          operation: sum
+        - pm-metric-name: ho_csfallback_uecntxmodcount
+          operation: sum
+        - pm-metric-name: ho_csfallback_geransucc
+          operation: sum
+        - pm-metric-name: ho_csfallback_estabinitcount
+          operation: sum
+        - pm-metric-name: ho_interenboutatt_s1intrasystemhandovertriggered
+          operation: sum
+        - pm-metric-name: ho_interenboutatt_handoverdesirableforradioreason
+          operation: sum
+        - pm-metric-name: drb_ueactiveul_sum
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci9
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci7
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci1
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci8
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci6
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci8
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci6
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_sum
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci9
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci7
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci1
+          operation: avg
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackul_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci5
+          operation: sum
+        - pm-metric-name: cell_activeue_ul
+          operation: avg
+        - pm-metric-name: cell_activeue_dl
+          operation: avg
+        - pm-metric-name: cell_datavolumedl
+          operation: avg
+        - pm-metric-name: cell_datavolumeul
+          operation: avg
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsdutotalackdl_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpsdubitratedlmax
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci9
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci8
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci7
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci6
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci2
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci1
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci9
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci8
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci7
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci6
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci1
+          operation: avg
+    - name: HRLY_PM_3
+      type: pm
+      columns:
+        - pm-metric-name: rru_prbul_qci1
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci1
+          operation: avg
+        - pm-metric-name: macharq_dlack_256qam
+          operation: sum
+        - pm-metric-name: macharq_dlack_16qam
+          operation: sum
+        - pm-metric-name: macharq_dlack_64qam
+          operation: sum
+        - pm-metric-name: macharq_dlack_qpsk
+          operation: sum
+        - pm-metric-name: ho_intrafreqpreparationoutsucc
+          operation: sum
+        - pm-metric-name: ho_intrafreqpreparationoutfailure
+          operation: sum
+        - pm-metric-name: ho_intrafreqpreparationoutatt
+          operation: sum
+        - pm-metric-name: ho_intrafreqoutatt_qci1
+          operation: sum
+        - pm-metric-name: ho_interfreqpreparationoutsucc
+          operation: sum
+        - pm-metric-name: ho_interfreqpreparationoutfailure
+          operation: sum
+        - pm-metric-name: ho_interfreqpreparationoutatt
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutsucc_qci1
+          operation: sum
+        - pm-metric-name: ho_csfallback_mtaccessattempt
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unspecified_3
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unspecified_2
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_tx2relocoverallexpiry
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_ts1relocprepexpiry
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_ts1relocoverallexpiry
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_sum
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_releaseduetoeutrangeneratedreason
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioconnectionwithuelost
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_partialhandover
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_normalrelease
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_failureinradiointerfaceprocedure
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountul_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpuulosscountdl_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_sum
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_sum
+          operation: avg
+        - pm-metric-name: drb_pdcpsduairlossratedl_sum
+          operation: avg
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci1
+          operation: sum
+        - pm-metric-name: drb_iplatedl_qci9
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci8
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci6
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci5
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci2
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci1
+          operation: max
+    - name: HRLY_PM_4
+      type: pm
+      columns:
+        - pm-metric-name: s1sig_connestabsucc
+          operation: sum
+        - pm-metric-name: s1sig_connestabatt
+          operation: sum
+        - pm-metric-name: rru_cellunavailabletime_devmode
+          operation: avg
+        - pm-metric-name: rru_cellunavailabletime_configfailure
+          operation: avg
+        - pm-metric-name: rru_cellunavailabletime_testmode
+          operation: avg
+        - pm-metric-name: rru_cellunavailabletime_inrrhcalmode
+          operation: avg
+        - pm-metric-name: rru_cellunavailabletime_protocolcrash
+          operation: avg
+        - pm-metric-name: pusch_trans_using_mcs28
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs26
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs24
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs22
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs20
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs18
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs16
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs14
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs12
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs10
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs8
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs6
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs4
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs2
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs0
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs27
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs25
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs23
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs21
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs19
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs17
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs15
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs13
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs11
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs9
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs7
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs5
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs3
+          operation: sum
+        - pm-metric-name: pusch_trans_using_mcs1
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs27
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs25
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs23
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs21
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs19
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs17
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs15
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs13
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs11
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs9
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs7
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs5
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs3
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs1
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs28
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs26
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs24
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs22
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs20
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs18
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs16
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs14
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs12
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs10
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs8
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs6
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs4
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs2
+          operation: sum
+        - pm-metric-name: pdsch_trans_using_mcs0
+          operation: sum
+        - pm-metric-name: mr_ulsinr_bin29
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin27
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin25
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin23
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin21
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin19
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin17
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin15
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin13
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin11
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin9
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin7
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin5
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin3
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin1
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin28
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin26
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin24
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin22
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin20
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin18
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin16
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin14
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin12
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin10
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin8
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin6
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin4
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin2
+          operation: avg
+        - pm-metric-name: mr_ulsinr_bin0
+          operation: avg
+        - pm-metric-name: erab_sessiontimeue
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci9
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci7
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci5
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci3
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci1
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci8
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci6
+          operation: avg
+        - pm-metric-name: erab_relactnbr_qci4
+          operation: avg
+        - pm-metric-name: drb_iplatedl_qci3
+          operation: max
+        - pm-metric-name: drb_iplatedl_qci4
+          operation: max
+        - pm-metric-name: erab_relactnbr_qci2
+          operation: avg
+        - pm-metric-name: drb_iplatedl_qci7
+          operation: max
+        - pm-metric-name: carr_wbcqidist_bin0
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin1
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin2
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin3
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin4
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin5
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin6
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin7
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin8
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin9
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin10
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin11
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin12
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin13
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin14
+          operation: avg
+        - pm-metric-name: carr_wbcqidist_bin15
+          operation: avg
+    - name: HRLY_PM_5
+      columns:
+        - pm-metric-name: avg_cellthp_ul
+          operation: avg
+        - pm-metric-name: rru_prbul_qci8
+          operation: avg
+        - pm-metric-name: avg_cellthp_dl
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci5
+          operation: avg
+        - pm-metric-name: avg_dl_cell_timevolume
+          operation: sum
+        - pm-metric-name: avg_dl_user_datavolume
+          operation: sum
+        - pm-metric-name: avg_dl_user_timevolume
+          operation: sum
+        - pm-metric-name: avg_ul_cell_timevolume
+          operation: sum
+        - pm-metric-name: avg_ul_user_datavolume
+          operation: sum
+        - pm-metric-name: avg_ul_user_timevolume
+          operation: sum
+        - pm-metric-name: drb_ueactiveul_qci3
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci4
+          operation: avg
+        - pm-metric-name: drb_ueactiveul_qci2
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci4
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci2
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci5
+          operation: avg
+        - pm-metric-name: drb_ueactivedl_qci3
+          operation: avg
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcptotalpacketrcvddl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci4
+          operation: sum
+        - pm-metric-name: carr_tadist_bin0
+          operation: avg
+        - pm-metric-name: carr_tadist_bin2
+          operation: avg
+        - pm-metric-name: carr_tadist_bin4
+          operation: avg
+        - pm-metric-name: carr_tadist_bin6
+          operation: avg
+        - pm-metric-name: carr_tadist_bin8
+          operation: avg
+        - pm-metric-name: carr_tadist_bin10
+          operation: avg
+        - pm-metric-name: carr_tadist_bin12
+          operation: avg
+        - pm-metric-name: carr_tadist_bin14
+          operation: avg
+        - pm-metric-name: carr_tadist_bin16
+          operation: avg
+        - pm-metric-name: carr_tadist_bin18
+          operation: avg
+        - pm-metric-name: carr_tadist_bin20
+          operation: avg
+        - pm-metric-name: carr_tadist_bin22
+          operation: avg
+        - pm-metric-name: carr_tadist_bin24
+          operation: avg
+        - pm-metric-name: carr_tadist_bin26
+          operation: avg
+        - pm-metric-name: carr_tadist_bin28
+          operation: avg
+        - pm-metric-name: drb_pdcpsdulossrateul_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudelaydl_qci4
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci2
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci5
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci3
+          operation: avg
+        - pm-metric-name: carr_tadist_bin1
+          operation: avg
+        - pm-metric-name: carr_tadist_bin3
+          operation: avg
+        - pm-metric-name: carr_tadist_bin5
+          operation: avg
+        - pm-metric-name: carr_tadist_bin7
+          operation: avg
+        - pm-metric-name: carr_tadist_bin9
+          operation: avg
+        - pm-metric-name: carr_tadist_bin11
+          operation: avg
+        - pm-metric-name: carr_tadist_bin13
+          operation: avg
+        - pm-metric-name: carr_tadist_bin15
+          operation: avg
+        - pm-metric-name: carr_tadist_bin17
+          operation: avg
+        - pm-metric-name: carr_tadist_bin19
+          operation: avg
+        - pm-metric-name: carr_tadist_bin21
+          operation: avg
+        - pm-metric-name: carr_tadist_bin23
+          operation: avg
+        - pm-metric-name: carr_tadist_bin25
+          operation: avg
+        - pm-metric-name: carr_tadist_bin27
+          operation: avg
+        - pm-metric-name: carr_tadist_bin29
+          operation: avg
+        - pm-metric-name: carr_tadist_bin30
+          operation: avg
+        - pm-metric-name: carr_tadist_bin31
+          operation: avg
+        - pm-metric-name: carr_tadist_bin33
+          operation: avg
+        - pm-metric-name: carr_tadist_bin35
+          operation: avg
+        - pm-metric-name: carr_tadist_bin37
+          operation: avg
+        - pm-metric-name: carr_tadist_bin39
+          operation: avg
+        - pm-metric-name: carr_tadist_bin41
+          operation: avg
+        - pm-metric-name: carr_tadist_bin43
+          operation: avg
+        - pm-metric-name: carr_tadist_bin45
+          operation: avg
+        - pm-metric-name: carr_tadist_bin47
+          operation: avg
+        - pm-metric-name: carr_tadist_bin49
+          operation: avg
+        - pm-metric-name: carr_tadist_bin51
+          operation: avg
+        - pm-metric-name: carr_tadist_bin53
+          operation: avg
+        - pm-metric-name: carr_tadist_bin55
+          operation: avg
+        - pm-metric-name: carr_tadist_bin57
+          operation: avg
+        - pm-metric-name: carr_tadist_bin59
+          operation: avg
+        - pm-metric-name: carr_tadist_bin61
+          operation: avg
+        - pm-metric-name: carr_tadist_bin63
+          operation: avg
+        - pm-metric-name: carr_tadist_bin32
+          operation: avg
+        - pm-metric-name: carr_tadist_bin34
+          operation: avg
+        - pm-metric-name: carr_tadist_bin36
+          operation: avg
+        - pm-metric-name: carr_tadist_bin38
+          operation: avg
+        - pm-metric-name: carr_tadist_bin40
+          operation: avg
+        - pm-metric-name: carr_tadist_bin42
+          operation: avg
+        - pm-metric-name: carr_tadist_bin44
+          operation: avg
+        - pm-metric-name: carr_tadist_bin46
+          operation: avg
+        - pm-metric-name: carr_tadist_bin48
+          operation: avg
+        - pm-metric-name: carr_tadist_bin50
+          operation: avg
+        - pm-metric-name: carr_tadist_bin52
+          operation: avg
+        - pm-metric-name: carr_tadist_bin54
+          operation: avg
+        - pm-metric-name: carr_tadist_bin56
+          operation: avg
+        - pm-metric-name: carr_tadist_bin58
+          operation: avg
+        - pm-metric-name: carr_tadist_bin60
+          operation: avg
+        - pm-metric-name: carr_tadist_bin62
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci4
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci2
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci5
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci3
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci5
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci3
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci4
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci2
+          operation: avg
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci2
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci5
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci4
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci3
+          operation: sum
+        - pm-metric-name: drb_pdcppacketdropcountdl_qci2
+          operation: sum
+        - pm-metric-name: drb_ipthpul_qci5
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci4
+          operation: avg
+        - pm-metric-name: drb_ipthpul_qci3
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci5
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci4
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci3
+          operation: avg
+        - pm-metric-name: drb_ipthpdl_qci2
+          operation: avg
+    - name: HRLY_PM_6
+      type: pm
+      columns:
+        - pm-metric-name: uecntx_modrcvd_count
+          operation: sum
+        - pm-metric-name: uecntx_relsuccnbr
+          operation: sum
+        - pm-metric-name: uecntx_relreq_s1apunknownplmn
+          operation: avg
+        - pm-metric-name: uecntx_relreq_s1apunspecified
+          operation: avg
+        - pm-metric-name: uecntx_relreq_notenoughuserplaneprocessingresources
+          operation: avg
+        - pm-metric-name: uecntx_relreq_controlprocessingoverload
+          operation: avg
+        - pm-metric-name: uecntx_relreq_hardwarefailure
+          operation: avg
+        - pm-metric-name: uecntx_relreq_omintervention
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unspecified_1
+          operation: avg
+        - pm-metric-name: uecntx_relreq_abstractsyntaxerrorfalselyconstructedmessage
+          operation: avg
+        - pm-metric-name: uecntx_relreq_semanticerror
+          operation: avg
+        - pm-metric-name: uecntx_relreq_messagenotcompatiblewithreceiverstate
+          operation: avg
+        - pm-metric-name: uecntx_relreq_abstractsyntaxerrorignoreandnotify
+          operation: avg
+        - pm-metric-name: uecntx_relreq_abstractsyntaxerrorreject
+          operation: avg
+        - pm-metric-name: uecntx_relreq_transfersyntaxerror
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unspecified4
+          operation: avg
+        - pm-metric-name: uecntx_relreq_detach
+          operation: avg
+        - pm-metric-name: uecntx_relreq_authenticationfailure
+          operation: avg
+        - pm-metric-name: uecntx_relreq_normalrelease
+          operation: avg
+        - pm-metric-name: uecntx_relreq_transportunspecified
+          operation: avg
+        - pm-metric-name: uecntx_relreq_transportresourceunavailable
+          operation: avg
+        - pm-metric-name: uecntx_relreq_x2handovertriggered
+          operation: avg
+        - pm-metric-name: uecntx_relreq_s1intersystemhandovertriggered
+          operation: avg
+        - pm-metric-name: uecntx_relreq_s1intrasystemhandovertriggered
+          operation: avg
+        - pm-metric-name: uecntx_relreq_encryptionandorintegrityprotectionalgorithmsnotsupported
+          operation: avg
+        - pm-metric-name: uecntx_relreq_multipleerabidinstances
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unknownerabid
+          operation: avg
+        - pm-metric-name: uecntx_relreq_interactionwithotherprocedure
+          operation: avg
+        - pm-metric-name: uecntx_relreq_interratredirection
+          operation: avg
+        - pm-metric-name: uecntx_relreq_invalidqoscombination
+          operation: avg
+        - pm-metric-name: uecntx_relreq_failureinradiointerfaceprocedure
+          operation: sum
+        - pm-metric-name: uecntx_relreq_radioresourcesnotavailable
+          operation: avg
+        - pm-metric-name: uecntx_relreq_uenotavailableforpsservice
+          operation: avg
+        - pm-metric-name: uecntx_relreq_csfallbacktriggered
+          operation: sum
+        - pm-metric-name: uecntx_relreq_loadbalancingtaurequired
+          operation: avg
+        - pm-metric-name: uecntx_relreq_radioconnectionwithuelost
+          operation: sum
+        - pm-metric-name: uecntx_relreq_reduceloadinservingcell
+          operation: avg
+        - pm-metric-name: uecntx_relreq_resourceoptimisationhandover
+          operation: avg
+        - pm-metric-name: uecntx_relreq_timecriticalhandover
+          operation: avg
+        - pm-metric-name: uecntx_relreq_handoverdesirableforradioreason
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unknownenbues1apid
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unknownmmeues1apid
+          operation: avg
+        - pm-metric-name: uecntx_relreq_noradioresourcesavailableintargetcell
+          operation: avg
+        - pm-metric-name: uecntx_relreq_unknowntargetid
+          operation: avg
+        - pm-metric-name: uecntx_relreq_cellnotavailable
+          operation: avg
+        - pm-metric-name: uecntx_relreq_ts1relocprepexpiry
+          operation: avg
+        - pm-metric-name: uecntx_relreq_ts1relocoverallexpiry
+          operation: sum
+        - pm-metric-name: uecntx_relreq_hotargetnotallowed
+          operation: avg
+        - pm-metric-name: uecntx_relreq_hofailureintargetepcenbortargetsystem
+          operation: avg
+        - pm-metric-name: uecntx_relreq_partialhandover
+          operation: avg
+        - pm-metric-name: uecntx_relreq_handovercancelled
+          operation: avg
+        - pm-metric-name: uecntx_relreq_releaseduetoeutrangeneratedreason
+          operation: sum
+        - pm-metric-name: uecntx_relreq_successfulhandover
+          operation: avg
+        - pm-metric-name: uecntx_relreq_tx2relocoverallexpiry
+          operation: sum
+        - pm-metric-name: uecntx_relreq_unspecified
+          operation: avg
+        - pm-metric-name: uecntx_relreq_nouseractivity
+          operation: sum
+        - pm-metric-name: uecntx_relreq_sum
+          operation: sum
+        - pm-metric-name: rru_prbul_qci9
+          operation: avg
+        - pm-metric-name: rru_prbul_qci7
+          operation: avg
+        - pm-metric-name: rru_prbul_qci6
+          operation: avg
+        - pm-metric-name: rru_prbul_qci5
+          operation: avg
+        - pm-metric-name: rru_prbul_qci4
+          operation: avg
+        - pm-metric-name: rru_prbul_qci3
+          operation: avg
+        - pm-metric-name: rru_prbul_qci2
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci9
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci7
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci5
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci3
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci8
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci6
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci4
+          operation: avg
+        - pm-metric-name: rru_prbdl_qci2
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin62
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin60
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin58
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin56
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin54
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin52
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin50
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin48
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin46
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin44
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin42
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin40
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin38
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin36
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin34
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin32
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin63
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin61
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin59
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin57
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin55
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin53
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin51
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin49
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin47
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin45
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin43
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin41
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin39
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin37
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin35
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin33
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin31
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin29
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin27
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin25
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin23
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin21
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin19
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin17
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin15
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin13
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin11
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin9
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin7
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin5
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin3
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin1
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin30
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin28
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin26
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin24
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin22
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin20
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin18
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin16
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin14
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin12
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin10
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin8
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin6
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin4
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin2
+          operation: avg
+        - pm-metric-name: mr_powerheadroom_bin0
+          operation: avg
+        - pm-metric-name: max_activeuedl_qci8
+          operation: max
+        - pm-metric-name: max_activeuedl_qci6
+          operation: max
+        - pm-metric-name: max_activeuedl_qci9
+          operation: max
+        - pm-metric-name: max_activeuedl_qci7
+          operation: max
+        - pm-metric-name: max_activeuedl_qci5
+          operation: max
+        - pm-metric-name: max_activeuedl_qci3
+          operation: max
+        - pm-metric-name: max_activeuedl_qci1
+          operation: max
+        - pm-metric-name: max_activeuedl_qci4
+          operation: max
+        - pm-metric-name: max_activeuedl_qci2
+          operation: max
+        - pm-metric-name: erab_relenbnbr_x2hotriggered
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unspecified_4
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unspecified_1
+          operation: avg
+        - pm-metric-name: erab_relenbnbr_unspecified
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknowntargetid
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknownplmn
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknownpairues1apid
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknownmmeues1apid
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknownerabid
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_unknownenbues1apid
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_uenotavailableforpsservice
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_transportresourceunavailable
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_transfersyntaxerror
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_timecriticalhandover
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_successfulhandover
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_semanticerror
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_s1intrasystemhandovertriggered
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_s1intersystemhandovertriggered
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_resourceoptimisationhandover
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_reduceloadinservingcell
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_radioresourcesnotavailable
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_omintervention
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_nouseractivity
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_notenoughuserplaneprocessingresources
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_noradioresourcesavailableintargetcell
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_multipleerabidinstances
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_messagenotcompatiblewithreceiverstate
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_loadbalancingtaurequired
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_invalidqoscombination
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_intersystemredirection
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_interratredirection
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_interactionwithotherprocedure
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_hotargetnotallowed
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_hooverallexpiry
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_hofailureintargetepcenbortargetsystem
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_hardwarefailure
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_handoverdesirableforradioreason
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_handovercancelled
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_encryptionandorintegrityprotectionalgorithmsnotsupported
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_detach
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_csfallbacktriggered
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_controlprocessingoverload
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_cellnotavailable
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_authenticationfailure
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_abstractsyntaxerrorreject
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_abstractsyntaxerrorignoreandnotify
+          operation: sum
+        - pm-metric-name: erab_relenbnbr_abstractsyntaxerrorfalselyconstructedmessage
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpsdulossrateul_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci1
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudropratedl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpsdudelaydl_qci8
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci6
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci9
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci7
+          operation: avg
+        - pm-metric-name: drb_pdcpsdudelaydl_qci1
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci8
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci6
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci9
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci7
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitrateul_qci1
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci9
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci7
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci1
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci8
+          operation: avg
+        - pm-metric-name: drb_pdcpsdubitratedl_qci6
+          operation: avg
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci9
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci8
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci7
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci6
+          operation: sum
+        - pm-metric-name: drb_pdcpsduairlossratedl_qci1
+          operation: sum
+    - name: HRLY_PM_7
+      type: pm
+      columns:
+        - pm-metric-name: pag_succnbr
+          operation: sum
+        - pm-metric-name: pag_receivednbr
+          operation: sum
+        - pm-metric-name: pag_discardednbr
+          operation: sum
+        - pm-metric-name: max_activeueul_qci1
+          operation: max
+        - pm-metric-name: max_activeueul_qci2
+          operation: max
+        - pm-metric-name: max_activeueul_qci5
+          operation: max
+        - pm-metric-name: max_activeueul_qci6
+          operation: max
+        - pm-metric-name: max_activeueul_qci8
+          operation: max
+        - pm-metric-name: max_activeueul_qci9
+          operation: max
+        - pm-metric-name: erab_relenbnbr_loadbalancingtaurequired_qci1
+          operation: sum
+        - pm-metric-name: rrc_connreestabatt_otherfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabfail_otherfailure
+          operation: sum
+        - pm-metric-name: erab_estabaddfailnbr_ts1relocprepexpiry
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedpreparationsucc
+          operation: sum
+        - pm-metric-name: ho_interenbs1basedpreparationfailure
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedpreparationsucc
+          operation: sum
+        - pm-metric-name: ho_interenbx2basedpreparationfail
+          operation: sum
+        - pm-metric-name: carr_totalta_count
+          operation: sum
+        - pm-metric-name: rrc_maxactiveuenbr
+          operation: max
+        - pm-metric-name: rrc_maxconnecteduenbr
+          operation: max
+        - pm-metric-name: rrc_connestabfailenbcause_unspecified
+          operation: sum
+        - pm-metric-name: ho_interfreqmeasgapoutfail
+          operation: sum
+        - pm-metric-name: ho_interfreqnomeasgapoutfail
+          operation: sum
+        - pm-metric-name: ho_rrcconn_estabfail
+          operation: sum
+        - pm-metric-name: rrc_connreestabatt_handoverfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabatt_reconfigurationfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabfail_handoverfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabfail_reconfigurationfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabsucc_handoverfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabsucc_otherfailure
+          operation: sum
+        - pm-metric-name: rrc_connreestabsucc_reconfigurationfailure
+          operation: sum

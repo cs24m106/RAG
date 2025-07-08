@@ -1,0 +1,46 @@
+hourly-kpi-db-ingestion-config:
+  tables:
+    - name: HRLY_KPI_1
+      columns:
+        - rrc_connection_success_rate_all
+        - intra_frequency_handover_out_success_rate
+        - inter_frequency_handover_out_success_rate
+        - totalpayloadgb
+        - rrcsrdenom
+        - rrcsrnom
+        - rrcdr
+        - erabsrnom
+        - erabsrdenom
+        - erabsr
+        - pserabdrnom
+        - pserabdrdenom
+        - pshonom
+        - pshodenom
+        - pshosr
+        - avgperusercellthpdlmbps
+        - avgperusercellthpulmbps
+        - erabdrnom
+        - erabdrdenom
+        - erabdr
+        - iratghosr
+        - iratuhosr
+        - csfbpct
+        - voltetrfcerl
+        - rrccongnom
+        - voerabdrnom
+        - voerabdrdenom
+        - voerabdr
+        - voerabsrnom
+        - voerabsrdenom
+        - voerabsr
+        - s1hosr
+        - x2hosr
+        - cellavailability
+        - dlpktlossratenom
+        - dlpktlossratedenom
+        - ulpktlossratenom
+        - ulpktlossratedenom
+        - data_volume_dl_gb
+        - data_volume_ul_gb
+        - allhoatt
+        - erabreleutrangenreasonqci1
