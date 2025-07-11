@@ -9,8 +9,75 @@ sys.path.append(ROOT_PATH)
 import preheader, logging # import for custom logger
 logger = logging.getLogger(__name__) # Setup logging
 
-from .analysis import create_pg_engine, get_top_n_correlated_kpis, get_formula_for_kpi, extract_pms_from_formula, load_pm_table_mapping, get_low_kpi_event, get_pm_value
+from analysis import create_pg_engine, get_top_n_correlated_kpis, get_formula_for_kpi, extract_pms_from_formula, load_pm_table_mapping, get_pm_value, make_timezone_unaware
+from sqlalchemy import Table, MetaData, select
+from datetime import datetime, timedelta, timezone
+import pandas as pd
 
+def save_degraded_event_to_excel(degraded_data, filename="output/degraded_kpi.xlsx"):
+    if not degraded_data:
+        print("No degraded event data to save.")
+        return
+
+    row = {
+        "time": degraded_data["timestamp"],
+        "cell_id": degraded_data["cell_id"],
+        "kpi": degraded_data["target_kpi"],
+        "kpi_value": degraded_data["kpi_value"]
+    }
+
+    for pm, value in degraded_data["dependent_pms"].items():
+        row[pm] = pm
+        row[f"{pm}_value"] = value
+
+    df = pd.DataFrame([row])
+
+    cols = ["time", "cell_id", "kpi", "kpi_value"]
+    for pm in degraded_data["dependent_pms"]:
+        cols.append(pm)
+        cols.append(f"{pm}_value")
+
+    df = df[cols]
+    df = make_timezone_unaware(df)
+
+    df.to_excel(filename, index=False)
+    print(f"Degraded KPI event saved to '{filename}'")
+
+# Helper Function: Get degraded KPI event from hrly_kpi_1
+def get_low_kpi_event(target_kpi, cell_id, hours=24, threshold=20.0, engine=None):
+    if not engine:
+        logger.error("PostgreSQL engine must be provided")
+        exit(1)
+
+    end_time = datetime.now(timezone.utc)
+    start_time = end_time - timedelta(hours=hours) # taking past 24 hours time-stamp range
+
+    try:
+        metadata = MetaData()
+        kpi_table = Table('hrly_kpi_1', metadata, autoload_with=engine)
+
+        # Build safe query using SQLAlchemy Core
+        stmt = (
+            select(kpi_table.c.time, kpi_table.c.cell_id, kpi_table.c[target_kpi].label("kpi_value"))
+            .where(
+                kpi_table.c.cell_id == cell_id,
+                kpi_table.c[target_kpi].is_not(None),
+                kpi_table.c[target_kpi] < threshold,
+                kpi_table.c.time >= start_time,
+                kpi_table.c.time <= end_time
+            )
+            .order_by(kpi_table.c.time.desc())
+            .limit(1)
+        )
+
+        df = pd.read_sql_query(stmt, engine.connect())
+        if df.empty:
+            return None
+        return df.iloc[0].to_dict()
+
+    except Exception as e:
+        logger.error(f"Error fetching KPI data: {e}")
+        exit(1)
 
 # Main analysis function
 def analyze_degraded_kpi_event(target_kpi, cell_id, hours=24, threshold=20.0, top_n=3, engine=None):
@@ -28,7 +95,8 @@ def analyze_degraded_kpi_event(target_kpi, cell_id, hours=24, threshold=20.0, to
     # Step 3: Find degraded KPI event
     kpi_data = get_low_kpi_event(target_kpi, cell_id, hours=hours, threshold=threshold, engine=engine)
     if not kpi_data:
-        raise Exception(f"No low-value event found for KPI '{target_kpi}' on cell_id '{cell_id}' in last {hours} hrs")
+        logger.error(f"No low-value event found for KPI '{target_kpi}' on cell_id '{cell_id}' in last {hours} hrs")
+        exit(1)
 
     timestamp = kpi_data["time"]
     kpi_value = kpi_data["kpi_value"]
@@ -48,46 +116,41 @@ def analyze_degraded_kpi_event(target_kpi, cell_id, hours=24, threshold=20.0, to
         "dependent_pms": pm_values
     }
 
+# modify db vars here
+cell_ids = ['24419330']
+target_kpis = ['rrc_connection_success_rate_all']
+no_of_hours = 24
+threshold = 20
+
 # Main execution
 if __name__ == "__main__":
 
     # Create a single PostgreSQL engine
     engine = create_pg_engine()
     if not engine:
-        print("Error: Failed to create PostgreSQL engine")
+        logger.error("Error: Failed to create PostgreSQL engine")
         exit(1)
 
     try:
-        while True:
-            target_kpi = input("Enter the target KPI (or 'quit' to exit): ").strip()
-            if target_kpi.lower() == 'quit':
-                break
-
-            cell_id = input("Enter the cell ID: ").strip()
-            hours_input = input("How many hours back to look? (default 24): ").strip()
-            threshold_input = input("What is the threshold? (default 20): ").strip()
-
-            try:
-                hours = int(hours_input) if hours_input else 24
-                threshold = float(threshold_input) if threshold_input else 20.0
-            except ValueError:
-                print("Invalid numeric input for hours or threshold")
-                continue
-
-            try:
-                result = analyze_degraded_kpi_event(target_kpi, cell_id, hours=hours, threshold=threshold, engine=engine)
-                print("\n=== Degraded KPI Event Analysis ===")
-                print(f"Target KPI: {result['target_kpi']}")
-                print(f"Cell ID: {result['cell_id']}")
-                print(f"Timestamp: {result['timestamp']}")
-                print(f"KPI Value: {result['kpi_value']}")
-                print("\nTop 3 Correlated KPIs:")
-                for idx, kpi in enumerate(result['top_kpis'], 1):
-                    print(f"  {idx}. {kpi}")
-                print("\nDependent PM Values:")
-                for pm, val in sorted(result['dependent_pms'].items()):
-                    print(f"  {pm}: {val if val is not None else 'No data'}")
-            except Exception as e:
-                print(f"\nError: {e}")
+        for cell_id in cell_ids:
+            for target_kpi in target_kpis:
+                logger.info(f"Cell ID: {cell_id}, Target KPI: {target_kpi}")
+                try:
+                    result = analyze_degraded_kpi_event(target_kpi, cell_id, hours=no_of_hours, threshold=threshold, engine=engine)
+                    logger.info("\n=== Degraded KPI Event Analysis ===")
+                    logger.info(f"Target KPI: {result['target_kpi']}")
+                    logger.info(f"Cell ID: {result['cell_id']}")
+                    logger.info(f"Timestamp: {result['timestamp']}")
+                    logger.info(f"KPI Value: {result['kpi_value']}")
+                    logger.info("Top 3 Correlated KPIs:")
+                    for idx, kpi in enumerate(result['top_kpis'], 1):
+                        logger.debug(f"  {idx}. {kpi}")
+                    logger.info("Dependent PM Values:")
+                    for pm, val in sorted(result['dependent_pms'].items()):
+                        logger.info(f"  {pm}: {val if val is not None else 'No data'}")
+                except Exception as e:
+                    logger.error(f"Error: {e}")
+                input("PAUSED! Press <ENTER> to continue...")
+                logger.debug("\n")
     finally:
         engine.dispose()

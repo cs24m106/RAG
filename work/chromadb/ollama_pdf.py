@@ -153,6 +153,12 @@ def read_xcel(file_path):
 
         # Drop columns with all missing values
         df = df.dropna(axis=1, how='all')
+        # Drop columns with only numeric values (all values are numbers or NaN)
+        numeric_only_cols = [
+            col for col in df.columns
+            if pd.api.types.is_numeric_dtype(df[col]) and df[col].notna().all()
+        ]
+        df = df.drop(columns=numeric_only_cols)
         # Process each row to generate enriched strings
         text_extract = []
         for _, row in df.iterrows():

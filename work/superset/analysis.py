@@ -1,11 +1,11 @@
 import os
 import json, yaml
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 import pandas as pd
 import requests, logging
 logger = logging.getLogger(__name__) # Setup logging (existing)
 
-from sqlalchemy import create_engine, Table, MetaData, select, text, Column
+from sqlalchemy import create_engine, Table, MetaData, select
 
 # Configuration for Superset (existing)
 SUPERSET_URL = "http://10.100.80.31:8088"
@@ -50,8 +50,8 @@ def authenticate_superset():
             access_token = data.get("access_token")
             refresh_token = data.get("refresh_token")
             token_expiry = datetime.now() + timedelta(hours=1)  # Adjust based on Superset config
-            logger.debug("Successfully authenticated with Superset")
-            logger.debug(f"Session cookies: {session.cookies.get_dict()}")
+            logger.info("Successfully authenticated with Superset")
+            logger.info(f"Session cookies: {session.cookies.get_dict()}")
             return access_token
         else:
             logger.error(f"Authentication failed: {response.status_code} {response.text}")
@@ -78,8 +78,8 @@ def refresh_superset_token():
         if response.status_code == 200:
             access_token = response.json().get("access_token")
             token_expiry = datetime.now() + timedelta(hours=1)
-            logger.debug("Successfully refreshed access token")
-            logger.debug(f"Session cookies: {session.cookies.get_dict()}")
+            logger.info("Successfully refreshed access token")
+            logger.info(f"Session cookies: {session.cookies.get_dict()}")
             return access_token
         else:
             logger.error(f"Token refresh failed: {response.status_code} {response.text}")
@@ -92,7 +92,7 @@ def refresh_superset_token():
 def get_csrf_token():
     global access_token, token_expiry
     if not access_token or datetime.now() >= token_expiry:
-        logger.debug("Access token missing or expired, refreshing")
+        logger.info("Access token missing or expired, refreshing")
         access_token_new = refresh_superset_token()
         if not access_token_new:
             logger.error("Failed to obtain access token")
@@ -110,7 +110,7 @@ def get_csrf_token():
         if response.status_code == 200:
             return response.json().get("result")
         elif response.status_code == 401:
-            logger.debug("Access token invalid, refreshing")
+            logger.info("Access token invalid, refreshing")
             access_token_new = refresh_superset_token()
             if access_token_new:
                 access_token = access_token_new
@@ -155,7 +155,7 @@ def execute_superset_query(sql_query):
         if response.status_code == 200:
             return response.json().get("data", [])
         elif response.status_code == 401:
-            logger.debug("Access token invalid, refreshing")
+            logger.info("Access token invalid, refreshing")
             access_token_new = refresh_superset_token()
             if access_token_new:
                 access_token = access_token_new
@@ -181,13 +181,14 @@ def execute_superset_query(sql_query):
 # --------------------------------------------------------------------------------------------------------
 #                                           Postgress Handlers
 # --------------------------------------------------------------------------------------------------------
+datapath = "/home/techie/logeshv/RAG/work/chromadb/documents/"
 
 # Helper function to create PostgreSQL connection
 def create_pg_engine():
     try:
         connection_string = f"postgresql://{PG_USERNAME}:{PG_PASSWORD}@{PG_HOST}:{PG_PORT}/{PG_DATABASE}"
         engine = create_engine(connection_string)
-        logger.debug("Successfully created PostgreSQL engine")
+        logger.info("Successfully created PostgreSQL engine")
         return engine
     except Exception as e:
         logger.error(f"Failed to create PostgreSQL engine: {e}")
@@ -210,29 +211,34 @@ def execute_pg_query(sql_query):
         engine.dispose()  # Clean up connection
 
 # Function 1: Get top 3 correlated KPIs from AllMetrics.xlsx
-def get_top_n_correlated_kpis(target_metric, file_path="output/AllMetrics.xlsx", top_n=3):
+def get_top_n_correlated_kpis(target_metric, file_path=os.path.join(datapath,"AllMetrics.xlsx"), top_n=3):
     if top_n < 1 or top_n > 10:
-        raise ValueError("top_n must be between 1 and 10")
+        logger.warning("top_n must be between 1 and 10")
+    if top_n < 1: top_n = 1;
+    if top_n > 10: top_n = 10;
 
     df = pd.read_excel(file_path)
     row = df[df['Target Metric'] == target_metric]
     if row.empty:
-        raise ValueError(f"Target metric '{target_metric}' not found in {file_path}")
+        logger.error(f"Target metric '{target_metric}' not found in {file_path}")
+        raise ValueError
 
     top_kpis = []
     for i in range(1, top_n + 1):
         col_name = f'Top_{i}_Correlated'
         if col_name not in df.columns:
-            raise KeyError(f"Column '{col_name}' not found in {file_path}")
+            logger.error(f"Column '{col_name}' not found in {file_path}")
+            raise KeyError
         top_kpis.append(row[col_name].values[0])
     return top_kpis
 
-# Function 2: Get formula for a given KPI from KPI_Formula(Sheet1).csv
-def get_formula_for_kpi(kpi_name, file_path="resources/KPI_formula(Sheet1).csv"):
-    df = pd.read_csv(file_path)
+# Function 2: Get formula for a given KPI from KPI_Formula
+def get_formula_for_kpi(kpi_name, file_path=os.path.join(datapath,"KPI_formula.xlsx")):
+    df = pd.read_excel(file_path)
     row = df[df['db_column_bame'] == kpi_name]
     if row.empty:
-        raise ValueError(f"KPI '{kpi_name}' not found in {file_path}")
+        logger.error(f"KPI '{kpi_name}' not found in {file_path}")
+        raise ValueError
 
     formula_json_str = row['Formula json'].iloc[0]
     if pd.isna(formula_json_str) or formula_json_str.strip() == '':
@@ -240,16 +246,18 @@ def get_formula_for_kpi(kpi_name, file_path="resources/KPI_formula(Sheet1).csv")
     try:
         return json.loads(formula_json_str)
     except json.JSONDecodeError:
-        raise ValueError(f"Invalid JSON in formula for '{kpi_name}'")
+        logger.error(f"Invalid JSON in formula for '{kpi_name}'")
+        raise ValueError
 
 # Function 3: Extract all PMs from formula JSON recursively
 def extract_pms_from_formula(formula_json):
+    logger.info(f"extractings pms out of given formula json: {formula_json}")
     pms = set()
     def recursive_extract(node):
         if isinstance(node, dict):
             for key, value in node.items():
                 if key == "$number":
-                    if isinstance(value, str) and not value.isdigit():
+                    if isinstance(value, str) and not value.isdigit(): # adding only variables, not constants
                         if '.' in value or '_' in value or value.startswith("RRU") or value.startswith("ERAB"):
                             pms.add(value)
                 else:
@@ -262,68 +270,38 @@ def extract_pms_from_formula(formula_json):
     return list(pms)
 
 # Function 4: Load PM-to-table mapping from YAML
-def load_pm_table_mapping(config_path="resources/hourly_pm_ingestion_config.yml"):
+def load_pm_table_mapping(config_path=os.path.join(datapath,"hourly_pm_ingestion_config.yml")):
+    pm_to_table = {}
     try:
         with open(config_path, 'r') as f:
             config = yaml.safe_load(f)
         if 'hourly-pm-db-ingestion-config' not in config:
-            raise KeyError("'hourly-pm-db-ingestion-config' not found in YAML")
-        pm_to_table = {}
+            logger.error("'hourly-pm-db-ingestion-config' not found in YAML")
+            exit(1)
         tables = config['hourly-pm-db-ingestion-config'].get('tables', [])
         for table in tables:
             table_name = table.get('name')
             if not table_name:
-                raise KeyError("Table missing 'name' field")
+                logger.warning("Table missing 'name' field")
+                continue
             columns = table.get('columns', [])
             for column in columns:
                 pm_name = column.get('pm-metric-name')
                 if not pm_name:
-                    raise KeyError("Column missing 'pm-metric-name'")
+                    logger.warning("Column missing 'pm-metric-name'")
+                    continue
                 pm_to_table[pm_name] = table_name
-        return pm_to_table
     except FileNotFoundError:
-        raise FileNotFoundError(f"Config file not found at {config_path}")
+        logger.error(f"Config file not found at {config_path}")
     except yaml.YAMLError as e:
-        raise ValueError(f"Invalid YAML format in {config_path}: {e}")
+        logger.error(f"Invalid YAML format in {config_path}: {e}")
+    return pm_to_table
 
-# Function 5: Get degraded KPI event from hrly_kpi_1
-def get_low_kpi_event(target_kpi, cell_id, hours=24, threshold=20.0, engine=None):
-    if not engine:
-        raise Exception("PostgreSQL engine must be provided")
-
-    end_time = datetime.now(timezone.utc)
-    start_time = end_time - timedelta(hours=hours)
-
-    try:
-        metadata = MetaData()
-        kpi_table = Table('hrly_kpi_1', metadata, autoload_with=engine)
-
-        # Build safe query using SQLAlchemy Core
-        stmt = (
-            select(kpi_table.c.time, kpi_table.c.cell_id, kpi_table.c[target_kpi].label("kpi_value"))
-            .where(
-                kpi_table.c.cell_id == cell_id,
-                kpi_table.c[target_kpi].is_not(None),
-                kpi_table.c[target_kpi] < threshold,
-                kpi_table.c.time >= start_time,
-                kpi_table.c.time <= end_time
-            )
-            .order_by(kpi_table.c.time.desc())
-            .limit(1)
-        )
-
-        df = pd.read_sql_query(stmt, engine.connect())
-        if df.empty:
-            return None
-        return df.iloc[0].to_dict()
-
-    except Exception as e:
-        raise Exception(f"Error fetching KPI data: {e}")
-
-# Function 6: Get PM value from the appropriate table
+# Function 5: Get PM value from the appropriate table
 def get_pm_value(pm_name, cell_id, timestamp, pm_to_table_map, engine=None):
     if not engine:
-        raise Exception("PostgreSQL engine must be provided")
+        logger.error("PostgreSQL engine must be provided")
+        raise Exception
 
     # Convert PM name to lowercase with underscores
     pm_name_converted = pm_name.replace('.', '_').lower()
@@ -337,11 +315,11 @@ def get_pm_value(pm_name, cell_id, timestamp, pm_to_table_map, engine=None):
     table_names = [table_name.lower()]
     
     for tbl_name in table_names:
-        logger.debug(f"Attempting to access table '{tbl_name}' for PM '{pm_name_converted}'")
+        logger.info(f"Attempting to access table '{tbl_name}' for PM '{pm_name_converted}'")
         try:
             metadata = MetaData()
             pm_table = Table(tbl_name, metadata, autoload_with=engine)
-            logger.debug(f"Successfully loaded table '{tbl_name}'")
+            logger.info(f"Successfully loaded table '{tbl_name}'")
 
             stmt = (
                 select(pm_table.c[pm_name_converted])
@@ -352,13 +330,13 @@ def get_pm_value(pm_name, cell_id, timestamp, pm_to_table_map, engine=None):
                 .limit(1)
             )
 
-            logger.info(f"SQL Query for PM '{pm_name_converted}': {str(stmt)}")
+            logger.info(f"SQL Query for PM '{pm_name_converted}': \n{str(stmt)}")
 
             df = pd.read_sql_query(stmt, engine.connect())
             if df.empty or df[pm_name_converted].isna().all():
-                logger.debug(f"No data found for PM '{pm_name_converted}' at timestamp {timestamp}")
+                logger.warning(f"No data found for PM '{pm_name_converted}' at timestamp {timestamp}")
                 return None
-            logger.debug(f"Data retrieved for PM '{pm_name_converted}': {df[pm_name_converted].iloc[0]}")
+            logger.info(f"Data retrieved for PM '{pm_name_converted}': {df[pm_name_converted].iloc[0]}")
             return df[pm_name_converted].iloc[0]
 
         except KeyError:
@@ -370,3 +348,9 @@ def get_pm_value(pm_name, cell_id, timestamp, pm_to_table_map, engine=None):
     
     logger.warning(f"Failed to fetch PM '{pm_name_converted}' from any table")
     return None
+
+def make_timezone_unaware(df):
+    """Convert all datetime columns to timezone-unaware."""
+    for col in df.select_dtypes(include=['datetime64[ns, UTC]']).columns:
+        df[col] = df[col].dt.tz_localize(None)
+    return df
