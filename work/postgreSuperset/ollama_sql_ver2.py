@@ -84,7 +84,7 @@ MODEL_URL = "http://localhost:11434/api/tags" # Ollama API endpoint to get avail
 
 # Configuration
 # SUPERSET_URL = "http://localhost:8088"  # Superset instance URL
-SUPERSET_URL = "http://10.100.80.23:8088" #sys.26:port def
+SUPERSET_URL = "http://10.100.80.26:8088" #sys.26:port def
 OLLAMA_URL = "http://localhost:11434/api/generate"  # Ollama local endpoint
 DATABASE_ID = 2  # Superset database ID for SQL Lab
 SUPERSET_USERNAME = os.getenv("SUPERSET_USERNAME", "admin")  # Set in environment

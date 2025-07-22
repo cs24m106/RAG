@@ -1,2 +1,5 @@
 # ignore log files
 **.log
+
+# ignore _pycache_ folders
+__pycache__/

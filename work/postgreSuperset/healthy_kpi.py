@@ -1,12 +1,6 @@
-import os, sys
-curr_path = os.path.abspath(__file__)
-REPO_DIR = "RAG"
-REPO_PATH = curr_path[:curr_path.find(REPO_DIR) + len(REPO_DIR)]
-
-ROOT_DIR = REPO_DIR + "_api"
-ROOT_PATH = os.path.join(REPO_PATH, "ref/Telco-RAG/Telco-RAG_api")
-sys.path.append(ROOT_PATH)
-import preheader, logging # import for custom logger
+import sys
+sys.path.append("..")
+import logging, preheader # import for custom logger
 logger = logging.getLogger(__name__) # Setup logging
 
 from analysis import create_pg_engine, load_pm_table_mapping, get_pm_value, make_timezone_unaware
