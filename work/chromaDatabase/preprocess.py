@@ -7,10 +7,11 @@ import logging, preheader # import for custom logger
 logger = logging.getLogger(__name__) # Setup logging
 
 from docx import Document
+from doc2docx import convert
 from pypdf import PdfReader
 import pandas as pd
 from openpyxl import load_workbook
-import re
+import re, shutil, platform, subprocess
 
 # -----------------------------------------------------------------------------------------------------------
 
@@ -90,6 +91,43 @@ def delete_contents(raw_text):
     return '\n'.join(filtered_lines)
 
 # -----------------------------------------------------------------------------------------------------------
+
+def convert_docs_to_docx(folder_path, clear_space=False):
+    """Convert .doc files in a folder to .docx format if any."""
+    has_doc = any(f.endswith('.doc') for f in os.listdir(folder_path))
+    if not has_doc:
+        return
+    if platform.system().lower() == "linux":
+        # Convert all .doc files in the folder to .docx using LibreOffice
+        doc_files = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if f.endswith('.doc') and not f.endswith('.docx')]
+        try:
+            subprocess.run(
+                ["libreoffice", "--headless", "--convert-to", "docx", "--outdir", folder_path] + doc_files,
+                check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL
+            )
+        except Exception as e:
+            logger.warning(f"Failed to convert DOC files using LibreOffice: {e}")
+    else:
+        # Use doc2docx's convert function for Windows or other OS
+        try:
+            convert(folder_path)
+        except Exception as e:
+            logger.warning(f"Failed to convert DOC files using doc2docx: {e}")
+
+    if not clear_space:
+        return
+    # clear any other temp files/folders other than .docx files
+    for f in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, f)
+        if f.endswith('.docx'):
+            continue
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.remove(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            logger.warning(f"Failed to delete {file_path}: {e}")
 
 def read_docx(file_path):
     """Read and extract text from a DOCX file."""
